@@ -1,0 +1,138 @@
+﻿body {
+  margin:0px;
+  background-image:none;
+  position:relative;
+  left:-8px;
+  width:1647px;
+  margin-left:auto;
+  margin-right:auto;
+  text-align:left;
+}
+.form_sketch {
+  border-color:transparent;
+  background-color:transparent;
+}
+#base {
+  position:absolute;
+  z-index:0;
+}
+#u1105_img {
+  border-width:0px;
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:168px;
+  height:19px;
+}
+#u1105 {
+  border-width:0px;
+  position:absolute;
+  left:8px;
+  top:15px;
+  width:168px;
+  height:19px;
+  display:flex;
+}
+#u1105 .text {
+  position:absolute;
+  align-self:center;
+  padding:2px 2px 2px 2px;
+  box-sizing:border-box;
+  width:100%;
+}
+#u1105_text {
+  border-width:0px;
+  word-wrap:break-word;
+  text-transform:none;
+  visibility:hidden;
+}
+#u1106_img {
+  border-width:0px;
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:168px;
+  height:238px;
+}
+#u1106 {
+  border-width:0px;
+  position:absolute;
+  left:8px;
+  top:34px;
+  width:168px;
+  height:238px;
+  display:flex;
+}
+#u1106 .text {
+  position:absolute;
+  align-self:center;
+  padding:2px 2px 2px 2px;
+  box-sizing:border-box;
+  width:100%;
+}
+#u1106_text {
+  border-width:0px;
+  word-wrap:break-word;
+  text-transform:none;
+  visibility:hidden;
+}
+#u1107_img {
+  border-width:0px;
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:168px;
+  height:340px;
+}
+#u1107 {
+  border-width:0px;
+  position:absolute;
+  left:8px;
+  top:272px;
+  width:168px;
+  height:340px;
+  display:flex;
+}
+#u1107 .text {
+  position:absolute;
+  align-self:center;
+  padding:2px 2px 2px 2px;
+  box-sizing:border-box;
+  width:100%;
+}
+#u1107_text {
+  border-width:0px;
+  word-wrap:break-word;
+  text-transform:none;
+  visibility:hidden;
+}
+#u1108_img {
+  border-width:0px;
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:1487px;
+  height:494px;
+}
+#u1108 {
+  border-width:0px;
+  position:absolute;
+  left:168px;
+  top:15px;
+  width:1487px;
+  height:494px;
+  display:flex;
+}
+#u1108 .text {
+  position:absolute;
+  align-self:center;
+  padding:2px 2px 2px 2px;
+  box-sizing:border-box;
+  width:100%;
+}
+#u1108_text {
+  border-width:0px;
+  word-wrap:break-word;
+  text-transform:none;
+  visibility:hidden;
+}
