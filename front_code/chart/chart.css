@@ -4,7 +4,7 @@ body {
 
 #base1 {
     width: 100%;
-    height: 700px;
+    height: 935px;
     margin: 0;
 }
 
@@ -35,7 +35,7 @@ body {
     display: flex;
     width: 350px;
     height: 60px;
-    margin-left: 750px;
+    margin-left: 1200px;
 }
 
 .button {
@@ -50,7 +50,7 @@ body {
 
 #word2 {
     margin-top: 80px;
-    margin-left: 250px;
+    margin-left: 480px;
     font-size: 24px;
     font-weight: 700;
 }
@@ -59,8 +59,7 @@ body {
     display: flex;
     width: 1000px;
     height: 450px;
-    margin-left: 250px;
-    margin-top: 10px;
+    margin: 10px auto 0;
 }
 
 .chart {
