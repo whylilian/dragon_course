@@ -2,15 +2,20 @@ before_script:
     - echo "begin"
 
 stages:
-  - build
-  - test
+  - test1
+  - test2
 
-build:
-  stage: bulid
+test1:
+  stage: test1
   script:
-    - echo "build"
+    - echo "test1"
 
-test:
-  stage: test
+test2:
+  stage: test2
   script:
-    - echo "test"
+    - echo "test1"
+
+test3:
+    stage: test1
+    script:
+        - echo "test3"
