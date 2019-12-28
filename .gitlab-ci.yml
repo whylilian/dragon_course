@@ -1,0 +1,21 @@
+before_script:
+    - echo "begin"
+
+stages:
+  - test1
+  - test2
+
+test1:
+  stage: test1
+  script:
+    - echo "test1"
+
+test2:
+  stage: test2
+  script:
+    - echo "test1"
+
+test3:
+    stage: test1
+    script:
+        - echo "test3"
