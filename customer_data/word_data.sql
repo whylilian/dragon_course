@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 28/12/2019 20:39:30
+ Date: 31/12/2019 14:42:56
 */
 
 SET NAMES utf8mb4;
@@ -26,7 +26,7 @@ CREATE TABLE `calendar`  (
   `calendar_time` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '打卡的时间，使用\'|\'分割成列表',
   INDEX `fk_student_delete`(`student_id`) USING BTREE,
   CONSTRAINT `fk_student_delete` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for category
@@ -42,7 +42,7 @@ CREATE TABLE `category`  (
   `sequence` int(3) NULL DEFAULT NULL COMMENT '顺序',
   `cover_pic` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '封面图片',
   PRIMARY KEY (`category_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for classification
@@ -62,7 +62,7 @@ CREATE TABLE `classification`  (
   INDEX `FK_CLA_CATEGORY`(`category_id`) USING BTREE,
   CONSTRAINT `FK_CLA_CATEGORY` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `FK_CLA_WORD` FOREIGN KEY (`word_id`) REFERENCES `words` (`word_id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for course
@@ -73,7 +73,12 @@ CREATE TABLE `course`  (
   `number` int(5) NOT NULL COMMENT '课程人数',
   `course_book_id` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '课程的单词书id，使用‘|’分割',
   PRIMARY KEY (`course_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of course
+-- ----------------------------
+INSERT INTO `course` VALUES (1, 1, '12|34|2');
 
 -- ----------------------------
 -- Table structure for edition
@@ -86,7 +91,7 @@ CREATE TABLE `edition`  (
   `modify_time` datetime(0) NOT NULL COMMENT '修改时间',
   `unit_enable` int(1) NOT NULL COMMENT '单元练习是否可用',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for match
@@ -102,7 +107,7 @@ CREATE TABLE `match`  (
   `end_time` datetime(0) NOT NULL COMMENT '比赛截止时间',
   `match_time` time(0) NOT NULL COMMENT '比赛持续时间',
   PRIMARY KEY (`match_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for means
@@ -116,7 +121,7 @@ CREATE TABLE `means`  (
   INDEX `fk_means_1_idx1`(`word_id`) USING BTREE,
   CONSTRAINT `fk_means_1` FOREIGN KEY (`word_id`) REFERENCES `words` (`word_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `fk_means_2` FOREIGN KEY (`pos_id`) REFERENCES `pos` (`pos_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for pos
@@ -218,7 +223,12 @@ CREATE TABLE `student`  (
   PRIMARY KEY (`student_id`) USING BTREE,
   INDEX `fk_course_id`(`course_id`) USING BTREE,
   CONSTRAINT `fk_course_id` FOREIGN KEY (`course_id`) REFERENCES `course` (`course_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of student
+-- ----------------------------
+INSERT INTO `student` VALUES (1, 'timemachine', '123', 'luorong', '男', 20, 1, 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for teacher
@@ -235,7 +245,7 @@ CREATE TABLE `teacher`  (
   `teacher_address` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '教师住址',
   `courses_id` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '教师教授的课程，为一个列表，里面保存着课程id',
   PRIMARY KEY (`teacher_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for words
@@ -248,6 +258,28 @@ CREATE TABLE `words`  (
   `voice` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '单词的发音网址链接',
   `value` int(4) NOT NULL COMMENT '单词价值量',
   PRIMARY KEY (`word_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Triggers structure for table student
+-- ----------------------------
+DROP TRIGGER IF EXISTS `t_inst_stu`;
+delimiter ;;
+CREATE TRIGGER `t_inst_stu` AFTER INSERT ON `student` FOR EACH ROW update course
+set number = number+1
+where(course.course_id=new.course_id)
+;;
+delimiter ;
+
+-- ----------------------------
+-- Triggers structure for table student
+-- ----------------------------
+DROP TRIGGER IF EXISTS `t_delete_stu`;
+delimiter ;;
+CREATE TRIGGER `t_delete_stu` AFTER DELETE ON `student` FOR EACH ROW update course
+set number = number-1
+where(course.course_id=old.course_id)
+;;
+delimiter ;
 
 SET FOREIGN_KEY_CHECKS = 1;
