@@ -49,6 +49,7 @@ class Course(models.Model):
     course_id = models.AutoField(primary_key=True)
     number = models.IntegerField()
     course_book_id = models.CharField(max_length=100)
+    course_name = models.CharField(max_length=50)
 
     class Meta:
         managed = False
@@ -81,26 +82,6 @@ class Match(models.Model):
         db_table = 'match'
 
 
-class Means(models.Model):
-    word = models.ForeignKey('Words', models.DO_NOTHING)
-    pos = models.ForeignKey('Pos', models.DO_NOTHING)
-    means = models.CharField(max_length=1000, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'means'
-
-
-class Pos(models.Model):
-    pos_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=20, blank=True, null=True)
-    means = models.CharField(max_length=45, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'pos'
-
-
 class Student(models.Model):
     student_id = models.AutoField(primary_key=True)
     student_username = models.CharField(max_length=20)
@@ -112,10 +93,22 @@ class Student(models.Model):
     coins = models.PositiveIntegerField(blank=True, null=True)
     word_numbers = models.PositiveIntegerField(blank=True, null=True)
     points = models.PositiveIntegerField(blank=True, null=True)
+    study_status = models.PositiveIntegerField()
 
     class Meta:
         managed = False
         db_table = 'student'
+
+
+class StudentWords(models.Model):
+    student_id = models.AutoField(primary_key=True)
+    words_id = models.CharField(max_length=2000, blank=True, null=True)
+    counts = models.CharField(max_length=2000, blank=True, null=True)
+    value = models.CharField(max_length=2000, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'student_words'
 
 
 class Teacher(models.Model):
@@ -134,12 +127,23 @@ class Teacher(models.Model):
         db_table = 'teacher'
 
 
+class Test(models.Model):
+    student_id = models.AutoField(primary_key=True)
+    test_type = models.PositiveIntegerField()
+    test_grade = models.PositiveIntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'test'
+
+
 class Words(models.Model):
     word_id = models.AutoField(primary_key=True)
     word = models.CharField(max_length=100)
-    exchange = models.CharField(max_length=200, blank=True, null=True)
+    means = models.CharField(max_length=200)
     voice = models.CharField(max_length=1000, blank=True, null=True)
     value = models.IntegerField()
+    property = models.CharField(max_length=20)
 
     class Meta:
         managed = False
