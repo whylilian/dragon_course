@@ -1,9 +1,9 @@
 def Word_book(request):
-    # order = request.POST.get('review_order')
-    # studentid = request.POST.get('student_id')
-    order = 'letter'
+    order = request.POST.get('review_order')
+    studentid = request.POST.get('student_id')
+    # order = 'letter'
     # order = 'familiarity'
-    studentid = 2
+    # studentid = 2
 
     words = Words.objects.all()
     word_rank = {}
