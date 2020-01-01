@@ -9,34 +9,51 @@ body {
 }
 
 #base2 {
-    display: flex;
-    width: 100%;
-    height: 65px;
-    margin: 0;
+    overflow: hidden;
+    background-color: #e0edfdf1;
 }
 
-#box1 {
-    width: 256px;
-    height: 65px;
-    margin-left: 100px;
-    border-bottom: 1px solid hsla(0, 0%, 0%, 0.227450980392157);
+.logoimgStyle {
+	float: left;
+	list-style: none;
+    margin: 10px 10px;
+    width: 35px;
+    height: 35px;
 }
 
-#word1{
-    color: #0096FA;
-    padding-left: 80px;
-    padding-bottom: 10px;
+.logoStyle {
+	width: 150px;
+	margin: 0;
+	background-color: white;
+}
+
+#word1 {
+    float: left;
+	margin: 15px 5px;
+	padding: 0;
+	list-style: none;
+	font-family: 'PingFangSC-Semibold', 'PingFang SC Semibold', 'PingFang SC';
+    font-weight: 650;
+    font-style: normal;
     font-size: 18px;
-    font-weight: bold;
-    padding-top: 10px;
+    color: #0096FA;
+    text-align: left;
+    line-height: 26px;
 }
 
-#box2 {
-    display: flex;
-    width: 350px;
-    height: 60px;
-    margin-left: 1200px;
-}
+#base2 a {
+    float: right;
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+
+#base2 a:hover {
+    background-color: #ddd;
+    color: black;
+  }
 
 .button {
     margin-right: 20px;

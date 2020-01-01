@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 31/12/2019 14:42:56
+ Date: 01/01/2020 17:29:19
 */
 
 SET NAMES utf8mb4;
@@ -72,13 +72,14 @@ CREATE TABLE `course`  (
   `course_id` int(5) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '课程id',
   `number` int(5) NOT NULL COMMENT '课程人数',
   `course_book_id` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '课程的单词书id，使用‘|’分割',
+  `course_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '课程名称',
   PRIMARY KEY (`course_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of course
 -- ----------------------------
-INSERT INTO `course` VALUES (1, 1, '12|34|2');
+INSERT INTO `course` VALUES (1, 1, '12|34|2', '');
 
 -- ----------------------------
 -- Table structure for edition
@@ -110,102 +111,6 @@ CREATE TABLE `match`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for means
--- ----------------------------
-DROP TABLE IF EXISTS `means`;
-CREATE TABLE `means`  (
-  `word_id` int(19) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '单词id',
-  `pos_id` int(2) NOT NULL,
-  `means` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  INDEX `fk_means_1_idx`(`pos_id`) USING BTREE,
-  INDEX `fk_means_1_idx1`(`word_id`) USING BTREE,
-  CONSTRAINT `fk_means_1` FOREIGN KEY (`word_id`) REFERENCES `words` (`word_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `fk_means_2` FOREIGN KEY (`pos_id`) REFERENCES `pos` (`pos_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for pos
--- ----------------------------
-DROP TABLE IF EXISTS `pos`;
-CREATE TABLE `pos`  (
-  `pos_id` int(2) NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `means` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`pos_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 77 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of pos
--- ----------------------------
-INSERT INTO `pos` VALUES (1, 'n.', '名词');
-INSERT INTO `pos` VALUES (2, 'pron.', '代词');
-INSERT INTO `pos` VALUES (3, 'adj.', '形容词');
-INSERT INTO `pos` VALUES (4, 'adv.', '副词');
-INSERT INTO `pos` VALUES (5, 'vi.', '不及无动词');
-INSERT INTO `pos` VALUES (6, 'vt.', '及无动词');
-INSERT INTO `pos` VALUES (7, 'num.', '数词');
-INSERT INTO `pos` VALUES (8, 'art.', '冠词');
-INSERT INTO `pos` VALUES (9, 'prep. ', '介词');
-INSERT INTO `pos` VALUES (10, 'conj.', '连词');
-INSERT INTO `pos` VALUES (11, 'int.', '感叹词');
-INSERT INTO `pos` VALUES (21, 'aux.', NULL);
-INSERT INTO `pos` VALUES (22, 'v.', NULL);
-INSERT INTO `pos` VALUES (23, 'det.', NULL);
-INSERT INTO `pos` VALUES (24, 'prep.', NULL);
-INSERT INTO `pos` VALUES (25, 'vt.& vi.', NULL);
-INSERT INTO `pos` VALUES (26, '', NULL);
-INSERT INTO `pos` VALUES (27, 'abbr.', NULL);
-INSERT INTO `pos` VALUES (28, 'adj.& pron.', NULL);
-INSERT INTO `pos` VALUES (29, 'vt.& vi.& link-v.', NULL);
-INSERT INTO `pos` VALUES (30, 'vt.&vi.', NULL);
-INSERT INTO `pos` VALUES (31, 'n. &adj.', NULL);
-INSERT INTO `pos` VALUES (32, 'vi.& link-v.', NULL);
-INSERT INTO `pos` VALUES (33, 'adj.& adv.', NULL);
-INSERT INTO `pos` VALUES (34, 'link-v.', NULL);
-INSERT INTO `pos` VALUES (35, 'vi.&vt.', NULL);
-INSERT INTO `pos` VALUES (36, 'prep.&conj.', NULL);
-INSERT INTO `pos` VALUES (37, 'quant.', NULL);
-INSERT INTO `pos` VALUES (38, 'na.', NULL);
-INSERT INTO `pos` VALUES (39, 'pref.', NULL);
-INSERT INTO `pos` VALUES (40, 'adj.& n.', NULL);
-INSERT INTO `pos` VALUES (41, 'v.& n.', NULL);
-INSERT INTO `pos` VALUES (42, 'vi.& vt.', NULL);
-INSERT INTO `pos` VALUES (43, 'adv.& adj.', NULL);
-INSERT INTO `pos` VALUES (44, 'n.& v.', NULL);
-INSERT INTO `pos` VALUES (45, 'n.& adj.', NULL);
-INSERT INTO `pos` VALUES (46, 'adv.& prep.', NULL);
-INSERT INTO `pos` VALUES (47, 'n.&v.', NULL);
-INSERT INTO `pos` VALUES (48, 'v. .', NULL);
-INSERT INTO `pos` VALUES (49, 'a.', NULL);
-INSERT INTO `pos` VALUES (50, 'vi.& n.', NULL);
-INSERT INTO `pos` VALUES (51, 'adj.&adv.', NULL);
-INSERT INTO `pos` VALUES (52, 'adj. .', NULL);
-INSERT INTO `pos` VALUES (53, 'col.', NULL);
-INSERT INTO `pos` VALUES (54, 'vt.& adj.', NULL);
-INSERT INTO `pos` VALUES (55, 'exclam.', NULL);
-INSERT INTO `pos` VALUES (56, 'n.& vi.', NULL);
-INSERT INTO `pos` VALUES (57, 'n.& vt.', NULL);
-INSERT INTO `pos` VALUES (58, 'n.& adv.', NULL);
-INSERT INTO `pos` VALUES (59, 'n.&adj.', NULL);
-INSERT INTO `pos` VALUES (60, 'vt.& n.', NULL);
-INSERT INTO `pos` VALUES (61, 'adv.& conj.', NULL);
-INSERT INTO `pos` VALUES (62, 'adj.&n.', NULL);
-INSERT INTO `pos` VALUES (63, 'int.& n.& vi.', NULL);
-INSERT INTO `pos` VALUES (64, 'n.&vt.', NULL);
-INSERT INTO `pos` VALUES (65, 'int.& n.', NULL);
-INSERT INTO `pos` VALUES (66, 'int.&n.', NULL);
-INSERT INTO `pos` VALUES (67, 'adj.& v.', NULL);
-INSERT INTO `pos` VALUES (68, 'suf.', NULL);
-INSERT INTO `pos` VALUES (69, 'adv.& int.', NULL);
-INSERT INTO `pos` VALUES (70, 'v.&n.', NULL);
-INSERT INTO `pos` VALUES (71, 'prep.& adv.', NULL);
-INSERT INTO `pos` VALUES (72, 'interj.', NULL);
-INSERT INTO `pos` VALUES (73, 'phr.', NULL);
-INSERT INTO `pos` VALUES (74, 'adv.&adj.', NULL);
-INSERT INTO `pos` VALUES (75, 'n.& int.', NULL);
-INSERT INTO `pos` VALUES (76, 'n.& adv.& adj.', NULL);
-
--- ----------------------------
 -- Table structure for student
 -- ----------------------------
 DROP TABLE IF EXISTS `student`;
@@ -220,15 +125,28 @@ CREATE TABLE `student`  (
   `coins` int(4) UNSIGNED NULL DEFAULT 0 COMMENT '金币数量',
   `word_numbers` int(7) UNSIGNED NULL DEFAULT 0 COMMENT '熟练的单词数',
   `points` int(7) UNSIGNED NULL DEFAULT 0 COMMENT '比赛积累的积分',
+  `study_status` int(2) UNSIGNED NOT NULL COMMENT '学习状态，1表示没学过，进行学前测试；2表示学习中；3表示学习完，进行学后测试',
   PRIMARY KEY (`student_id`) USING BTREE,
   INDEX `fk_course_id`(`course_id`) USING BTREE,
   CONSTRAINT `fk_course_id` FOREIGN KEY (`course_id`) REFERENCES `course` (`course_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of student
 -- ----------------------------
-INSERT INTO `student` VALUES (1, 'timemachine', '123', 'luorong', '男', 20, 1, 0, 0, 0);
+INSERT INTO `student` VALUES (1, 'timemachine', '123', 'luorong', '男', 20, 1, 0, 0, 0, 0);
+
+-- ----------------------------
+-- Table structure for student_words
+-- ----------------------------
+DROP TABLE IF EXISTS `student_words`;
+CREATE TABLE `student_words`  (
+  `student_id` int(7) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `words_id` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '学习过的单词id，使用|分割',
+  `counts` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '单词熟练度，使用|分割',
+  `value` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '单词价值量，使用|分割',
+  PRIMARY KEY (`student_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for teacher
@@ -248,15 +166,27 @@ CREATE TABLE `teacher`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for test
+-- ----------------------------
+DROP TABLE IF EXISTS `test`;
+CREATE TABLE `test`  (
+  `student_id` int(7) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '学生编号',
+  `test_type` int(2) UNSIGNED NOT NULL COMMENT '测试种类：1代表学前测试，2代表学后测试，3代表单元测试',
+  `test_grade` int(3) UNSIGNED NOT NULL COMMENT '测试分数',
+  PRIMARY KEY (`student_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for words
 -- ----------------------------
 DROP TABLE IF EXISTS `words`;
 CREATE TABLE `words`  (
   `word_id` int(19) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '单词id',
   `word` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '单词的英文拼写',
-  `exchange` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '单词的变化',
+  `means` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '单词意思',
   `voice` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '单词的发音网址链接',
   `value` int(4) NOT NULL COMMENT '单词价值量',
+  `property` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '单词词性',
   PRIMARY KEY (`word_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 

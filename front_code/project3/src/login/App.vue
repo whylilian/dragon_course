@@ -1,7 +1,84 @@
-body {
-    margin: 0;
-}
+<template>
+	<div id="app">
+		<div id = "base1">
+			<div id = "base2">
+				<img id = "u24" src = "../assets/u24.png">
+				<p id = "word">单词赢</p>
+				<p id = "text">三天背完小升初   七天背完中高考</p>
+				<div id = "box1">
+					<p>账号密码登陆</p>
+				</div>
+				<div class = "box2" id = "account-box">
+					<div class = "box3">
+						<img class = "u671" src = "../assets/u671.png">
+					</div>
+					<input type = "text" class = "input" id = "account" placeholder = "账号" v-model="username">
+				</div>
+				<div class = "box2" id = "password-box">
+					<div class = "box3">
+						<img class = "u671" src = "../assets/u671.png">
+					</div>
+					<input type = "password" class = "input" id = "password" placeholder = "密码" v-model="password">
+				</div>
+				<input type = "radio" id = "select">自动登录
+				<a herf = "#" id = "forget-password" >忘记密码</a>
+				<input type = "button" id = "login" value = "登陆" @click="send">
+			</div>
+		</div>
+	</div>
+</template>
 
+<script>
+//import HelloWorld from '../components/HelloWorld.vue'
+
+export default {
+	name: 'app',
+	data: function(){
+		return{
+			username: '',
+			password: '',
+		}
+	},
+	methods: {
+		send: function(){
+			let that = this
+			let param = new URLSearchParams()
+			param.append('student_username',this.username)
+			param.append('student_password',this.password)
+			this.$axios({
+				method:'post',
+				url:'http://localhost:8000/app/',
+				data:param,
+			}).then(function(response){
+				window.console.log(response);
+				if(response.data.login_status=='succeed'){
+					that.$router.push({
+						path:'/test',
+						params:{
+							student_id:response.data.student_id,
+							student_name:response.data.student_name
+						}
+					})
+					//window.location = 'test.html';
+				}
+			})
+		}
+	}
+  // components: {
+  //   HelloWorld
+  // }
+}
+</script>
+
+<style>
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
 #base1 {
     width: 100%;
     height: 935px;
@@ -14,7 +91,7 @@ body {
     margin: auto;
     padding-top: 100px;
     padding-bottom: 100px;
-    
+
 }
 
 #u24 {
@@ -110,7 +187,7 @@ body {
     color: #1890FF;
 }
 
-#sign {
+#login {
     display: block;
     width: 350px;
     height: 40px;
@@ -130,3 +207,4 @@ body {
     width: 16px;
     height: 16px;
 }
+</style>
