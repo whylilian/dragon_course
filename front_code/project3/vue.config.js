@@ -5,7 +5,7 @@ module.exports = {
     pages: {
       login: {
         // page 的入口
-        entry: 'src/login/main.js',
+        entry: 'src/login/login.js',
         // 模板来源
         template: 'public/login.html',
         // 在 dist/index.html 的输出
@@ -30,6 +30,12 @@ module.exports = {
         // 在这个页面中包含的块，默认情况下会包含
         // 提取出来的通用 chunk 和 vendor chunk。
         chunks: ['chunk-vendors', 'chunk-common', 'test']
+      },
+      main: {
+        entry: 'src/main/main.js',
+        template: 'public/main.html',
+        filename: 'main.html',
+        chunks: ['chunk-vendors', 'chunk-common', 'main']
       },
       // 当使用只有入口的字符串格式时，
       // 模板会被推导为 `public/subpage.html`

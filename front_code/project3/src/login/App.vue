@@ -63,7 +63,7 @@ export default {
                     let student_id = response.data.student_id
                     let student_name = response.data.student_name
                     that.$store.dispatch("Login",{student_id,student_name})
-                    window.location = 'test.html'
+                    window.location = 'main.html'
 				}
 			})
 		}
@@ -76,16 +76,21 @@ export default {
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    background: url("../assets/login.jpg");
+    background-size:100% 100%;
+    margin: none;
+    height: 100%;
+    width: 100%;
+  
 }
 #base1 {
     width: 100%;
-    height: 935px;
+    height: 100%;
     margin: 0;
 }
 
