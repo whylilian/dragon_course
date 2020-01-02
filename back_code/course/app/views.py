@@ -176,7 +176,6 @@ def Match_uncommit(request):
             }
     return JsonResponse(uncommit,json_dumps_params={'ensure_ascii':False})
 
-
 #教师创建比赛
 def Create_match(request):
     name = request.POST.get('match_name')
