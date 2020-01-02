@@ -32,7 +32,7 @@ def Match_uncommit(request):
         unmatchs.add(item.match_id)
     for item in studentmatchs:
         unmatchs.remove(item.match_id)
-    print(unmatchs)
+    # print(unmatchs)
     uncommit = {}
     for item in matchs:
         if item.match_id in unmatchs:
