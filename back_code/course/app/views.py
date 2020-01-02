@@ -99,7 +99,7 @@ def Check_spell(request):
     # spell = request.POST.get('spell')
     # studentid = request.POST.get('student_id')
     wordid = 1
-    spell = 'questions'
+    spell = 'question'
     studentid = 1
     word = Words.objects.get(word_id = wordid)
     student_word = StudentWords.objects.get(student_id = studentid,words_id = wordid)

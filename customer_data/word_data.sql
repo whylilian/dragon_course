@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 01/01/2020 17:29:19
+ Date: 02/01/2020 13:18:11
 */
 
 SET NAMES utf8mb4;
@@ -125,7 +125,7 @@ CREATE TABLE `student`  (
   `coins` int(4) UNSIGNED NULL DEFAULT 0 COMMENT '金币数量',
   `word_numbers` int(7) UNSIGNED NULL DEFAULT 0 COMMENT '熟练的单词数',
   `points` int(7) UNSIGNED NULL DEFAULT 0 COMMENT '比赛积累的积分',
-  `study_status` int(2) UNSIGNED NOT NULL COMMENT '学习状态，1表示没学过，进行学前测试；2表示学习中；3表示学习完，进行学后测试',
+  `study_status` int(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '学习状态，1表示没学过，进行学前测试；2表示学习中；3表示学习完，进行学后测试',
   PRIMARY KEY (`student_id`) USING BTREE,
   INDEX `fk_course_id`(`course_id`) USING BTREE,
   CONSTRAINT `fk_course_id` FOREIGN KEY (`course_id`) REFERENCES `course` (`course_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
@@ -134,19 +134,26 @@ CREATE TABLE `student`  (
 -- ----------------------------
 -- Records of student
 -- ----------------------------
-INSERT INTO `student` VALUES (1, 'timemachine', '123', 'luorong', '男', 20, 1, 0, 0, 0, 0);
+INSERT INTO `student` VALUES (1, 'timemachine', '123', 'luorong', '男', 20, 1, 0, 0, 0, 1);
 
 -- ----------------------------
 -- Table structure for student_words
 -- ----------------------------
 DROP TABLE IF EXISTS `student_words`;
 CREATE TABLE `student_words`  (
-  `student_id` int(7) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `words_id` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '学习过的单词id，使用|分割',
-  `counts` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '单词熟练度，使用|分割',
-  `value` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '单词价值量，使用|分割',
-  PRIMARY KEY (`student_id`) USING BTREE
+  `table_id` int(19) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '表记录编号',
+  `student_id` int(7) UNSIGNED NOT NULL COMMENT '学生编号',
+  `words_id` int(19) UNSIGNED NOT NULL COMMENT '学习过的单词id',
+  `counts` int(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '单词熟练度',
+  `value` int(4) UNSIGNED NOT NULL COMMENT '单词价值量',
+  PRIMARY KEY (`table_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of student_words
+-- ----------------------------
+INSERT INTO `student_words` VALUES (1, 1, 1, 2, 10);
+INSERT INTO `student_words` VALUES (2, 1, 2, 0, 5);
 
 -- ----------------------------
 -- Table structure for teacher
@@ -189,6 +196,12 @@ CREATE TABLE `words`  (
   `property` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '单词词性',
   PRIMARY KEY (`word_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of words
+-- ----------------------------
+INSERT INTO `words` VALUES (1, 'question', '问题；疑问', NULL, 10, 'n');
+INSERT INTO `words` VALUES (2, 'english', '英语；英文', NULL, 5, 'n');
 
 -- ----------------------------
 -- Triggers structure for table student

@@ -101,7 +101,8 @@ class Student(models.Model):
 
 
 class StudentWords(models.Model):
-    student_id = models.AutoField(primary_key=True)
+    table_id = models.AutoField(primary_key=True)
+    student_id = models.PositiveIntegerField()
     words_id = models.PositiveIntegerField()
     counts = models.PositiveIntegerField()
     value = models.PositiveIntegerField()
@@ -109,7 +110,6 @@ class StudentWords(models.Model):
     class Meta:
         managed = False
         db_table = 'student_words'
-        unique_together = (('student_id', 'words_id'),)
 
 
 class Teacher(models.Model):
