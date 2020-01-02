@@ -47,6 +47,7 @@ class Classification(models.Model):
 
 class Course(models.Model):
     course_id = models.AutoField(primary_key=True)
+    teacher_id = models.PositiveIntegerField()
     number = models.IntegerField()
     course_book_id = models.CharField(max_length=100)
     course_name = models.CharField(max_length=50)
@@ -72,6 +73,7 @@ class Match(models.Model):
     match_name = models.CharField(max_length=20)
     match_point = models.IntegerField()
     words_id = models.CharField(max_length=1000)
+    teacher_id = models.PositiveIntegerField()
     teacher_name = models.CharField(max_length=20)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
@@ -98,6 +100,18 @@ class Student(models.Model):
     class Meta:
         managed = False
         db_table = 'student'
+
+
+class StudentMatchs(models.Model):
+    match_table_id = models.AutoField(primary_key=True)
+    match_id = models.PositiveIntegerField()
+    student_id = models.PositiveIntegerField()
+    match_grade = models.PositiveIntegerField()
+    join_time = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'student_matchs'
 
 
 class StudentWords(models.Model):

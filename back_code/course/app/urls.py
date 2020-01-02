@@ -11,4 +11,7 @@ urlpatterns = [
     path('checkspell', views.Check_spell, name='checkspell'),
     path('wordbook', views.Word_book, name='workbook'),
     path('studystatus', views.Study_status, name='studystatus'),
+    path('matchcommit', views.Match_commit, name='matchcommit'),
+    path('matchuncommit', views.Match_uncommit, name='matchuncommit'),
+    path('creatematch', views.Create_match, name='creatematch'),
 ]
