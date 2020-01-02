@@ -23,7 +23,6 @@
 				<input type = "radio" id = "select">自动登录
 				<a herf = "#" id = "forget-password" >忘记密码</a>
 				<input type = "button" id = "login" value = "登陆" @click="send">
-                <h1>{{this.$store.state.count}}</h1>
 			</div>
 		</div>
 	</div>
@@ -38,7 +37,11 @@ export default {
 			username: '',
             password: '',
 		}
-	},
+    },
+    created(){
+        window.console.log("创建")
+        window.console.log(this.$store.state.coin_rank)
+    },
 	methods: {
 		send: function(){
 			let that = this

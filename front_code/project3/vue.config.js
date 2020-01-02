@@ -37,6 +37,12 @@ module.exports = {
         filename: 'main.html',
         chunks: ['chunk-vendors', 'chunk-common', 'main']
       },
+      chart: {
+        entry: 'src/chart/chart.js',
+        template: 'public/chart.html',
+        filename: 'chart.html',
+        chunks: ['chunk-vendors', 'chunk-common', 'chart']
+      },
       // 当使用只有入口的字符串格式时，
       // 模板会被推导为 `public/subpage.html`
       // 并且如果找不到的话，就回退到 `public/index.html`。

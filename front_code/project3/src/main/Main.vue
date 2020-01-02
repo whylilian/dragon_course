@@ -9,7 +9,7 @@
                 <input type = "button" class = "button-style" id = "exit" value = "退出" @click="logout">
                 <input type = "button" class = "button-style" id = "help" value = "帮助">
                 <input type = "button" class = "button-style" id = "setting" value = "设置">
-                <input type = "button" class = "button-style" id = "chart" value = "排行榜">
+                <input type = "button" class = "button-style" value = "排行榜" @click="gorank">
                 <input type = "button" class = "button-style" value = "主页" @click="gomain">
         </div>
         <!-- 左侧块-->
@@ -59,12 +59,13 @@ export default {
 		return{
 			student_id: 0,
             student_name: '',
+            coin_rank:{},
+            word_rank:{},
+            point_rank:{},
 		}
     },
     beforeCreate(){
 		//未登录，跳转到登录界面
-		window.console.log("创建前")
-		window.console.log(this.$store.state.student_id)
 		if(this.$store.state.student_id==""){
 			window.location = "login.html"
 		}
@@ -82,6 +83,9 @@ export default {
         },
         gomain:function(){
             window.location = "main.html"
+        },
+        gorank:function(){
+            window.location = "chart.html"
         }
     },
   // components: {
