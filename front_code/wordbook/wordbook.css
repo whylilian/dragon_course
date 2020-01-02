@@ -12,6 +12,33 @@ body {
   overflow: hidden;
   background-color: #e0edfdf1;
 }
+/*logo*/
+.logoimgStyle {
+	float: left;
+	list-style: none;
+	margin: 10px 10px;
+	
+}
+/*logo块*/
+.logoStyle {
+	width: 150px;
+	margin: 0;
+	background-color: white;
+}
+/*单词赢*/
+#logotext {
+	float: left;
+	margin: 15px 5px;
+	padding: 0;
+	list-style: none;
+	font-family: 'PingFangSC-Semibold', 'PingFang SC Semibold', 'PingFang SC';
+    font-weight: 650;
+    font-style: normal;
+    font-size: 18px;
+    color: #0096FA;
+    text-align: left;
+    line-height: 26px;
+}
 /*导航链接*/
 .navigationStyle a {
   float: right;

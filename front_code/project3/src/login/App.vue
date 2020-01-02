@@ -23,20 +23,20 @@
 				<input type = "radio" id = "select">自动登录
 				<a herf = "#" id = "forget-password" >忘记密码</a>
 				<input type = "button" id = "login" value = "登陆" @click="send">
+                <h1>{{this.$store.state.count}}</h1>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-//import HelloWorld from '../components/HelloWorld.vue'
 
 export default {
 	name: 'app',
 	data: function(){
 		return{
 			username: '',
-			password: '',
+            password: '',
 		}
 	},
 	methods: {
@@ -50,20 +50,24 @@ export default {
 				url:'http://localhost:8000/app/',
 				data:param,
 			}).then(function(response){
-				window.console.log(response);
+                window.console.log(response)
+                window.console.log(typeof(response.data.student_id))
 				if(response.data.login_status=='succeed'){
-					that.$router.push({
-						path:'/test',
-						params:{
-							student_id:response.data.student_id,
-							student_name:response.data.student_name
-						}
-					})
-					//window.location = 'test.html';
+					// that.$router.push({
+					// 	path:'/test',
+					// 	params:{
+					// 		student_id:response.data.student_id,
+					// 		student_name:response.data.student_name
+					// 	}
+                    // })
+                    let student_id = response.data.student_id
+                    let student_name = response.data.student_name
+                    that.$store.dispatch("Login",{student_id,student_name})
+                    window.location = 'test.html'
 				}
 			})
 		}
-	}
+    },
   // components: {
   //   HelloWorld
   // }
