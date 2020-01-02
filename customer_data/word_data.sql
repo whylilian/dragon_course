@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 02/01/2020 13:18:11
+ Date: 02/01/2020 14:09:48
 */
 
 SET NAMES utf8mb4;
@@ -135,6 +135,19 @@ CREATE TABLE `student`  (
 -- Records of student
 -- ----------------------------
 INSERT INTO `student` VALUES (1, 'timemachine', '123', 'luorong', '男', 20, 1, 0, 0, 0, 1);
+
+-- ----------------------------
+-- Table structure for student_matchs
+-- ----------------------------
+DROP TABLE IF EXISTS `student_matchs`;
+CREATE TABLE `student_matchs`  (
+  `match_table_id` int(19) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `match_id` int(5) UNSIGNED NOT NULL COMMENT '比赛编号',
+  `student_id` int(7) UNSIGNED NOT NULL COMMENT '学生编号',
+  `match_grade` int(3) UNSIGNED NOT NULL COMMENT '比赛分数',
+  `join_time` datetime(0) NOT NULL COMMENT '参加比赛的时间',
+  PRIMARY KEY (`match_table_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for student_words
