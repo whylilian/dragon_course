@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 02/01/2020 14:09:48
+ Date: 02/01/2020 21:32:29
 */
 
 SET NAMES utf8mb4;
@@ -70,6 +70,7 @@ CREATE TABLE `classification`  (
 DROP TABLE IF EXISTS `course`;
 CREATE TABLE `course`  (
   `course_id` int(5) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '课程id',
+  `teacher_id` int(4) UNSIGNED NOT NULL COMMENT '老师编号',
   `number` int(5) NOT NULL COMMENT '课程人数',
   `course_book_id` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '课程的单词书id，使用‘|’分割',
   `course_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '课程名称',
@@ -79,7 +80,7 @@ CREATE TABLE `course`  (
 -- ----------------------------
 -- Records of course
 -- ----------------------------
-INSERT INTO `course` VALUES (1, 1, '12|34|2', '');
+INSERT INTO `course` VALUES (1, 0, 2, '12|34|2', '');
 
 -- ----------------------------
 -- Table structure for edition
@@ -103,6 +104,7 @@ CREATE TABLE `match`  (
   `match_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '比赛名字',
   `match_point` int(4) NOT NULL COMMENT '比赛满分积分',
   `words_id` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '比赛所用单词的编号，使用\'|\'分割',
+  `teacher_id` int(4) UNSIGNED NOT NULL COMMENT '开启比赛的老师编号',
   `teacher_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '开启比赛的老师',
   `start_time` datetime(0) NOT NULL COMMENT '比赛开始时间',
   `end_time` datetime(0) NOT NULL COMMENT '比赛截止时间',
@@ -134,7 +136,8 @@ CREATE TABLE `student`  (
 -- ----------------------------
 -- Records of student
 -- ----------------------------
-INSERT INTO `student` VALUES (1, 'timemachine', '123', 'luorong', '男', 20, 1, 0, 0, 0, 1);
+INSERT INTO `student` VALUES (1, 'timemachine', '123', '罗嵘', '男', 20, 1, 1, 0, 0, 1);
+INSERT INTO `student` VALUES (2, 'test1', '123', '曹勇', '男', 20, 1, 0, 2, 0, 1);
 
 -- ----------------------------
 -- Table structure for student_matchs
@@ -160,7 +163,7 @@ CREATE TABLE `student_words`  (
   `counts` int(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '单词熟练度',
   `value` int(4) UNSIGNED NOT NULL COMMENT '单词价值量',
   PRIMARY KEY (`table_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of student_words
@@ -173,7 +176,7 @@ INSERT INTO `student_words` VALUES (2, 1, 2, 0, 5);
 -- ----------------------------
 DROP TABLE IF EXISTS `teacher`;
 CREATE TABLE `teacher`  (
-  `teacher_id` int(4) NOT NULL AUTO_INCREMENT COMMENT '教师编号',
+  `teacher_id` int(4) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '教师编号',
   `teacher_username` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '教师账户',
   `teacher_password` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '教师账户密码',
   `teacher_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '教师姓名',
@@ -190,11 +193,12 @@ CREATE TABLE `teacher`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `test`;
 CREATE TABLE `test`  (
-  `student_id` int(7) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '学生编号',
+  `test_id` int(7) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `student_id` int(7) UNSIGNED NOT NULL COMMENT '学生编号',
   `test_type` int(2) UNSIGNED NOT NULL COMMENT '测试种类：1代表学前测试，2代表学后测试，3代表单元测试',
   `test_grade` int(3) UNSIGNED NOT NULL COMMENT '测试分数',
-  PRIMARY KEY (`student_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`test_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for words
@@ -208,7 +212,7 @@ CREATE TABLE `words`  (
   `value` int(4) NOT NULL COMMENT '单词价值量',
   `property` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '单词词性',
   PRIMARY KEY (`word_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of words
