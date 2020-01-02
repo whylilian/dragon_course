@@ -1,6 +1,6 @@
 def Match_commit(request):
-    # studentid = request.POST.get('student_id')
-    studentid = 1
+    studentid = request.POST.get('student_id')
+    # studentid = 1
     studentmatchs = StudentMatchs.objects.filter(student_id = studentid)
 
     commit = {}
@@ -8,11 +8,12 @@ def Match_commit(request):
         match = Match.objects.get(match_id = item.match_id)
         starttime = match.start_time.strftime("%Y-%m-%d %H:%M:%S")
         endtime = match.end_time.strftime("%Y-%m-%d %H:%M:%S")
+        jointime = item.join_time.strftime("%Y-%m-%d %H:%M:%S")
         commit[match.match_id] = {
             'match':match.match_name,
             'start_time':starttime,
-            'endtime':endtime,
-            'join_time':item.join_time,
+            'end_time':endtime,
+            'join_time':jointime,
             'match_grade':item.match_grade
         }
     return JsonResponse(commit,json_dumps_params={'ensure_ascii':False})
