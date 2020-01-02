@@ -3,13 +3,14 @@
 		<!--导航条及logo-->
         <div id="navigation" class="navigationStyle">
             <div id="logo" class="logoStyle">
-                <img src="../assets/u24.png" id="logoimg" class="logoimgStyle" width="35" height="35">
+               <img src="../assets/u24.png" id="logoimg" class="logoimgStyle" width="35" height="35">
                 <p id="logotext">单词赢</p>
-            </div>    
-                <a @click="logout">退出</a>
-                <a href="#">帮助</a>
-                <a href="#">设置</a>
-                <a href="#">排行榜</a>
+            </div>
+                <input type = "button" class = "button-style" id = "exit" value = "退出" @click="logout">
+                <input type = "button" class = "button-style" id = "help" value = "帮助">
+                <input type = "button" class = "button-style" id = "setting" value = "设置">
+                <input type = "button" class = "button-style" id = "chart" value = "排行榜">
+                <input type = "button" class = "button-style" value = "主页" @click="gomain">
         </div>
         <!-- 左侧块-->
         <div id="Dleftframe" class="DleftframeStyle">
@@ -23,7 +24,6 @@
                 <div id="p1" class="p1Style">
                     <p>我的金币(2000)</p>
                 </div>
-
                 <input type="button" id="clockOn" class="clockOnStyle" value="打卡" >
                 <a href="#">
                     <button id="learning" class="buttonStyle" >正在学习</button>
@@ -42,7 +42,7 @@
         <!-- 中间的块 -->
         <div id="middleframe" class="column middleframeStyle">
             <div id="pmiddleframe" class="pmiddleframeStyle">
-                <p>学习报告</p>
+                 <p>学习报告</p>
             </div>
             <div id="someP1" class="someP1Style">
                 <p>学习报告展现了您最近一周内每天学习的<span>单词次数量</span>、本月<span>学习时间</span>；以及<span>测试成绩</span>等数据</p>
@@ -79,6 +79,9 @@ export default {
 		logout:function(){
             this.$store.dispatch("Logout")
 			window.location = "login.html"
+        },
+        gomain:function(){
+            window.location = "main.html"
         }
     },
   // components: {
@@ -132,16 +135,23 @@ export default {
     line-height: 26px;
 }
 /*导航链接*/
-.navigationStyle a {
+.button-style {
+    height: 56px;
     float: right;
     display: block;
     color: black;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
+    background: inherit;
+    background-color: #e0edfdf1;
+    border-radius: 4px;
+    border-width: 0px;
+    word-wrap: break-word;
+    text-transform: none;
 }
 /*导航 - 修改颜色*/
-.navigationStyle a:hover {
+.button-style:hover {
     background-color: #ddd;
     color: black;
 }
@@ -154,6 +164,7 @@ export default {
 .column.leftframeStyle {
     width: 16%;
     padding: 10px;
+
 }
 /*左侧大框单独*/
 .leftframeStyle {
@@ -166,10 +177,12 @@ export default {
 }
 /*头像的div*/
 .headportraitStyle {
+ 
     width: 35px;
     height: 35px;
     margin: 15px 8px 5px 5px;
     float: left;
+
 }
 /*“我爱背单词”*/
 .h3headStyle {
@@ -178,6 +191,7 @@ export default {
 #h3head {
     margin: 20px 5px 20px 5px;
     float:left;
+  
 }
 h3 {
     margin: 0;
@@ -229,15 +243,12 @@ a>button:focus {
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
     background-color: rgba(93, 204, 255, 0.192); 
 	color:rgb(14, 140, 243);
-   
 }
 /*中间宽度*/
 .column.middleframeStyle {
     width: 73%;
     margin: auto;
     padding: 10px;
-  
-
 }
 /*学习报告*/
 .pmiddleframeStyle {
