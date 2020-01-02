@@ -6,46 +6,39 @@
                <img src="../assets/u24.png" id="logoimg" class="logoimgStyle" width="35" height="35">
                 <p id="logotext">单词赢</p>
             </div>
-                <input type = "button" class = "button-style" id = "exit" value = "退出" @click="logout">
-                <input type = "button" class = "button-style" id = "help" value = "帮助">
-                <input type = "button" class = "button-style" id = "setting" value = "设置">
-                <input type = "button" class = "button-style" value = "排行榜" @click="gorank">
-                <input type = "button" class = "button-style" value = "主页" @click="gomain">
+            <input type = "button" class = "button-style" id = "exit" value = "退出" @click="logout">
+            <input type = "button" class = "button-style" id = "help" value = "帮助">
+            <input type = "button" class = "button-style" id = "setting" value = "设置">
+            <input type = "button" class = "button-style" value = "排行榜" @click="gorank">
+            <input type = "button" class = "button-style" value = "主页" @click="gomain">
         </div>
-        <!-- 左侧块-->
-        <div id="Dleftframe" class="DleftframeStyle">
-            <div id="leftframe" class="column leftframeStyle">
-                <div id="headportrait" class="headportraitStyle">
-                    <img src="../assets/u35.png" width="35" height="35" id="headportrait_img" class="headportrait_imgStyle">
+        <!--主体部分-->
+        <div id = "main">
+            <!--左侧块-->
+            <div id = "left">
+                <!--左上角-->
+                <div id = "top-left">
+                    <div id="headportrait" class="headportraitStyle">
+                        <img src="../assets/u35.png" width="35" height="35" id="headportrait_img" class="headportrait_imgStyle">
+                    </div>
+                    <div id="h3head" class="h3headStyle">
+                        <h3>{{student_name}}</h3>
+                    </div>
+                    <div id="p1" class="p1Style">
+                        <p>金币数：{{coins}}</p>
+                    </div>
+                    <input type="button" id="clockOn" class="clockOnStyle" value="打卡" >
                 </div>
-                <div id="h3head" class="h3headStyle">
-                    <h3>{{student_name}}</h3>
+                <!--左下角-->
+                <div id = "buttom-left">
+                    <input type = "button" class = "select" id = "learning" value = "正在学习">
+                    <input type = "button" class = "select" id = "learning-records" value = "学习统计">
+                    <input type = "button" class = "select" id = "word-book" value = "单词本">
+                    <input type = "button" class = "select" id = "word-match" value = "单词比赛">
                 </div>
-                <div id="p1" class="p1Style">
-                    <p>我的金币(2000)</p>
-                </div>
-                <input type="button" id="clockOn" class="clockOnStyle" value="打卡" >
-                <a href="#">
-                    <button id="learning" class="buttonStyle" >正在学习</button>
-                </a>
-                <a href="#">
-                    <button id="Statistics" class="buttonStyle" >学习统计</button>
-                </a>
-                <a href="#">
-                    <button id="wordbook" class="buttonStyle" >单词本</button>
-                </a>
-                <a href="#">
-                    <button id="wordcontest" class="buttonStyle" >单词比赛</button>
-                </a>
-            </div>   
-        </div>
-        <!-- 中间的块 -->
-        <div id="middleframe" class="column middleframeStyle">
-            <div id="pmiddleframe" class="pmiddleframeStyle">
-                 <p>学习报告</p>
             </div>
-            <div id="someP1" class="someP1Style">
-                <p>学习报告展现了您最近一周内每天学习的<span>单词次数量</span>、本月<span>学习时间</span>；以及<span>测试成绩</span>等数据</p>
+            <!--右侧块-->
+            <div id = "right">
             </div>
         </div>
 	</div>
@@ -59,6 +52,7 @@ export default {
 		return{
 			student_id: 0,
             student_name: '',
+            coins: 0,
             coin_rank:{},
             word_rank:{},
             point_rank:{},
@@ -72,7 +66,8 @@ export default {
 	},
 	created(){
 		this.student_id = parseInt(this.$store.state.student_id)
-		this.student_name = this.$store.state.student_name
+        this.student_name = this.$store.state.student_name
+        this.coins = parseInt(this.$store.state.coins)
 		window.console.log(this.student_id)
 		window.console.log(this.student_name)
 	},
@@ -159,54 +154,53 @@ export default {
     background-color: #ddd;
     color: black;
 }
-/*创建两个不相等的列*/
-.column {
-    float: left;
-    padding: 20px;
+/* 主体部分 */
+#main {
+    display: flex;
+    width: 1200px;
+    height: 700px;
+    margin: 100px auto;
 }
-/*左侧窗口 整体*/
-.column.leftframeStyle {
-    width: 16%;
-    padding: 10px;
 
+/* 左侧部分 */
+#left {
+    width: 300px;
+    height: 400px;
 }
-/*左侧大框单独*/
-.leftframeStyle {
-    margin-right: 10px;
-    margin-top: 10px;
-    border-style: solid;
-    border-color: white;
-    border-width: 2px;
-    border-right-color: #d1d1d1;
+
+/* 左上角部分 */
+#top-left {
+    width: 300px;
+    height: 120px;
 }
-/*头像的div*/
+
 .headportraitStyle {
- 
     width: 35px;
     height: 35px;
     margin: 15px 8px 5px 5px;
     float: left;
-
 }
-/*“我爱背单词”*/
+/* 我爱背单词 */
 .h3headStyle {
     width: 94px;
 }
+
 #h3head {
     margin: 20px 5px 20px 5px;
-    float:left;
-  
+    float:left; 
 }
 h3 {
     margin: 0;
 }
-/*“我的金币”*/
+
+/* 我的金币 */
 .p1Style {
     float: left;
     margin: 5px;
     width: 120px;
-}
-/*打卡按钮*/
+  }
+
+/* 打卡按钮 */
 .clockOnStyle {
     background-color: rgb(16, 150, 190); /* Green */
     border: none;
@@ -220,16 +214,23 @@ h3 {
     display: inline-block;
     font-size: 14px;
 }
-/*四个大按钮*/
+
+/* 左下角部分 */
+.buttom-left {
+    width: 300px;
+    height: 280px;
+}
+
 /*按钮被按下时*/
-a>button:focus {
+.select:focus {
     border-right-width: 4px;
     border-right-color: rgb(6, 115, 204) ;
     background-color:  rgba(93, 204, 255, 0.192);
     color:rgb(14, 140, 243);
 }
+
 /*按钮样式*/
-.buttonStyle {
+.select {
     background-color: rgba(255, 253, 253, 0.945); 
     border: 1px solid whitesmoke;
     width: 200px;
@@ -242,47 +243,18 @@ a>button:focus {
     display: inline-block;
     font-size: 14px;
 }
+
 /*鼠标在按钮上时*/
-.buttonStyle:hover {
+.select:hover {
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
     background-color: rgba(93, 204, 255, 0.192); 
 	color:rgb(14, 140, 243);
 }
-/*中间宽度*/
-.column.middleframeStyle {
-    width: 73%;
-    margin: auto;
-    padding: 10px;
-}
-/*学习报告*/
-.pmiddleframeStyle {
-    color: rgb(253, 116, 74);
-    font-size: 16px;
-    margin: 10px;
-    border-style: solid;
-    border-color: white;
-    border-width: 2px;
-    border-bottom-color: #d1d1d1;
-}
-/*提示语*/
-.someP1Style {
-    margin: auto;
-    padding: 2px;
-    text-align: center;
-    border-style: solid;
-    border-color: rgb(224, 229, 233);
-    border-radius: 8px;
-    border-width: 1px;
-}
-span {
-    color: rgb(253, 116, 74);
-    font-size: 20px;
-}
 
-/*列后面清楚浮动*/
-.DnavigationStyle {
-    content: "";
-    display: table;
-    clear: both;
+#right {
+    margin-left: 50px;
+    width: 850px;
+    height: 700px;
+    background-color: black;
 }
 </style>

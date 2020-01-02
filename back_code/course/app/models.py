@@ -143,7 +143,8 @@ class Teacher(models.Model):
 
 
 class Test(models.Model):
-    student_id = models.AutoField(primary_key=True)
+    test_id = models.AutoField(primary_key=True)
+    student_id = models.PositiveIntegerField()
     test_type = models.PositiveIntegerField()
     test_grade = models.PositiveIntegerField()
 

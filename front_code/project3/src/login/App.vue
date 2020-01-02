@@ -65,7 +65,8 @@ export default {
                     // })
                     let student_id = response.data.student_id
                     let student_name = response.data.student_name
-                    that.$store.dispatch("Login",{student_id,student_name})
+                    let coins = response.data.coins.toString()
+                    that.$store.dispatch("Login",{student_id,student_name,coins})
                     window.location = 'main.html'
 				}
 			})

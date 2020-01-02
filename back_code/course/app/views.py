@@ -17,6 +17,7 @@ def Student_login(request):
         data = {}
         data['student_id'] = student.student_id
         data['student_name'] = student.student_name
+        data['coins'] = student.coins
     except Student.DoesNotExist:
         print('发生异常')
     else:
@@ -217,4 +218,18 @@ def Create_match(request):
         match_time = matchtime
     )
     m.save()
-    return JsonResponse(None,safe = False) 
+    return JsonResponse(None,safe = False)
+
+#获取学生的学习统计
+def Learn_statistics(request):
+    studentid = request.POST.get('student_id')
+    # studentid = 1
+    wordnumber = len(StudentWords.objects.filter(student_id = studentid))
+
+    test = Test.objects.filter(student_id = studentid)
+
+    tests = {}
+    for item in test:
+        tests[item.test_type] = item.test_grade
+
+    return JsonResponse({'wordnumber':wordnumber,'test':tests}) 
