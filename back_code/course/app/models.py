@@ -96,6 +96,8 @@ class Student(models.Model):
     word_numbers = models.PositiveIntegerField(blank=True, null=True)
     points = models.PositiveIntegerField(blank=True, null=True)
     study_status = models.PositiveIntegerField()
+    create_time = models.DateTimeField(blank=True, null=True)
+    lastlogin_time = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False

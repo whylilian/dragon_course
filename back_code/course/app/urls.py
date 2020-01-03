@@ -15,4 +15,6 @@ urlpatterns = [
     path('matchuncommit', views.Match_uncommit, name='matchuncommit'),
     path('creatematch', views.Create_match, name='creatematch'),
     path('learnstatistics', views.Learn_statistics, name='learnstatistics'),
+    path('matchmessage', views.Match_message, name='matchmessage'),
+    path('studentlist', views.Student_list, name='studentlist'),
 ]

@@ -79,13 +79,19 @@ export default {
 </script>
 
 <style>
+body {
+    background:url(../assets/login.jpg)  no-repeat center center;
+    background-attachment:fixed;
+    background-size:cover;
+    margin: 0;
+    background-color:#CCCCCC;
+}
 #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    background: url("../assets/login.jpg");
     background-size:100% 100%;
     margin: none;
     height: 100%;
