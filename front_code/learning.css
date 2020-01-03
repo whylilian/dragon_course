@@ -1,0 +1,243 @@
+@charset "UTF-8";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+   margin: 0;
+}
+
+/* 导航条 */
+.navigationStyle {
+    overflow: hidden;
+    background-color: #e0edfdf1;
+}
+
+/* logo */
+.logoimgStyle {
+    float: left;
+	list-style: none;
+    margin: 10px 10px;
+}
+
+/* logo块 */
+.logoStyle {
+	width: 150px;
+	margin: 0;
+	background-color: white;
+}
+
+/* 单词赢 */
+#logotext {
+	float: left;
+	margin: 15px 5px;
+	padding: 0;
+	list-style: none;
+	font-family: 'PingFangSC-Semibold', 'PingFang SC Semibold', 'PingFang SC';
+    font-weight: 650;
+    font-style: normal;
+    font-size: 18px;
+    color: #0096FA;
+    text-align: left;
+    line-height: 26px;
+}
+
+/* 导航链接 */
+.button-style1 {
+    height: 56px;
+    float: right;
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    background: inherit;
+    background-color: #e0edfdf1;
+    border-radius: 4px;
+    border-width: 0px;
+    word-wrap: break-word;
+    text-transform: none;
+}
+
+/* 导航 - 修改颜色 */
+.button-style1:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+/* 主体部分 */
+#main {
+    display: flex;
+    width: 1200px;
+    height: 700px;
+    margin: 100px auto;
+}
+
+/* 左侧部分 */
+#left {
+    width: 300px;
+    height: 400px;
+}
+
+/* 左上角部分 */
+#top-left {
+    width: 300px;
+    height: 120px;
+}
+
+.headportraitStyle {
+    width: 35px;
+    height: 35px;
+    margin: 15px 8px 5px 5px;
+    float: left;
+}
+/* 我爱背单词 */
+.h3headStyle {
+    width: 94px;
+}
+
+#h3head {
+    margin: 20px 5px 20px 5px;
+    float:left; 
+}
+h3 {
+    margin: 0;
+}
+
+/* 我的金币 */
+.p1Style {
+    float: left;
+    margin: 5px;
+    width: 120px;
+  }
+
+/* 打卡按钮 */
+.clockOnStyle {
+    background-color: rgb(16, 150, 190); /* Green */
+    border: none;
+    margin-left: 5px;
+    margin-top: 13px;
+    border-radius: 8px;
+    color: white;
+    padding: 7px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+}
+
+/* 左下角部分 */
+.buttom-left {
+    width: 300px;
+    height: 280px;
+}
+
+/*按钮被按下时*/
+.button-style2:focus {
+    border-right-width: 4px;
+    border-right-color: rgb(6, 115, 204) ;
+    background-color:  rgba(93, 204, 255, 0.192);
+    color:rgb(14, 140, 243);
+}
+
+/*按钮样式*/
+.button-style2 {
+    background-color: rgba(255, 253, 253, 0.945); 
+    border: 1px solid whitesmoke;
+    width: 200px;
+    margin-top: 10px;
+    border-radius: 4px; 
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+}
+
+/*鼠标在按钮上时*/
+.button-style2:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    background-color: rgba(93, 204, 255, 0.192); 
+	color:rgb(14, 140, 243);
+}
+
+/* 右侧块 */
+#right {
+    width: 850px;
+	height: 700px;
+	margin-left: 50px;
+	display: flex;
+}
+
+/* 右侧块中左侧部分 */
+#right-left {
+    width: 400px;
+    height: 700px;
+}
+
+/* 右侧块中左上角部分 */
+#right-topleft {
+    width: 400px;
+    height: 470px;
+	padding-top: 15px;
+	background-color: #0096FA;
+}
+
+/* 比赛的名字 */
+#name {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* 比赛介绍中的小标题*/
+.title {
+    font-size: 16px;
+    font-weight: 600;
+    padding-left: 30px;
+}
+
+/* 小标题下的内容 */
+.text {
+    font-size: 12px;
+    padding-left: 30px;
+}
+
+/* 右侧块中的左下角部分*/
+#right-buttomleft {
+    width: 400px;
+	height: 230px;
+	background-color: powderblue;
+}
+
+/* 下方两个按钮样式 */
+.button-style3 {
+	width: 200px;
+	height: 50px;
+    font-size: 16px;
+    color: white;
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 30px;
+    background: inherit;
+	margin-top: 40px;
+	margin-left: 100px;
+}
+
+#join {
+	background-color: green;
+}
+
+#start-challenge {
+	background-color: orange;
+}
+
+/* 右侧块中的右侧块 */
+#right-right {
+	width: 400px;
+	height: 700px;
+	background-color: peachpuff;
+}
