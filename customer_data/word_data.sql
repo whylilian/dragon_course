@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 03/01/2020 17:15:52
+ Date: 03/01/2020 17:41:46
 */
 
 SET NAMES utf8mb4;
@@ -123,13 +123,14 @@ CREATE TABLE `student`  (
   `student_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '学生姓名',
   `student_sex` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '学生性别',
   `student_age` int(3) UNSIGNED NOT NULL COMMENT '学生年龄',
+  `student_email` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '学生邮箱',
   `course_id` int(5) UNSIGNED NULL DEFAULT NULL COMMENT '学生加入的课程编号',
   `coins` int(4) UNSIGNED NULL DEFAULT 0 COMMENT '金币数量',
   `word_numbers` int(7) UNSIGNED NULL DEFAULT 0 COMMENT '熟练的单词数',
   `points` int(7) UNSIGNED NULL DEFAULT 0 COMMENT '比赛积累的积分',
   `study_status` int(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '学习状态，1表示没学过，进行学前测试；2表示学习中；3表示学习完，进行学后测试',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '学生账户创建时间',
-  `lastlogin_time` datetime(0) NULL DEFAULT NULL COMMENT '学生上次登录时间',
+  `create_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '学生账户创建时间',
+  `lastlogin_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '学生上次登录时间',
   PRIMARY KEY (`student_id`) USING BTREE,
   INDEX `fk_course_id`(`course_id`) USING BTREE,
   CONSTRAINT `fk_course_id` FOREIGN KEY (`course_id`) REFERENCES `course` (`course_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
@@ -138,8 +139,8 @@ CREATE TABLE `student`  (
 -- ----------------------------
 -- Records of student
 -- ----------------------------
-INSERT INTO `student` VALUES (1, 'timemachine', '123', '罗嵘', '男', 20, 1, 1, 0, 0, 1, NULL, NULL);
-INSERT INTO `student` VALUES (2, 'test1', '123', '曹勇', '男', 20, 1, 0, 2, 0, 1, NULL, NULL);
+INSERT INTO `student` VALUES (1, 'timemachine', '123', '罗嵘', '男', 20, NULL, 1, 1, 0, 0, 1, NULL, NULL);
+INSERT INTO `student` VALUES (2, 'test1', '123', '曹勇', '男', 20, NULL, 1, 0, 2, 0, 1, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for student_matchs
