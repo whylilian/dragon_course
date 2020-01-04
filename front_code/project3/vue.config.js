@@ -43,6 +43,12 @@ module.exports = {
         filename: 'chart.html',
         chunks: ['chunk-vendors', 'chunk-common', 'chart']
       },
+      setting: {
+        entry: 'src/setting/setting.js',
+        template: 'public/setting.html',
+        filename: 'setting.html',
+        chunks: ['chunk-vendors', 'chunk-common', 'setting']
+      },
       // 当使用只有入口的字符串格式时，
       // 模板会被推导为 `public/subpage.html`
       // 并且如果找不到的话，就回退到 `public/index.html`。

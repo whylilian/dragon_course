@@ -288,3 +288,44 @@ def Student_list(request):
             'status':"付费"
         }
     return JsonResponse(student_message,json_dumps_params={'ensure_ascii':False})
+
+#修改密码
+def Change_password(request):
+    # 存取控制
+    studentid = request.POST.get('student_id')
+    new_password = request.POST.get('new_password')
+    studentid = 2
+    student = Student.objects.get(student_id = studentid)
+    student.student_password = new_password
+    student.save()
+    return JsonResponse({'change_status':'密码修改成功'},safe = False,json_dumps_params={'ensure_ascii':False})
+
+#查看学生学习单词量
+def Study_census(request):
+    # coursename = request.POST.get('course_name')
+    coursename = "七年级上册"
+    course = Course.objects.get(course_name = coursename)
+    students = Student.objects.filter(course_id = course.course_id)
+    student_words = {}
+    for item in students:
+        student_words[item.student_name] = item.word_numbers
+        
+    return JsonResponse(student_words,json_dumps_params={'ensure_ascii':False})
+
+#教师端查看比赛信息
+def TeacherMatchMessage(request):
+    # teacherid = request.POST.get('teacher_id')
+    teacherid = 1
+    teacher = Teacher.objects.get(teacher_id = teacherid)
+    matchs = Match.objects.filter(teacher_id = teacher.teacher_id)
+
+    match_message = {}
+    for item in matchs:
+        match_message[item.match_id] = {
+            'match_name':item.match_name,
+            'start_time':item.start_time.strftime("%Y-%m-%d %H:%M:%S"),
+            'end_time':item.end_time.strftime("%Y-%m-%d %H:%M:%S"),
+            'match_time':item.match_time,
+            'join_number':'5000'
+        }
+    return JsonResponse(match_message,json_dumps_params={'ensure_ascii':False})

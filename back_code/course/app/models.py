@@ -91,13 +91,14 @@ class Student(models.Model):
     student_name = models.CharField(max_length=20)
     student_sex = models.CharField(max_length=2)
     student_age = models.PositiveIntegerField()
+    student_email = models.CharField(max_length=20, blank=True, null=True)
     course = models.ForeignKey(Course, models.DO_NOTHING, blank=True, null=True)
     coins = models.PositiveIntegerField(blank=True, null=True)
     word_numbers = models.PositiveIntegerField(blank=True, null=True)
     points = models.PositiveIntegerField(blank=True, null=True)
     study_status = models.PositiveIntegerField()
-    create_time = models.DateTimeField(blank=True, null=True)
-    lastlogin_time = models.DateTimeField(blank=True, null=True)
+    create_time = models.CharField(max_length=20, blank=True, null=True)
+    lastlogin_time = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
         managed = False

@@ -8,7 +8,7 @@
             </div>
                 <input type = "button" class = "button-style" id = "exit" value = "退出" @click="logout">
                 <input type = "button" class = "button-style" id = "help" value = "帮助">
-                <input type = "button" class = "button-style" id = "setting" value = "设置">
+                <input type = "button" class = "button-style" id = "setting" value = "设置" @click="gosetting">
                 <input type = "button" class = "button-style" value = "排行榜" @click="gorank">
                 <input type = "button" class = "button-style" value = "主页" @click="gomain">
         </div>
@@ -78,7 +78,10 @@ export default {
         },
         gorank:function(){
             window.location = "chart.html"
-        }
+        },
+        gosetting:function(){
+            window.location = "setting.html"
+        },
     },
   // components: {
   //   HelloWorld
