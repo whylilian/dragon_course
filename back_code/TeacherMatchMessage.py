@@ -1,4 +1,4 @@
-def Match_message(request):
+def TeacherMatchMessage(request):
     # teacherid = request.POST.get('teacher_id')
     teacherid = 1
     teacher = Teacher.objects.get(teacher_id = teacherid)
