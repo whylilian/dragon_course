@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 03/01/2020 17:41:46
+ Date: 04/01/2020 20:46:12
 */
 
 SET NAMES utf8mb4;
@@ -134,13 +134,13 @@ CREATE TABLE `student`  (
   PRIMARY KEY (`student_id`) USING BTREE,
   INDEX `fk_course_id`(`course_id`) USING BTREE,
   CONSTRAINT `fk_course_id` FOREIGN KEY (`course_id`) REFERENCES `course` (`course_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of student
 -- ----------------------------
-INSERT INTO `student` VALUES (1, 'timemachine', '123', '罗嵘', '男', 20, NULL, 1, 1, 0, 0, 1, NULL, NULL);
-INSERT INTO `student` VALUES (2, 'test1', '123', '曹勇', '男', 20, NULL, 1, 0, 2, 0, 1, NULL, NULL);
+INSERT INTO `student` VALUES (1, 'timemachine', '123456', '罗嵘', '男', 20, NULL, 1, 1, 0, 0, 1, NULL, NULL);
+INSERT INTO `student` VALUES (2, 'test1', '12345', '曹勇', '男', 20, NULL, 1, 0, 2, 0, 1, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for student_matchs
@@ -202,6 +202,12 @@ CREATE TABLE `test`  (
   `test_grade` int(3) UNSIGNED NOT NULL COMMENT '测试分数',
   PRIMARY KEY (`test_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of test
+-- ----------------------------
+INSERT INTO `test` VALUES (1, 1, 1, 80);
+INSERT INTO `test` VALUES (2, 1, 2, 90);
 
 -- ----------------------------
 -- Table structure for words
