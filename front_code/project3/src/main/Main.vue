@@ -8,7 +8,7 @@
             </div>
             <input type = "button" class = "button-style" id = "exit" value = "退出" @click="logout">
             <input type = "button" class = "button-style" id = "help" value = "帮助">
-            <input type = "button" class = "button-style" id = "setting" value = "设置" @click="gosetting">
+            <input type = "button" class = "button-style" id = "setting" value = "修改密码" @click="gosetting">
             <input type = "button" class = "button-style" value = "排行榜" @click="gorank">
             <input type = "button" class = "button-style" value = "主页" @click="gomain">
         </div>
@@ -31,14 +31,88 @@
                 </div>
                 <!--左下角-->
                 <div id = "buttom-left">
-                    <input type = "button" class = "select" id = "learning" value = "正在学习">
-                    <input type = "button" class = "select" id = "learning-records" value = "学习统计">
+                    <input type = "button" class = "select" id = "learning" value = "正在学习" @click="mybooks">
+                    <input type = "button" class = "select" id = "learning-records" value = "学习统计" @click="statistics">
                     <input type = "button" class = "select" id = "word-book" value = "单词本">
                     <input type = "button" class = "select" id = "word-match" value = "单词比赛">
                 </div>
             </div>
             <!--右侧块-->
-            <div id = "right">
+            <div id = "right" v-show="show">
+                <div v-show="show_books">
+                    <div v-for="index in books">
+                        <p>教材名称：{{index.book_name}}</p>
+                        <p>教材编号：{{index.book_id}}</p>
+                        <p>教材启用状态：{{index.enable}}</p>
+                        <input type="button" value="进入学习" v-if="index.enable==1" @click="study(index.book_id,index.book_name)">
+                        <input type="button" value="请求开通教材" v-if="index.enable==0" @click="">
+                    </div>
+                </div>
+                <div v-show="show_study">
+                    <!--切换单词书按钮-->
+                    <input type = "button" id = "switch-book" value = "切换单词书">
+                    <!--第一行文字及标签-->
+                    <div id = "box1">
+                        <p id = "word1">{{course_name}}</p>
+                        <p id = "word2">学前检测</p>
+                        <span class = "num" id = "num1" v-if="study_status==1">？</span>
+                        <span class="num" v-if="study_status==2">{{}}</span>
+                        <span class = "num" id = "num2">VS</span>
+                        <span class = "num" id = "num3">？</span>
+                    </div>
+
+                    <!--第二行内容-->
+                    <div id = "box2">
+                        <div id = "word3">
+                            <p>{{now_book_name}}</p>
+                        </div>
+                        <!--圆形百分比，待补充-->
+                        <div id = "rate">
+                        </div>
+                        <div id = "btn">
+                            <input type = "button" class = "button-style3" id = "preschool-test" value="学前检测" @click="goxueqian" v-if="study_status==1">
+                        </div>
+                    </div>
+
+                    <!--第三行内容-->
+                    <div id = "box3">
+                        <input type = "button" class = "button-style4" id = "unit1" value = "1">
+                        <input type = "button" class = "button-style4" id = "unit2" value = "2">
+                        <input type = "button" class = "button-style4" id = "unit3" value = "3">
+                        <input type = "button" class = "button-style4" id = "unit4" value = "4">
+                        <input type = "button" class = "button-style4" id = "unit5" value = "5">
+                        <input type = "button" class = "button-style4" id = "unit6" value = "6">
+                        <input type = "button" class = "button-style4" id = "unit7" value = "7">
+                        <input type = "button" class = "button-style4" id = "unit8" value = "8">
+                        <input type = "button" class = "button-style4" id = "unit9" value = "9">
+                        <input type = "button" class = "button-style4" id = "unit10" value = "10">
+                        <input type = "button" class = "button-style4" id = "unit11" value = "11">
+                        <input type = "button" class = "button-style4" id = "unit12" value = "12">
+                    </div>
+                </div>
+                <div v-show="show_xueqian">
+                    <p id = "word_xueqian1">初中核心词</p>
+			        <img src="../assets/u209.png" id="u209">
+			        <p id = "word_xueqian2">3分钟测出你的词汇掌握水平</p>
+			        <p id = "word_xueqian3">根据检测结果定制针对性学习方案</p>
+			        <p id = "word_xueqian4">你需要在3分钟内完成以下题目，请保持专注</p>
+			        <input type = "button" id = "start" value = "立即开始" @click="startxueqian">
+                </div>
+                <div v-if="show_statistics">
+                    <p>总共学习单词数量：{{word_numbers}}</p>
+                    <table>
+                        <tr>
+                            <th>序号</th>
+                            <th>测试类型</th>
+                            <th>分数</th>
+                        </tr>
+                        <tr v-for="index in tests_type">
+                            <td>{{index}}</td>
+                            <td>{{tests_type[index-1]}}</td>
+                            <td>{{tests_grade[index-1]}}</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
 	</div>
@@ -56,6 +130,20 @@ export default {
             coin_rank:{},
             word_rank:{},
             point_rank:{},
+            show:false,
+            test:{},
+            show_study:false,
+            show_statistics:false,
+            show_xueqian:false,
+            show_books:false,
+            tests_type:{},
+            tests_grade:{},
+            books:{},
+            word_numbers:0,
+            study_status:0,
+            now_book_id:0,
+            now_book_name:'',
+            course_name:'',
 		}
     },
     beforeCreate(){
@@ -84,6 +172,68 @@ export default {
         },
         gosetting:function(){
             window.location = "setting.html"
+        },
+        mybooks:function(){
+            this.show = true
+            this.show_study = false
+            this.show_xueqian = false
+            let that = this
+            let param = new URLSearchParams
+            param.append('student_id',this.student_id)
+            this.$axios({
+                method:'post',
+                url:'http://localhost:8000/app/getbooks',
+                data:param,
+            }).then(function(response){
+                window.console.log(response)
+                that.books = response.data
+                that.show_books = true
+            })
+        },
+        study:function(book_id,book_name){
+            this.show = true
+            let that = this
+            this.now_book_id = book_id
+            this.now_book_name = book_name
+            this.show_books = false
+            let param = new URLSearchParams
+            param.append('student_id',this.student_id)
+            this.$axios({
+                method:'post',
+                url:'http://localhost:8000/app/studystatus',
+                data:param,
+            }).then(function(response){
+                window.console.log(response)
+                that.study_status = response.data.study_status
+                that.course_name = response.data.course_name
+                that.show_study = true
+            })
+        },
+        goxueqian:function(){
+            this.show = true
+            this.show_study = false
+            this.show_xueqian = true
+        },
+        statistics:function(){
+            this.show = true
+            this.show_statistics = true
+            let that = this
+            let param = new URLSearchParams
+            param.append('student_id',this.student_id)
+            this.$axios({
+                method:'post',
+                url:'http://localhost:8000/app/studentstatistics',
+                data:param,
+            }).then(function(response){
+                window.console.log(response)
+                that.tests_type = response.data.tests_type
+                that.tests_grade = response.data.tests_grade
+                that.word_numbers = response.data.word_numbers
+            })
+        },
+        startxueqian:function(){
+            let that = this
+              
         }
     },
   // components: {
@@ -102,7 +252,6 @@ export default {
     margin: none;
     height: 100%;
     width: 100%;
-  
 }
 /*导航条*/
 .navigationStyle {
@@ -258,6 +407,152 @@ h3 {
     margin-left: 50px;
     width: 850px;
     height: 700px;
-    background-color: black;
+    background-color: #ffffff;
 }
+
+/* 学前测试开始页面CSS开始 */
+#word_xueqian1 {
+    height: 40px;
+    font-size: 30px;
+    font-weight: bold;
+    margin-left: 50px;
+}
+#u209 {
+     display: block;
+     width: 350px;
+     height: 200px;
+     margin: 70px auto 0;
+}
+#word_xueqian2 {
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: hsla(0, 0%, 0%, 0.427450980392157);
+    margin-top: 30px;
+}
+#word_xueqian3 {
+    text-align: center;
+    font-size: 14px;
+    color: hsla(0, 0%, 0%, 0.427450980392157);
+}
+#word_xueqian4 {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 100px;
+}
+/* 学前测试开始页面CSS结束 */
+
+/* 开始按钮 */
+#start {
+    margin: 15px auto 0;
+    width: 100px;
+    height: 40px;
+    font-size: 14px;
+    color: white;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    background: inherit;
+    background-color: #1890FF;
+}
+
+/* 教材和当前学习单词书页面CSS开始 */
+#switch-book {
+    width: 130px;
+    height: 45px;
+    font-size: 14px;
+    color: black;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    border-color: black;
+    background: inherit;
+    background-color: white;
+    margin-left: 500px;
+}
+/* 第一行文字及标签 */
+#box1 {
+    width: 850px;
+    height: 50px;
+    display: flex;
+    margin-top: 50px;
+}
+#word1 {
+    font-size: 14px;
+    margin-left: 50px;
+    display: block;
+}
+#word2 {
+    font-size: 14px;
+    margin-left: 200px;
+}
+.num {
+    font-size: 30px;
+    margin-left: 20px;
+}
+#num1 {
+    color: orange;
+}
+#num2 {
+    color: black;
+}
+#num3 {
+    color: black;
+}
+/* 第二行内容 */
+#box2 {
+    width: 850px;
+    height: 250px;
+    margin-top: 50px;
+    display: flex;
+}
+#word3 {
+    width: 150px;
+    height: 100px;
+    font-size: 30px;
+    font-weight: bold;
+    margin-left: 50px;
+}
+#rate {
+    width: 150px;
+    height: 150px;
+    margin-top: 50px;
+    margin-left: 150px;
+}
+#btn {
+    width: 200px;
+    height: 150px;
+    margin-top: 50px;
+    margin-left: 100px;
+    display: flex;
+    flex-direction: column;
+}
+.button-style3 {
+    width: 150px;
+    height: 40px;
+    font-size: 14px;
+    color: white;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    background: inherit;
+    background-color: #1890FF;
+}
+/* 第三行内容 */
+#box3 {
+    width: 600px;
+    height: 200px;
+}
+.button-style4 {
+    width: 70px;
+    height: 70px;
+    border: none;
+    font-size: 20px;
+    border-radius: 50%;
+    background: inherit;
+    background-color:#D3D3D3;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+/* 教材和当前学习单词书页面CSS结束 */
 </style>

@@ -6,25 +6,25 @@
                <img src="../assets/u24.png" id="logoimg" class="logoimgStyle" width="35" height="35">
                 <p id="logotext">单词赢</p>
             </div>
-            <input type = "button" class = "button-style1" id = "exit" value = "退出" @click="logout">
-            <input type = "button" class = "button-style1" id = "help" value = "帮助">
-            <input type = "button" class = "button-style1" id = "setting" value = "设置" @click="gosetting">
-            <input type = "button" class = "button-style1" id = "rank" value = "排行榜" @click="gorank">
+            <input type = "button" class = "button-style" id = "exit" value = "退出" @click="logout">
+            <input type = "button" class = "button-style" id = "help" value = "帮助">
+            <input type = "button" class = "button-style" value = "修改密码" @click="gosetting">
+            <input type = "button" class = "button-style" value = "排行榜" @click="gorank">
             <input type = "button" class = "button-style" value = "主页" @click="gomain">
         </div>
 
         <!--主体部分-->
-        <div id = main>
+        <div id = "main">
 
 	    	<!--修改密码部分-->
-	    	<div class = "input">
+	    	<div class = "change">
 	    		<p>请输入新密码</p>
-            	<input type = "text" class = "password" id = "new-password" v-bind:value="password1">
+            	<input type = "text" class = "password" id = "new-password" v-model="password1">
 	    	</div>
 
-	    	<div class = "input">
+	    	<div class = "change">
 	    		<p>请确认新密码</p>
-            	<input type = "text" class = "password" id = "confirm-password" v-bind:value="password2">
+            	<input type = "text" class = "password" id = "confirm-password" v-model="password2">
 	    	</div>
             <input type = "button" class = "button-style2" id = "confirm" value = "确认" @click="change_password">
             <input type = "button" class = "button-style2" id = "cancel" value = "取消" @click="gomain">
@@ -82,12 +82,14 @@ export default {
             window.location = "setting.html"
         },
         change_password:function(){
+            let that = this
+            window.console.log(this.password1)
             if(this.password1 == this.password2 && this.password1 != ""){
                 let message = '你确定要修改密码吗？'
                 if(window.confirm(message) == true){
-                    let that = this
                     let param = new URLSearchParams()
                     param.append('new_password',this.password1)
+                    param.append('student_id',this.student_id)
                     this.$axios({
                         method:'post',
                         url:'http://localhost:8000/app/changepassword',
@@ -115,27 +117,36 @@ export default {
 </script>
 
 <style scoped> 
-/* 导航条 */
+#setting {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin: none;
+    height: 100%;
+    width: 100%;
+  
+}
+/*导航条*/
 .navigationStyle {
     overflow: hidden;
     background-color: #e0edfdf1;
 }
-
-/* logo */
+/*logo*/
 .logoimgStyle {
-    float: left;
+	float: left;
 	list-style: none;
-    margin: 10px 10px;
+	margin: 10px 10px;
+	
 }
-
-/* logo块 */
+/*logo块*/
 .logoStyle {
 	width: 150px;
 	margin: 0;
 	background-color: white;
 }
-
-/* 单词赢 */
+/*单词赢*/
 #logotext {
 	float: left;
 	margin: 15px 5px;
@@ -149,9 +160,8 @@ export default {
     text-align: left;
     line-height: 26px;
 }
-
-/* 导航链接 */
-.button-style1 {
+/*导航链接*/
+.button-style {
     height: 56px;
     float: right;
     display: block;
@@ -166,9 +176,8 @@ export default {
     word-wrap: break-word;
     text-transform: none;
 }
-
-/* 导航 - 修改颜色 */
-.button-style1:hover {
+/*导航 - 修改颜色*/
+.button-style:hover {
     background-color: #ddd;
     color: black;
 }
@@ -181,7 +190,7 @@ export default {
     margin-top: 150px;
 }
 
-.input {
+.change {
 	display: flex;
 	font-size: 18px;
 	font-weight: bold;

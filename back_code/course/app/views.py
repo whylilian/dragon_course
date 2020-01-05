@@ -1,8 +1,9 @@
-
+# -*- coding:UTF-8 -*-
 
 from django.shortcuts import render
 from app.models import *
 from django.http import JsonResponse
+import random
 # Create your views here.
 
 #处理学生登录请求，匹配账户和密码
@@ -12,14 +13,16 @@ def Student_login(request):
         password = request.POST.get('student_password')
         print(username)
         print(password)
-        student = Student.objects.get(student_username=username)
-        print(student.student_name)
         data = {}
+        student = Student.objects.get(student_username = username)
+        print(student.student_name)
         data['student_id'] = student.student_id
         data['student_name'] = student.student_name
         data['coins'] = student.coins
     except Student.DoesNotExist:
-        print('发生异常')
+        print('用户名不存在')
+        data['login_status'] = 'not_exist'
+        return JsonResponse(data, safe=False)
     else:
         if student.student_username==username and student.student_password==password:
             data['login_status'] = 'succeed'
@@ -29,17 +32,19 @@ def Student_login(request):
             return JsonResponse(data, safe=False)
 
 #获取学生的学习状态
-def GetStudentStatus(request):
+def Study_status(request):
     try:
-        student_id = int(request.POST.get('student_id'))
-        student = Student.objects.get(student_id=student_id)
-        study_status = student.study_status
+        student_id = request.POST.get('student_id')
+        student = Student.objects.get(student_id = student_id)
+        course = Course.objects.get(course_id = student.course_id)
         data = {}
-        data['study_status'] = study_status
+        data['study_status'] = student.study_status
+        data['course_name'] = course.course_name
     except Student.DoesNotExist:
         print('发生异常')
     else:
         return JsonResponse(data, safe=False)
+
 
 #获取排行榜信息
 def Student_rank(request):
@@ -117,12 +122,30 @@ def Check_spell(request):
             student_word.save()
         return JsonResponse({word.word:"错误"},json_dumps_params={'ensure_ascii':False})
 
-#获取学生学习状态
-def Study_status(request):
-    # studentid = request.POST.get('student_id')
-    studentid = 1
-    student = Student.objects.get(student_id = studentid)
-    return JsonResponse({'status':student.study_status})
+#获取学生的课程课本
+def Get_books(request):
+    # studentid = Student.POST.get('student_id')
+    student_id = 1
+    student = Student.objects.get(student_id = student_id)
+    course = Course.objects.get(course_id = student.course_id)
+
+    books = course.course_book_id.split('|')
+    books_list = {}
+    for item in books:
+        book_id = int(item)
+        book = Category.objects.get(category_id = book_id)
+        book_message = {
+            'book_name':book.book_name,
+            'book_id': book.category_id,
+            'enable':book.enable,
+            'create_time':book.create_time.strftime("%Y-%m-%d %H:%M:%S")
+        }
+        books_list[book.sequence] = book_message 
+
+    books_list = dict(sorted(books_list.items()))
+
+    return JsonResponse(books_list,json_dumps_params={'ensure_ascii':False})
+
 
 #返回学生已参加比赛的信息接口
 def Match_commit(request):
@@ -219,19 +242,20 @@ def Create_match(request):
     m.save()
     return JsonResponse(None,safe = False)
 
-#获取学生的学习统计
-def Learn_statistics(request):
-    studentid = request.POST.get('student_id')
-    # studentid = 1
-    wordnumber = len(StudentWords.objects.filter(student_id = studentid))
+#学生端获取学生的学习统计
+def Student_statistics(request):
+    student_id = request.POST.get('student_id')
+    word_numbers = len(StudentWords.objects.filter(student_id = student_id))
 
-    test = Test.objects.filter(student_id = studentid)
+    tests = Test.objects.filter(student_id = student_id)
 
-    tests = {}
-    for item in test:
-        tests[item.test_type] = item.test_grade
-
-    return JsonResponse({'wordnumber':wordnumber,'test':tests}) 
+    tests_type = {}
+    tests_grade = {}
+    
+    for i in range(len(tests)):
+        tests_type[i] = tests[i].test_type
+        tests_grade[i] = tests[i].test_grade
+    return JsonResponse({'word_numbers':word_numbers,'tests_type':tests_type,'tests_grade':tests_grade},safe = False) 
 
 #返回比赛详细信息
 def Match_message(request):
@@ -292,10 +316,9 @@ def Student_list(request):
 #修改密码
 def Change_password(request):
     # 存取控制
-    studentid = request.POST.get('student_id')
+    student_id = request.POST.get('student_id')
     new_password = request.POST.get('new_password')
-    studentid = 2
-    student = Student.objects.get(student_id = studentid)
+    student = Student.objects.get(student_id = student_id)
     student.student_password = new_password
     student.save()
     return JsonResponse({'change_status':'密码修改成功'},safe = False,json_dumps_params={'ensure_ascii':False})
@@ -329,3 +352,191 @@ def TeacherMatchMessage(request):
             'join_number':'5000'
         }
     return JsonResponse(match_message,json_dumps_params={'ensure_ascii':False})
+
+# 默认前端首先获得单词书列表，用户选择单词书在返回到后端
+def Test_before(request):
+    book_id = request.POST.get('book_id')
+    category = Category.objects.get(category_id = book_id)
+    words = Classification.objects.filter(category_id = category.category_id).order_by('word_id')
+
+    # 从当前单词书中获得随机的n个不重复的单词
+    n = 3
+    index_list = random.sample(range(1,len(words)),n)
+    # 测试的所有数据
+    test_list = {}
+    # 错误的三个单词字典
+    errorwords = {}
+    # 获得所有单词的数量，从所有单词里随机抽取，默认单词id自动递增无缺漏
+    allwords = Words.objects.all()
+    num = len(allwords)
+    
+    correct = str()
+    # 录入测试单词数据及其选项
+    i = 1
+    for item in index_list:
+        word = Words.objects.get(word_id = words[item].word_id)
+        
+        # 随机生成一个正确选项
+        correct_id = random.randint(1,4)
+        # 随机生成四个错误选项
+        for index in range(4):
+            random_id = random.randint(1,num)
+            while random_id == word.word_id:
+                random_id = random.randint(1,num)
+            err_word = Words.objects.get(word_id = random_id)
+            errorwords[index] = err_word.means
+
+        Aoption = errorwords[0]
+        Boption = errorwords[1]
+        Coption = errorwords[2]
+        Doption = errorwords[3]
+        # 根据随机出来的数字 确定正确选项字母
+        if correct_id == 1:
+            Aoption = word.means
+            correct = 'A'
+        elif correct_id == 2:
+            Boption = word.means
+            correct = 'B'
+        elif correct_id == 3:
+            Coption = word.means
+            correct = 'C'
+        else:
+            Doption = word.means
+            correct = 'D'
+
+        test_list[i] = {
+            'spell':word.word,
+            'A':Aoption,
+            'B':Boption,
+            'C':Coption,
+            'D':Doption,
+            'correct':correct,
+        }
+        i = i + 1
+    
+    return JsonResponse(test_list,json_dumps_params={'ensure_ascii':False})
+
+# 默认前端首先获得单词书列表，用户选择单词书，第几单元再返回到后端
+# 后端返回这个单元的所有单词
+def Unit_learn(request):
+    # unit = int(request.POST.get('Unit_number'))
+    # bookname = request.POST.get('book_name')
+    unit = 2
+    bookname = '八年级上册英语'
+    unit_num = 10  # 单元单词数量
+
+    category = Category.objects.get(book_name = bookname)
+    # 按单词ID进行排序，规定好一个单元的数量
+    words = Classification.objects.filter(category_id = category.category_id).order_by('word_id')
+    word_message = {}
+    
+    start = (unit-1)*unit_num
+    end = unit*unit_num
+    i = 1
+    for item in words[start:end]:
+        word = Words.objects.get(word_id = item.word_id)
+        word_message[i] = {
+            'word_id':word.word_id,
+            'spell':word.word,
+            'mean':word.means
+        }
+        i += 1
+    return JsonResponse(word_message,json_dumps_params={'ensure_ascii':False})
+
+
+# 学生单词学习拼写  只有拼写形式，加熟练度
+def Word_spell(request):
+    # 前端传入单词ID，学生拼写，学生ID
+    # wordid = request.POST.get('word_id')
+    # spell = request.POST.get('spell')
+    # studentid = request.POST.get('student_id')
+    wordid = 5
+    spell = 'AmAzing'
+    studentid = 1
+    word = Words.objects.get(word_id = wordid)
+    student_word = StudentWords.objects.get(student_id = studentid,words_id = word.word_id)
+
+    data = {}
+    if word.word == spell.lower():
+        if student_word.counts < student_word.value:
+            student_word.counts += 1
+            student_word.save()
+        # 返回正确的单词（键）和是否正确中文（键值）
+        data[word.word] = "正确"
+        return JsonResponse(data,json_dumps_params={'ensure_ascii':False})
+    else:
+        if student_word.counts > 0:
+            student_word.counts -= 1
+            student_word.save()
+        data[word.word] = "错误"
+        return JsonResponse(data,json_dumps_params={'ensure_ascii':False})
+
+# 默认前端首先获得单词书列表，用户选择单词书和第几单元在返回到后端
+# 学生单词单元测试  只有选择题，包含该单元所有单词，不加熟练度
+def Unit_test(request):
+    # bookname = request.POST.get('book_name')
+    # unit = request.POST.get('unit')
+    bookname = "八年级上册英语"
+    unit = 2
+    category = Category.objects.get(book_name = bookname)
+    # 按单词ID进行排序，规定好一个单元的数量
+    words = Classification.objects.filter(category_id = category.category_id).order_by('word_id')
+
+    # 单元单词数量
+    unit_num = 10
+    start = (unit-1)*unit_num
+    end = unit*unit_num
+  
+    # 单元测试的所有数据
+    test_list = {}
+    # 错误的三个单词字典
+    errorwords = {}
+    # 获得所有单词的数量，从所有单词里随机抽取，默认单词id自动递增无缺漏
+    allwords = Words.objects.all()
+    num = len(allwords)
+
+    correct = str()
+    # 录入测试单词数据及其选项
+    i = 1
+    for item in words[start:end]:
+        word = Words.objects.get(word_id = item.word_id)
+        
+        # 随机生成一个正确选项
+        correct_id = random.randint(1,4)
+        # 随机生成四个错误选项
+        for index in range(4):
+            random_id = random.randint(1,num)
+            while random_id == word.word_id:
+                random_id = random.randint(1,num)
+            err_word = Words.objects.get(word_id = random_id)
+            errorwords[index] = err_word.means
+
+        Aoption = errorwords[0]
+        Boption = errorwords[1]
+        Coption = errorwords[2]
+        Doption = errorwords[3]
+        # 根据随机出来的数字 确定正确选项字母
+        if correct_id == 1:
+            Aoption = word.means
+            correct = 'A'
+        elif correct_id == 2:
+            Boption = word.means
+            correct = 'B'
+        elif correct_id == 3:
+            Coption = word.means
+            correct = 'C'
+        else:
+            Doption = word.means
+            correct = 'D'
+
+        test_list[i] = {
+            'spell':word.word,
+            'A':Aoption,
+            'B':Boption,
+            'C':Coption,
+            'D':Doption,
+            'correct':correct,
+        }
+        i = i + 1
+    
+    return JsonResponse(test_list,json_dumps_params={'ensure_ascii':False})

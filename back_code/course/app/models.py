@@ -9,6 +9,7 @@ from django.db import models
 
 
 class Calendar(models.Model):
+    calendar_id = models.AutoField(primary_key=True)
     student = models.ForeignKey('Student', models.DO_NOTHING)
     calendar_time = models.CharField(max_length=2000, blank=True, null=True)
 

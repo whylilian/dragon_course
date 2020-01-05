@@ -47,7 +47,7 @@ export default {
 			let that = this
 			let param = new URLSearchParams()
 			param.append('student_username',this.username)
-			param.append('student_password',this.password)
+            param.append('student_password',this.password)
 			this.$axios({
 				method:'post',
 				url:'http://localhost:8000/app/',
@@ -56,19 +56,18 @@ export default {
                 window.console.log(response)
                 window.console.log(typeof(response.data.student_id))
 				if(response.data.login_status=='succeed'){
-					// that.$router.push({
-					// 	path:'/test',
-					// 	params:{
-					// 		student_id:response.data.student_id,
-					// 		student_name:response.data.student_name
-					// 	}
-                    // })
                     let student_id = response.data.student_id
                     let student_name = response.data.student_name
                     let coins = response.data.coins.toString()
                     that.$store.dispatch("Login",{student_id,student_name,coins})
                     window.location = 'main.html'
-				}
+				}else if(response.data.login_status=='failed'){
+                    window.alert("密码错误，请重新输入")
+                    window.location = "login.html"
+                }else if(response.data.login_status=='not_exist'){
+                    window.alert("用户名不存在，请重新输入")
+                    window.location = "login.html"
+                }
 			})
 		}
     },
@@ -90,7 +89,6 @@ body {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
     color: #2c3e50;
     background-size:100% 100%;
     margin: none;
