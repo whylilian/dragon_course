@@ -10,8 +10,7 @@ urlpatterns = [
     path('checkspell', views.Check_spell, name='checkspell'),
     path('wordbook', views.Word_book, name='workbook'),
     path('studystatus', views.Study_status, name='studystatus'),
-    path('matchcommit', views.Match_commit, name='matchcommit'),
-    path('matchuncommit', views.Match_uncommit, name='matchuncommit'),
+    path('match', views.Match_show, name='match'),
     path('creatematch', views.Create_match, name='creatematch'),
     path('studentstatistics', views.Student_statistics, name='studentstatistics'),
     path('matchmessage', views.Match_message, name='matchmessage'),
@@ -20,4 +19,5 @@ urlpatterns = [
     path('studycensus', views.Study_census, name='studycensus'),
     path('getbooks', views.Get_books, name='getbooks'),
     path('testbefore', views.Test_before, name='testbefore'),
+    path('inputtest', views.Input_test, name='inputtest'),
 ]

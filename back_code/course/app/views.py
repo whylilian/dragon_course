@@ -67,36 +67,44 @@ def Student_rank(request):
     # 返回给前端一个字典，字典中包括三个排行，每个排行的键值是字典，按照金币数、单词量、积分进行倒序排序。
     return JsonResponse({'coin_rank':coins_rank, 'word_rank':words_rank, 'point_rank':points_rank}, json_dumps_params={'ensure_ascii':False})
 
-#返回单词本数据
+# 学生单词本
 def Word_book(request):
-    # order = request.POST.get('review_order')
-    # studentid = request.POST.get('student_id')
-    # order = 'letter'
-    order = 'familiarity'
-    studentid = 1
+    order = request.POST.get('order')
+    student_id = request.POST.get('student_id')
 
-    words = Words.objects.all()
+    # 先获得学生的所有单词
+    student_words = StudentWords.objects.filter(student_id = student_id)
+    words = {}
+    for item in student_words:
+        word = Words.objects.get(word_id = item.words_id)
+        words[word.word] = item.counts/item.value
+    # 根据排序方式进行排序
     word_rank = {}
-    for item in words:
-        studentword = StudentWords.objects.get(student_id = studentid, words_id = item.word_id)
-        word_rank[item.word] = studentword.counts/studentword.value
-
-    wordrank = {}
     if order == 'familiarity':
-        wordrank = dict(sorted(word_rank.items(), key= lambda kv:(kv[1],kv[0])))
+        word_rank = dict(sorted(words.items(), key= lambda kv:(kv[1],kv[0])))
     elif order == 'letter':
-        for i in sorted(word_rank):
-            wordrank[i] = word_rank[i]
+        word_rank = dict(sorted(words.items()))
 
-    for key,value in wordrank.items():
+    data = {}
+    i = 1
+    # 读入数据
+    for key,value in word_rank.items():
+        word = Words.objects.get(word = key)
         if value == 0:
-            wordrank[key] = 1
+            value = 1
         elif value == 1:
-            wordrank[key] = 3
+            value = 3
         else:
-            wordrank[key] = 2
+            value = 2
+        
+        data[i] = {
+            'spell':key,
+            'mean':word.means,
+            'degree':value
+        }
+        i = i + 1
+    return JsonResponse(data,json_dumps_params={'ensure_ascii':False})
 
-    return JsonResponse(wordrank)
 
 
 #单词拼写检测
@@ -147,46 +155,43 @@ def Get_books(request):
     return JsonResponse(books_list,json_dumps_params={'ensure_ascii':False})
 
 
-#返回学生已参加比赛的信息接口
-def Match_commit(request):
-    studentid = request.POST.get('student_id')
-    # studentid = 1
-    studentmatchs = StudentMatchs.objects.filter(student_id = studentid)
-
-    commit = {}
-    for item in studentmatchs:
-        match = Match.objects.get(match_id = item.match_id)
-        # 将数据库中的datetime类型去除T/Z
-        starttime = match.start_time.strftime("%Y-%m-%d %H:%M:%S")
-        endtime = match.end_time.strftime("%Y-%m-%d %H:%M:%S")
-        jointime = item.join_time.strftime("%Y-%m-%d %H:%M:%S")
-        commit[match.match_id] = {
-            'match':match.match_name,
-            'start_time':starttime,
-            'end_time':endtime,
-            'join_time':jointime,
-            'match_grade':item.match_grade
-        }
-    return JsonResponse(commit,json_dumps_params={'ensure_ascii':False})
-
-#学生未参加的比赛信息
-def Match_uncommit(request):
+# 参加过的比赛
+# 只可以参加自己老师的比赛，未参加的比赛
+def Match_show(request):
     # studentid = request.POST.get('student_id')
     studentid = 1
     studentmatchs = StudentMatchs.objects.filter(student_id = studentid)
 
-    matchs = Match.objects.all()
+    # 学生参加过的比赛
+    commit = {}
+    for item in studentmatchs:
+        match = Match.objects.get(match_id = item.match_id)
+        starttime = match.start_time.strftime("%Y-%m-%d %H:%M:%S")
+        endtime = match.end_time.strftime("%Y-%m-%d %H:%M:%S")
+        commit[match.match_id] = {
+            'match':match.match_name,
+            'start_time':starttime,
+            'endtime':endtime,
+            'join_time':item.join_time,
+            'match_grade':item.match_grade
+        }
+
+    # 学生未参加过的比赛
+    student = Student.objects.get(student_id = studentid)
+    course = Course.objects.get(course_id = student.course_id)
+    # 检索出所有该课程老师的比赛
+    matchs = Match.objects.filter(teacher_id = course.teacher_id)
     unmatchs = set()
     for item in matchs:
         unmatchs.add(item.match_id)
+    # 移除参加过的项目
     for item in studentmatchs:
         unmatchs.remove(item.match_id)
-    # print(unmatchs)
+
     uncommit = {}
     for item in matchs:
         if item.match_id in unmatchs:
             match = Match.objects.get(match_id = item.match_id)
-            # 将数据库中的datetime类型去除T/Z
             starttime = match.start_time.strftime("%Y-%m-%d %H:%M:%S")
             endtime = match.end_time.strftime("%Y-%m-%d %H:%M:%S")
             uncommit[match.match_id] = {
@@ -194,10 +199,11 @@ def Match_uncommit(request):
                 'teacher_name':match.teacher_name,
                 'start_time':starttime,
                 'end_time':endtime,
-                # 比赛答题时间
                 'match_time':match.match_time
             }
-    return JsonResponse(uncommit,json_dumps_params={'ensure_ascii':False})
+    data = {'commit':commit,'uncommit':uncommit}
+    return JsonResponse(data,json_dumps_params={'ensure_ascii':False})
+
 
 #教师创建比赛
 def Create_match(request):
@@ -355,26 +361,45 @@ def TeacherMatchMessage(request):
 
 # 默认前端首先获得单词书列表，用户选择单词书在返回到后端
 def Test_before(request):
-    book_id = request.POST.get('book_id')
-    category = Category.objects.get(category_id = book_id)
-    words = Classification.objects.filter(category_id = category.category_id).order_by('word_id')
+    student_id = request.POST.get('student_id')
+    # student_id = 1
+    student = Student.objects.get(student_id = student_id)
+    course = Course.objects.get(course_id = student.course_id)
+    books = course.course_book_id.split('|')
+    # 用集合保存所有单词
+    words = set()
+    for item in books:
+        book_id = int(item)
+        book_words = Classification.objects.filter(category_id = book_id).order_by('word_id')
+        for word_item in book_words:
+            words.add(word_item.word_id)
+
+    i = 1
+    words_list = {}
+    # all_words = Words.objects.all()
+    for item in words:
+        # if item.word_id in words:
+        words_list[i] = item
+        i = i + 1
+
 
     # 从当前单词书中获得随机的n个不重复的单词
-    n = 3
-    index_list = random.sample(range(1,len(words)),n)
+    n = 28
+    index_list = random.sample(range(1,len(words_list)+1),n)
     # 测试的所有数据
     test_list = {}
     # 错误的三个单词字典
     errorwords = {}
+    
     # 获得所有单词的数量，从所有单词里随机抽取，默认单词id自动递增无缺漏
     allwords = Words.objects.all()
     num = len(allwords)
-    
+
     correct = str()
     # 录入测试单词数据及其选项
     i = 1
     for item in index_list:
-        word = Words.objects.get(word_id = words[item].word_id)
+        word = Words.objects.get(word_id = words_list[item])
         
         # 随机生成一个正确选项
         correct_id = random.randint(1,4)
@@ -540,3 +565,14 @@ def Unit_test(request):
         i = i + 1
     
     return JsonResponse(test_list,json_dumps_params={'ensure_ascii':False})
+
+# 录入测试成绩
+def Input_test(request):
+    studentid = request.POST.get('student_id')
+    test_type = request.POST.get('test_type')
+    test_grade = request.POST.get('test_grade')
+    test = Test(student_id= studentid,test_type = test_type,test_grade = test_grade)
+    test.save()
+    data = {}
+    data['status'] = 'succeed'
+    return JsonResponse(data)
