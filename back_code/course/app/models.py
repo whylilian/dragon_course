@@ -9,7 +9,6 @@ from django.db import models
 
 
 class Calendar(models.Model):
-    calendar_id = models.AutoField(primary_key=True)
     student = models.ForeignKey('Student', models.DO_NOTHING)
     calendar_time = models.CharField(max_length=2000, blank=True, null=True)
 
@@ -161,6 +160,8 @@ class Words(models.Model):
     word_id = models.AutoField(primary_key=True)
     word = models.CharField(max_length=100)
     means = models.CharField(max_length=200)
+    example = models.CharField(max_length=255)
+    example_means = models.CharField(max_length=255)
     voice = models.CharField(max_length=1000, blank=True, null=True)
     value = models.IntegerField()
     property = models.CharField(max_length=20)

@@ -31,10 +31,10 @@
                 </div>
                 <!--左下角-->
                 <div id = "buttom-left">
-                    <input type = "button" class = "select" id = "learning" value = "正在学习" @click="mybooks">
-                    <input type = "button" class = "select" id = "learning-records" value = "学习统计" @click="statistics">
-                    <input type = "button" class = "select" id = "word-book" value = "单词本" @click="check_familiarity">
-                    <input type = "button" class = "select" id = "word-match" value = "单词比赛">
+                    <input type = "button" :class = "{select1:button1,select2:!button1}" value = "正在学习" @click="mybooks">
+                    <input type = "button" :class = "{select1:button2,select2:!button2}" value = "学习统计" @click="statistics">
+                    <input type = "button" :class = "{select1:button3,select2:!button3}" value = "单词本" @click="check_familiarity">
+                    <input type = "button" :class = "{select1:button4,select2:!button4}" value = "单词比赛" @click="match">
                 </div>
             </div>
             <!--右侧块-->
@@ -134,10 +134,10 @@
                             <th>测试类型</th>
                             <th>分数</th>
                         </tr>
-                        <tr v-for="index in tests_type">
-                            <td>{{index}}</td>
-                            <td>{{tests_type[index-1]}}</td>
-                            <td>{{tests_grade[index-1]}}</td>
+                        <tr v-for="(key,value,index) in tests_type">
+                            <td>{{index+1}}</td>
+                            <td>{{tests_type[index]}}</td>
+                            <td>{{tests_grade[index]}}</td>
                         </tr>
                     </table>
                 </div>
@@ -158,6 +158,53 @@
                     </div>
                     <input type = "button" id = "commit" value = "提交" @click="commit_test">
                 </div>
+                <!-- 显示所有单词比赛信息页面 -->
+                <div v-show="show_match">
+                    <p class = "title">我参加的比赛</p>
+            
+                    <!--上方的盒子-->
+                    <div id = "match-box1" v-for="index in commit">
+                    
+                        <!--参加的比赛框-->
+                        <div class = "match">
+                        
+                            <!--第一行-->
+                            <div id = "first-box">
+                                <p class = "words" id = "words1">{{index.match}}</p>
+                                <p class = "words" id = "words3">已参加</p>
+                            </div>
+                            <p class = "words" id = "words4">{{index.start_time}}-{{index.end_time}}</p>
+                            <!--最后一行-->
+                            <div id = "third-box">
+                                <p class = "words" id = "words7">我的排名：{{index.match_rank}}</p>
+                                <a id = "detail">详情>></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class = "title">单词比赛</p>
+
+                    <!--下方的盒子-->
+                    <div id = "match-box2" v-for="index in uncommit">
+                    
+                        <!--单词比赛框-->
+                        <div class = "match">
+                            <!--第一行-->
+                            <div id = "forth-box">
+                                <p class = "words" id = "words8">{{index.match}}</p>
+                                <p class = "words" id = "words10">我要参加</p>
+                            </div>
+
+                            <p class = "words" id = "words11">{{index.start_time}}-{{index.end_time}}</p>
+
+                            <!--最后一行-->
+                            <div id = "sixth-box">
+                                <p class = "words" id = "words14">我的排名 999</p>
+                                <a id = "detail">详情>></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 	</div>
@@ -175,20 +222,27 @@ export default {
             coin_rank:{},//金币排行榜字典
             word_rank:{},//单词书排行榜字典
             point_rank:{},//积分排行榜字典
-            show:false,//显示右边主体框
             test:{},
+            button1:true,
+            button2:true,
+            button3:true,
+            button4:true,
+            show:false,//显示右边主体框
             show_study:false,//显示学习页面
             show_statistics:false,//显示学习统计页面
             show_xueqian:false,//显示学前测试进入页面
             show_books:false,//显示课程课本选择页面
             show_word_book:false,//显示单词书页面
             show_test:false,//显示学前测试页面
+            show_match:false,//显示全部比赛信息页面
             tests_type:{},//测试类型的字典
             tests_grade:{},//测试类型对应的测试分数的字典
             books:{},
             words:{},
             test_select:{},//测试页面学生做的选项
             test_before:{},//测试题数据
+            commit:{},//学生参加的单词比赛
+            uncommit:{},//学生未参加的单词比赛
             word_numbers:0,
             study_status:0,//记录学生学习状态，用来判断是否进行学前测试、学后测试
             now_book_id:0,//当前学习的书本id
@@ -233,6 +287,12 @@ export default {
             this.show_statistics = false
             this.show_books = false
             this.show_test = false
+            this.show_match = false
+            // 更改button样式
+            this.button1 = true
+            this.button2 = true
+            this.button3 = false
+            this.button4 = true
             this.word_order = 'familiarity'
             let that = this
             let param = new URLSearchParams
@@ -256,6 +316,7 @@ export default {
             this.show_statistics = false
             this.show_books = false
             this.show_test = false
+            this.show_match = false
             this.word_order = 'letter'
             let that = this
             let param = new URLSearchParams
@@ -279,6 +340,12 @@ export default {
             this.show_statistics = false
             this.show_word_book = false
             this.show_test = false
+            this.show_match = false
+            // 更改button样式
+            this.button1 = false
+            this.button2 = true
+            this.button3 = true
+            this.button4 = true
             let that = this
             let param = new URLSearchParams
             param.append('student_id',this.student_id)
@@ -299,6 +366,7 @@ export default {
             this.show_xueqian = false
             this.show_word_book = false
             this.show_test = false
+            this.show_match = false
             let that = this
             this.now_book_id = book_id
             this.now_book_name = book_name
@@ -323,6 +391,7 @@ export default {
             this.show_books = false
             this.show_word_book = false
             this.show_test = false
+            this.show_match = false
         },
         statistics:function(){
             this.show = true
@@ -332,6 +401,12 @@ export default {
             this.show_books = false
             this.show_word_book = false
             this.show_test = false
+            this.show_match = false
+            // 更改button样式
+            this.button1 = true
+            this.button2 = false
+            this.button3 = true
+            this.button4 = true
             let that = this
             let param = new URLSearchParams
             param.append('student_id',this.student_id)
@@ -354,6 +429,7 @@ export default {
             this.show_xueqian = false
             this.show_books = false
             this.show_word_book = false
+            this.show_match = false
             let param = new URLSearchParams
             param.append('student_id',this.student_id)
             this.$axios({
@@ -390,11 +466,51 @@ export default {
                 this.show_books = false
                 this.show_word_book = false
                 this.show_test = false
+                this.show_match = false
                 let param = new URLSearchParams
                 param.append('student_id',this.student_id)
-                param.append('before_grade',this.before_grade)
-
+                param.append('test_grade',this.before_grade)
+                param.append('test_type',1)
+                this.$axios({
+                    method:'post',
+                    url:'http://localhost:8000/app/inputtest',
+                    data:param,
+                }).then(function(response){
+                    window.console.log(response)
+                    if(response.data.status=='succeed'){
+                        window.alert('恭喜你，测试完成')
+                    }
+                })
             }
+        },
+        match:function(){
+            this.show = true
+            this.show_study = false//显示学习页面
+            this.show_statistics = false//显示学习统计页面
+            this.show_xueqian = false//显示学前测试进入页面
+            this.show_books = false//显示课程课本选择页面
+            this.show_word_book = false//显示单词书页面
+            this.show_test = false//显示学前测试页面
+            this.show_match = true//显示全部比赛信息页面
+            // 更改button样式
+            this.button1 = true
+            this.button2 = true
+            this.button3 = true
+            this.button4 = false
+            let that = this
+            let param = new URLSearchParams
+            param.append('student_id',this.student_id)
+            this.$axios({
+                method:'post',
+                url:'http://localhost:8000/app/match',
+                data:param
+            }).then(function(response){
+                window.console.log(response)
+                that.commit = response.data.commit
+                that.uncommit = response.data.uncommit
+                window.console.log(that.commit)
+                window.console.log(that.uncommit)
+            })
         }
     },
   // components: {
@@ -476,6 +592,14 @@ export default {
 #top-left {
     width: 300px;
     height: 120px;
+    background-color: #ffffff;
+}
+/* 左下角部分 */
+#buttom-left {
+    width: 300px;
+    height: 280px;
+    background-color: #ffffff;
+    text-align: center;
 }
 
 .headportraitStyle {
@@ -519,16 +643,10 @@ h3 {
     font-size: 14px;
 }
 
-/* 左下角部分 */
-.buttom-left {
-    width: 300px;
-    height: 280px;
-}
 
 /*按钮样式*/
-.select {
-    background-color: rgba(255, 253, 253, 0.945); 
-    border: 1px solid whitesmoke;
+.select1 {
+    background-color: rgba(223, 215, 215, 0.658); 
     width: 200px;
     margin-top: 10px;
     border-radius: 4px; 
@@ -538,19 +656,20 @@ h3 {
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
+    border: none;
 }
-/*鼠标在按钮上时*/
-.select:hover {
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-    background-color: rgba(93, 204, 255, 0.192); 
-	color:rgb(14, 140, 243);
-}
-/*按钮被按下时*/
-.select:focus {
-    border-right-width: 4px;
-    border-right-color: rgb(6, 115, 204) ;
-    background-color:  rgba(93, 204, 255, 0.192);
-    color:rgb(14, 140, 243);
+.select2{
+    background-color:  rgba(93, 255, 115, 0.842);
+    color:rgb(255, 255, 255);
+    width: 200px;
+    margin-top: 10px;
+    border-radius: 4px; 
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border: none;
 }
 
 #right {
@@ -788,4 +907,134 @@ h3 {
     display:block;
     margin:0 auto;
 }
+/* 学前测试页面CSS结束 */
+
+/* 所有比赛信息页面CSS开始 */
+#my_match1{
+    background-color: #D3D3D3;
+    float: left;
+    width: 300px;
+    height: 275px;
+}
+
+/* 上方框 */
+#match-box1{
+    width: 100%;
+    height: 260px;
+    display: flex;
+}
+
+/* 标题 */
+.title {
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0;
+    padding-left: 30px;
+    padding-top: 30px;
+}
+
+/* 参加的比赛框 */
+.match {
+    width: 300px;
+    height: 155px;
+    margin-top: 50px;
+    margin-left: 50px;
+    background-color: rgb(212, 211, 209);
+}
+
+/* 第一行 */
+#first-box {
+    width: 300px;
+    height: 40px;
+    display: flex;
+}
+
+.words {
+    font-size: 16px;
+}
+
+#words1 {
+    padding-left: 5px;
+}
+
+#words3 {
+    color: #0096FA;
+    padding-left: 170px;
+}
+
+#words4 {
+    text-align: center;
+}
+
+#words5 {
+    text-align: center;
+}
+
+/* 最后一行内容 */
+#third-box {
+    margin-top: 40px;
+    width: 300px;
+    height: 45px;
+    display: flex;
+}
+
+#words7 {
+    margin: 0;
+    padding-left: 100px;
+}
+
+#detail {
+    color: #0096FA;
+    padding-left: 30px;
+    font-size: 16px;
+}
+
+/* 下方框 */
+#match-box2{
+    width: 100%;
+    height: 260px;
+    display: flex;
+}
+
+/* 第一行 */
+#forth-box {
+    width: 300px;
+    height: 40px;
+    display: flex;
+}
+
+#words8 {
+    padding-left: 5px;
+}
+
+#words9 {
+    padding-left: 50px;
+}
+
+#words10 {
+    color: #0096FA;
+    padding-left: 150px;
+}
+
+#words11 {
+    text-align: center;
+}
+
+#words12 {
+    text-align: center;
+}
+
+/* 最后一行内容 */
+#sixth-box {
+    margin-top: 40px;
+    width: 300px;
+    height: 45px;
+    display: flex;
+}
+
+#words14 {
+    margin: 0;
+    padding-left: 100px;
+}
+
 </style>

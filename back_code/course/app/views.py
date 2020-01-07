@@ -158,26 +158,34 @@ def Get_books(request):
 # 参加过的比赛
 # 只可以参加自己老师的比赛，未参加的比赛
 def Match_show(request):
-    # studentid = request.POST.get('student_id')
-    studentid = 1
-    studentmatchs = StudentMatchs.objects.filter(student_id = studentid)
+    student_id = request.POST.get('student_id')
+    # student_id = 1
+    studentmatchs = StudentMatchs.objects.filter(student_id = student_id)
 
     # 学生参加过的比赛
+    rank = 1
     commit = {}
     for item in studentmatchs:
         match = Match.objects.get(match_id = item.match_id)
-        starttime = match.start_time.strftime("%Y-%m-%d %H:%M:%S")
-        endtime = match.end_time.strftime("%Y-%m-%d %H:%M:%S")
+        starttime = match.start_time.strftime("%m.%d")
+        endtime = match.end_time.strftime("%m.%d")
+
+        matchs = StudentMatchs.objects.filter(match_id = item.match_id).order_by('match_grade')
+        for i in range(0,len(matchs)):
+            if matchs[i].student_id == student_id:
+                rank = len(matchs) - i
+                break
+
         commit[match.match_id] = {
             'match':match.match_name,
             'start_time':starttime,
-            'endtime':endtime,
-            'join_time':item.join_time,
-            'match_grade':item.match_grade
+            'end_time':endtime,
+            'match_grade':item.match_grade,
+            'match_rank':rank
         }
 
     # 学生未参加过的比赛
-    student = Student.objects.get(student_id = studentid)
+    student = Student.objects.get(student_id = student_id)
     course = Course.objects.get(course_id = student.course_id)
     # 检索出所有该课程老师的比赛
     matchs = Match.objects.filter(teacher_id = course.teacher_id)
@@ -192,8 +200,8 @@ def Match_show(request):
     for item in matchs:
         if item.match_id in unmatchs:
             match = Match.objects.get(match_id = item.match_id)
-            starttime = match.start_time.strftime("%Y-%m-%d %H:%M:%S")
-            endtime = match.end_time.strftime("%Y-%m-%d %H:%M:%S")
+            starttime = match.start_time.strftime("%m.%d")
+            endtime = match.end_time.strftime("%m.%d")
             uncommit[match.match_id] = {
                 'match':match.match_name,
                 'teacher_name':match.teacher_name,
@@ -203,6 +211,7 @@ def Match_show(request):
             }
     data = {'commit':commit,'uncommit':uncommit}
     return JsonResponse(data,json_dumps_params={'ensure_ascii':False})
+
 
 
 #教师创建比赛
@@ -302,7 +311,7 @@ def Match_message(request):
 #学生名册
 def Student_list(request):
     # coursename = request.POST.get('course_name')
-    coursename = "七年级上册"
+    coursename = "初一进步班"
     course = Course.objects.get(course_name = coursename)
     students = Student.objects.filter(course_id = course.course_id)
     student_message = {}
@@ -374,7 +383,7 @@ def Test_before(request):
         for word_item in book_words:
             words.add(word_item.word_id)
 
-    i = 1
+    i = 0
     words_list = {}
     # all_words = Words.objects.all()
     for item in words:
@@ -385,7 +394,7 @@ def Test_before(request):
 
     # 从当前单词书中获得随机的n个不重复的单词
     n = 28
-    index_list = random.sample(range(1,len(words_list)+1),n)
+    index_list = random.sample(range(0,len(words_list)),n)
     # 测试的所有数据
     test_list = {}
     # 错误的三个单词字典
@@ -572,7 +581,18 @@ def Input_test(request):
     test_type = request.POST.get('test_type')
     test_grade = request.POST.get('test_grade')
     test = Test(student_id= studentid,test_type = test_type,test_grade = test_grade)
-    test.save()
+    test.save() 
+    #改变学生的学习状态
+    student = Student.objects.get(student_id = studentid)
+    if test_type == '1':
+        student.study_status = 2
+        student.save()
+    elif test_type == '2':
+        student.study_status = 2
+        student.save()
+    elif test_type == '3':
+        student.study_status = 3
+        student.save()
     data = {}
     data['status'] = 'succeed'
     return JsonResponse(data)

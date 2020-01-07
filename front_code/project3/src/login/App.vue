@@ -20,7 +20,6 @@
 					</div>
 					<input type = "password" class = "input" id = "password" placeholder = "密码" v-model="password">
 				</div>
-				<input type = "radio" id = "select">自动登录
 				<a herf = "#" id = "forget-password" >忘记密码</a>
 				<input type = "button" id = "login" value = "登陆" @click="send">
 			</div>
@@ -79,7 +78,7 @@ export default {
 
 <style>
 body {
-    background:url(../assets/login.jpg)  no-repeat center center;
+    background:url(../assets/timg.jpg)  no-repeat center center;
     background-attachment:fixed;
     background-size:cover;
     margin: 0;
@@ -94,7 +93,6 @@ body {
     margin: none;
     height: 100%;
     width: 100%;
-  
 }
 #base1 {
     width: 100%;
@@ -169,7 +167,7 @@ body {
     width: 310px;
     height: 38px;
     font-size: 16px;
-    color: rgba(0, 0, 0, 0.447058823529412);
+    color: rgba(0, 0, 0, 1);
     box-sizing: border-box;
     background: inherit;
     background-color: rgba(255, 255, 255, 1);
@@ -192,14 +190,9 @@ body {
     background-color: rgba(255, 255, 255, 1);
 }
 
-#select {
-    margin-left: 70px;
-    margin-top: 30px;
-}
-
 #forget-password {
     display: inline;
-    margin-left: 190px;
+    margin-left: 350px;
     font-size: 16px;
     color: #1890FF;
 }
@@ -212,10 +205,8 @@ body {
     margin-top: 30px;
     font-size: 16px;
     color: white;
+    border: none;
     box-sizing: border-box;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 4px;
     background: inherit;
     background-color: #1890FF;
 }
