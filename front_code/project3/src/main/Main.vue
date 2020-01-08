@@ -62,6 +62,7 @@
                         <span class = "num" id = "num2">VS</span>
                         <span class = "num" id = "num3" v-if="study_status!=3">？</span>
                         <span class="num" v-if="study_status==3">{{after_grade}}</span>
+                        <p id = "word2">学后检测</p>
                     </div>
 
                     <!--第二行内容-->
@@ -89,32 +90,38 @@
                         <input type = "button" class = "button-style4" id = "unit8" value = "8">
                         <input type = "button" class = "button-style4" id = "unit9" value = "9">
                         <input type = "button" class = "button-style4" id = "unit10" value = "10">
-                        <input type = "button" class = "button-style4" id = "unit11" value = "11">
-                        <input type = "button" class = "button-style4" id = "unit12" value = "12">
                     </div>
                 </div>
                 <!--单词本页面-->
                 <div v-show="show_word_book">
-                    <div>
-                        <span>复习顺序：</span>
-                        <input type="radio" name="radio1" value="familiarity" v-model="word_order" @click="check_familiarity">熟悉程度
-                        <input type="radio" name="radio1" value="letter" v-model="word_order" @click="check_letter">字母顺序
-                        <span id="word_status1">生词</span>
-                        <span id="word_status2">熟悉</span>
-                        <span id="word_status3">熟练</span>
+                    <!--上方框-->
+                    <div id = "top-box">
+
+                        <p id = "order">复习顺序:</p>
+                        <div class = "review-mode">
+                            <input type="radio" name="radio1" value="familiarity" v-model="word_order" @click="check_familiarity">熟悉程度
+                        </div>
+                        <div class = "review-mode">
+                            <input type="radio" name="radio1" value="letter" v-model="word_order" @click="check_letter">字母顺序
+                        </div>
+                        <div class = "color" id = "red"></div>
+                        <p class = "proficiency">生词</p>
+                        <div class = "color" id = "blue"></div>
+                        <p class = "proficiency">熟悉</p>
+                        <div class = "color" id = "green"></div>
+                        <p class = "proficiency">熟练</p>
                     </div>
-                    <br>
-                    <div id="wordbook" v-for="index in  words">
-                        <div id="wordbook1" v-if="index.degree==1">
-                            {{index.spell}}{{index.mean}}
-                        </div>
-                        <div id="wordbook2" v-if="index.degree==2">
-                            {{index.spell}}{{index.mean}}
-                        </div>
-                        <div id="wordbook3" v-if="index.degree==3">
-                            {{index.spell}}{{index.mean}}
+
+                    <!--下方框-->
+                    <div id = "buttom-box">
+                        <div v-for="(key,value,index) in words">
+                            <!-- key:{{key}},value:{{value}},index:{{index}},{{key.spell}} -->
+                        <input type = "button" class = "button-color" id = "button-red" v-if="key.degree==1&&value>=start_index&&value<=start_index+12" :value="key.spell">
+                        <input type = "button" class = "button-color" id = "button-blue" v-if="key.degree==2&&value>=start_index&&value<=start_index+12" :value="key.spell">
+                        <input type = "button" class = "button-color" id = "button-green" v-if="key.degree==3&&value>=start_index&&value<=start_index+12" :value="key.spell">
                         </div>
                     </div>
+                    <input type = "button" id = "next_group" value = "下一组" @click="next_group" v-if="start_index<=word_length&&start_index+12<word_length">
                 </div>
                 <!--学前学习进入页面-->
                 <div v-show="show_xueqian">
@@ -128,18 +135,24 @@
                 <!--学习统计页面-->
                 <div v-if="show_statistics">
                     <p>总共学习单词数量：{{word_numbers}}</p>
-                    <table>
-                        <tr>
-                            <th>序号</th>
-                            <th>测试类型</th>
-                            <th>分数</th>
-                        </tr>
-                        <tr v-for="(key,value,index) in tests_type">
-                            <td>{{index+1}}</td>
-                            <td>{{tests_type[index]}}</td>
-                            <td>{{tests_grade[index]}}</td>
-                        </tr>
-                    </table>
+                    <p id="title1">测试成绩</p>
+                    <div id="bake">
+                        <table>
+                            <tr>
+                                <th width="8%" class="table">序号</th>
+                                <th  width="8%" class="table">测试类型</th>
+                                <th  width="8%" class="table">分数</th>
+                                <th  width="8%" class="table">通过</th>
+                            </tr>
+                            <tr v-for="(key,value,index) in tests_type">
+                                <td>{{index+1}}</td>
+                                <td>{{tests_type[index]}}</td>
+                                <td>{{tests_grade[index]}}</td>
+                                <td v-if="tests_grade[index]<60" color="red">否</td>
+                                <td v-if="tests_grade[index]>=60" color="green">是</td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
                 <div v-show="show_test">
                     <!--标题 -->
@@ -238,7 +251,9 @@ export default {
             tests_type:{},//测试类型的字典
             tests_grade:{},//测试类型对应的测试分数的字典
             books:{},
-            words:{},
+            words:{},//学生单词本的字典
+            word_length:0,//学生单词本单词的总共数量
+            start_index:0,
             test_select:{},//测试页面学生做的选项
             test_before:{},//测试题数据
             commit:{},//学生参加的单词比赛
@@ -288,6 +303,7 @@ export default {
             this.show_books = false
             this.show_test = false
             this.show_match = false
+            this.start_index = 0
             // 更改button样式
             this.button1 = true
             this.button2 = true
@@ -306,6 +322,7 @@ export default {
             }).then(function(response){
                 window.console.log(response)
                 that.words = response.data
+                that.word_length = Object.keys(that.words).length
                 that.show_word_book = true
             })
         },
@@ -317,6 +334,7 @@ export default {
             this.show_books = false
             this.show_test = false
             this.show_match = false
+            this.start_index = 0
             this.word_order = 'letter'
             let that = this
             let param = new URLSearchParams
@@ -332,6 +350,17 @@ export default {
                 that.words = response.data
                 that.show_word_book = true
             })
+        },
+        next_group:function(){
+            this.show = true
+            this.show_study = false
+            this.show_xueqian = false
+            this.show_statistics = false
+            this.show_books = false
+            this.show_test = false
+            this.show_match = false
+            this.show_word_book = true
+            this.start_index += 12
         },
         mybooks:function(){
             this.show = true
@@ -485,13 +514,13 @@ export default {
         },
         match:function(){
             this.show = true
-            this.show_study = false//显示学习页面
-            this.show_statistics = false//显示学习统计页面
-            this.show_xueqian = false//显示学前测试进入页面
-            this.show_books = false//显示课程课本选择页面
-            this.show_word_book = false//显示单词书页面
-            this.show_test = false//显示学前测试页面
-            this.show_match = true//显示全部比赛信息页面
+            this.show_study = false
+            this.show_statistics = false
+            this.show_xueqian = false
+            this.show_books = false
+            this.show_word_book = false
+            this.show_test = false
+            this.show_match = true
             // 更改button样式
             this.button1 = true
             this.button2 = true
@@ -520,7 +549,10 @@ export default {
 </script>
 
 <style scoped>
-
+table{
+    border: 1px;
+    text-align: center;
+}
 /*导航条*/
 .navigationStyle {
     overflow: hidden;
@@ -715,9 +747,16 @@ h3 {
     width: 250px;
     height: 200px;
     margin: 10px;
+    background-color: rgb(206, 202, 202);
     float: left;
-    border: 2px solid black;
+    border: 1px solid rgba(133, 255, 150, 0.815);
+    
 }
+#book_box:hover{
+    background-color: rgba(116, 245, 133, 0.918);
+    
+}
+
 /* 开始按钮 */
 #start {
     display:block;
@@ -753,6 +792,7 @@ h3 {
     height: 50px;
     display: flex;
     margin-top: 50px;
+    margin-left: 0;
 }
 #word1 {
     font-size: 14px;
@@ -817,8 +857,10 @@ h3 {
 }
 /* 第三行内容 */
 #box3 {
-    width: 600px;
+    width: 500px;
     height: 200px;
+    margin: auto;
+    text-align: center;
 }
 .button-style4 {
     width: 70px;
@@ -834,7 +876,109 @@ h3 {
 /* 教材和当前学习单词书页面CSS结束 */
 
 /* 单词书页面CSS开始 */
-#wordbook{
+/* 上方框 */
+#top-box {
+    width: 100%;
+    height: 50px;
+    display: flex;
+}
+
+#order {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+    padding-left: 30px;
+    padding-top: 20px;
+}
+
+.review-mode{
+    width: 90px;
+    height: 50px;
+    font-size: 16px;
+    padding-top: 20px;
+    margin-left: 30px;
+}
+
+.color {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-top: 20px;
+}
+
+#red {
+    background-color: rgb(238,100,100);
+    margin-left: 230px;
+}
+
+
+#blue {
+    background-color: #3CE9E9;
+    margin-left: 40px;
+}
+
+#green {
+    background-color: #6CE076;
+    margin-left: 40px;
+}
+
+.proficiency {
+    font-size: 16px;
+    padding-left: 10px;
+}
+
+/* 下方框 */
+#buttom-box {
+    width: 100%;
+    height: 600px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+
+}
+
+.button-color {
+    margin-left: 40px;
+    margin-top: 40px;
+    width: 191px;
+    height: 100px;
+    background: #ffffff;
+    border-radius: 10px;
+    outline: none;
+}
+
+#button-red {
+    border: 1.5px solid rgb(238,100,100);
+    box-shadow: inset 0px -5px rgb(238,100,100);
+}
+
+#button-blue {
+    border: 1.5px solid #3CE9E9;
+    box-shadow: inset 0px -5px #3CE9E9;
+}
+#button-green {
+    border: 1.5px solid #6CE076;
+    box-shadow: inset 0px -5px #6CE076;
+}
+
+#next_group {
+    width: 150px;
+    height: 40px;
+    font-size: 14px;
+    color: white;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    background: inherit;
+    background-color: #1890FF;
+    margin-left: 600px;
+}
+#div1{
+    width: 235px;
+    height: 150px;
+}
+
+/* #wordbook{
     width: 100px;
     height: 80px;
     margin: 10px;
@@ -890,7 +1034,7 @@ h3 {
     margin: 20px;
     width: 50px;
     height: 30px;
-}
+} */
 /* 单词书页面结束 */
 
 /* 学前测试页面CSS开始 */
@@ -1037,4 +1181,23 @@ h3 {
     padding-left: 100px;
 }
 
+#title1 {
+    text-align: center;
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+#bake {
+    width:800px;
+    height:500px;
+    border: 1px solid rgb(255, 252, 252);
+
+}
+.table{
+    font-family: 微软雅黑;
+	font-size: 16px;
+	font-weight: bold;
+	color: #020a11;
+	background-color:#e9faff;
+}
 </style>

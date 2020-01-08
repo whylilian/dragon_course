@@ -17,19 +17,25 @@
             <div class = "chart" id = "studytime-today">
                 <div class = "title" id = "title-box1">
                     <p class = "title-word">金币数</p>
-                    <p v-for="(value,key,index) in coin_rank">{{index+1}}        {{key}}        {{value}}</p>
+                    <div class = "rank" v-for="(value,key,index) in coin_rank">
+                        <span>{{index+1}}        {{key}}        {{value}}</span>
+                    </div>
                 </div>
             </div>
             <div class = "chart" id = "studytime-lastmonth">
                 <div class = "title" id = "title-box2">
                     <p class = "title-word">熟练的单词数</p>
-                    <p v-for="(value,key,index) in word_rank">{{index+1}}        {{key}}        {{value}}</p>
+                    <div class = "rank" v-for="(value,key,index) in word_rank">
+                        <span>{{index+1}}        {{key}}        {{value}}</span>
+                    </div>
                 </div>
             </div>
             <div class = "chart" id = "goldcoin-week">
                 <div class = "title" id = "title-box3">
                     <p class = "title-word">总积分</p>
-                    <p v-for="(value,key,index) in point_rank">{{index+1}}        {{key}}        {{value}}</p>
+                    <div class = "rank" v-for="(value,key,index) in point_rank">
+                        <span>{{index+1}}        {{key}}        {{value}}</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -171,8 +177,6 @@ export default {
     height: 430px;
     margin-top: 10px;
     margin-left: 10px;
-    border-width: 1px;
-    border-style: solid;
     border-radius: 4px;
     background: inherit;
     background-color: rgba(255, 255, 255, 1);
@@ -180,7 +184,6 @@ export default {
 .title {
     width: 300px;
     height: 30px;
-    border-bottom: 1px solid;
 }
 .title-word {
     margin: 0;
@@ -189,4 +192,14 @@ export default {
     padding-left: 8px;
     text-align: center;
 }
+
+.rank {
+    width: 270px;
+    height: 25px;
+    margin-left: 15px;
+    border-radius: 5px;
+    background-color: #e0edfdf1;
+    margin-top: 10px;
+}
+
 </style>
