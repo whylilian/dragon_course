@@ -1,10 +1,9 @@
 <template>
-	<div id="app">
-		<div id = "base1">
-			<div id = "base2">
-				<img id = "u24" src = "../assets/u24.png">
+    <div id="teacherlogin">
+        <div id="base">
+            <img id = "u24" src = "../assets/u24.png">
 				<p id = "word">单词赢</p>
-				<p id = "text">三天背完小升初   七天背完中高考</p>
+				<p id = "text">教师端登录窗口</p>
 				<div id = "box1">
 					<p>账号密码登陆</p>
 				</div>
@@ -21,87 +20,64 @@
 					<input type = "password" class = "input" id = "password" placeholder = "密码" v-model="password">
 				</div>
 				<a herf = "#" id = "forget-password" >忘记密码</a>
-				<input type = "button" id = "login" value = "登陆" @click="send">
-			</div>
-		</div>
-	</div>
+				<input type = "button" id = "login" value = "登录" @click="send">
+        </div>
+    </div>
 </template>
 
 <script>
-
 export default {
-	name: 'app',
-	data: function(){
+    name:'teacherlogin',
+    data: function(){
 		return{
 			username: '',
             password: '',
 		}
     },
-    created(){
-        window.console.log("创建")
-        window.console.log(this.$store.state.coin_rank)
-    },
 	methods: {
 		send: function(){
 			let that = this
 			let param = new URLSearchParams()
-			param.append('student_username',this.username)
-            param.append('student_password',this.password)
+			param.append('teacher_username',this.username)
+			param.append('teacher_password',this.password)
 			this.$axios({
 				method:'post',
-				url:'http://localhost:8000/app/',
+				url:'http://localhost:8000/app/teacherlogin',
 				data:param,
 			}).then(function(response){
                 window.console.log(response)
+                window.console.log(typeof(response.data.teacher_id))
 				if(response.data.login_status=='succeed'){
-                    let student_id = response.data.student_id
-                    let student_name = response.data.student_name
-                    let coins = response.data.coins.toString()
-                    let daka_num = response.data.daka_num.toString()
-                    let enable_daka = response.data.enable_daka.toString()
-                    that.$store.dispatch("Login",{student_id,student_name,coins,daka_num,enable_daka})
-                    window.location = 'main.html'
+                    let teacher_id = response.data.teacher_id
+                    let teacher_name = response.data.teacher_name
+                    that.$store.dispatch("TeacherLogin",{teacher_id,teacher_name})
+                    window.location = 'teacher.html'
 				}else if(response.data.login_status=='failed'){
                     window.alert("密码错误，请重新输入")
-                    window.location = "login.html"
+                    window.location = "teacherlogin.html"
                 }else if(response.data.login_status=='not_exist'){
                     window.alert("用户名不存在，请重新输入")
-                    window.location = "login.html"
+                    window.location = "teacherlogin.html"
                 }
 			})
 		}
     },
-  // components: {
-  //   HelloWorld
-  // }
 }
 </script>
 
-<style>
-body {
-    background:url(../assets/login.png)  no-repeat center center;
-    background-attachment:fixed;
-    background-size:cover;
-    margin: 0;
-    background-color:#CCCCCC;
-}
-#app {
+<style scoped>
+#teacherlogin {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-align: center;
     color: #2c3e50;
     background-size:100% 100%;
     margin: none;
     height: 100%;
     width: 100%;
 }
-#base1 {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-}
-
-#base2 {
+#base {
     width: 500px;
     height: 500px;
     margin: auto;
@@ -115,6 +91,7 @@ body {
     height: 50px;
     margin-left: 150px;
     margin-top: 30px;
+	margin: auto;
 }
 
 #word {
@@ -124,8 +101,8 @@ body {
 }
 
 #text {
-    margin-left: 130px;
     color: hsla(0, 0%, 0%, 0.427450980392157);
+	margin: 0px;
 }
 
 #box1 {
@@ -168,7 +145,7 @@ body {
     width: 310px;
     height: 38px;
     font-size: 16px;
-    color: rgba(0, 0, 0, 1);
+    color: rgba(0, 0, 0, 0.447058823529412);
     box-sizing: border-box;
     background: inherit;
     background-color: rgba(255, 255, 255, 1);
@@ -191,9 +168,14 @@ body {
     background-color: rgba(255, 255, 255, 1);
 }
 
+#select {
+    margin-left: 0px;
+    margin-top: 30px;
+}
+
 #forget-password {
     display: inline;
-    margin-left: 350px;
+    margin-left: 190px;
     font-size: 16px;
     color: #1890FF;
 }
@@ -206,8 +188,10 @@ body {
     margin-top: 30px;
     font-size: 16px;
     color: white;
-    border: none;
     box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
     background: inherit;
     background-color: #1890FF;
 }

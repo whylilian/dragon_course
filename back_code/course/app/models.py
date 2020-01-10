@@ -9,7 +9,8 @@ from django.db import models
 
 
 class Calendar(models.Model):
-    student = models.ForeignKey('Student', models.DO_NOTHING)
+    calendar_id = models.AutoField(primary_key=True)
+    student_id = models.PositiveIntegerField()
     calendar_time = models.CharField(max_length=2000, blank=True, null=True)
 
     class Meta:
@@ -23,7 +24,6 @@ class Category(models.Model):
     create_time = models.DateTimeField(blank=True, null=True)
     modify_time = models.DateTimeField(blank=True, null=True)
     grade_id = models.IntegerField(blank=True, null=True)
-    enable = models.IntegerField()
     sequence = models.IntegerField(blank=True, null=True)
     cover_pic = models.CharField(max_length=255, blank=True, null=True)
 
@@ -97,8 +97,11 @@ class Student(models.Model):
     word_numbers = models.PositiveIntegerField(blank=True, null=True)
     points = models.PositiveIntegerField(blank=True, null=True)
     study_status = models.PositiveIntegerField()
-    create_time = models.CharField(max_length=20, blank=True, null=True)
-    lastlogin_time = models.CharField(max_length=20, blank=True, null=True)
+    create_time = models.DateTimeField(blank=True, null=True)
+    lastlogin_time = models.DateTimeField(blank=True, null=True)
+    books_id = models.CharField(max_length=255)
+    books_enable = models.CharField(max_length=255)
+    enable_daka = models.IntegerField()
 
     class Meta:
         managed = False
