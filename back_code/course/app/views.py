@@ -841,17 +841,12 @@ def Input_match(request):
 
 # 学生:巩固测试
 def Consolidate_test(request):
-    # student_id = int(request.POST.get('student_id'))
-    # book_id = int(request.POST.get('book_id'))
-    student_id = 1
-    book_id = 1
-    book_words = Classification.objects.filter(category_id = book_id).order_by('word_id')
-        
-    n = 10
-    index_list = random.sample(range(0, len(book_words)),n)
-    # 测试的所有数据
-    test_list = {}
+    student_id = int(request.POST.get('student_id'))
+    book_id = int(request.POST.get('book_id'))
 
+    book_words = Classification.objects.filter(category_id = book_id).order_by('word_id')
+    
+    test_list = {}
     # 错误的四个单词含义集合
     errorwords_mean = set()
     # 获得所有单词的数量，从所有单词里随机抽取，默认单词id自动递增无缺漏
@@ -860,12 +855,12 @@ def Consolidate_test(request):
     correct = str()
     # 录入测试单词数据及其选项
     i = 1
-    for item in index_list:
-        studentword = StudentWords.objects.get(student_id = student_id, words_id = book_words[item].word_id)
+    for item in book_words:
+        studentword = StudentWords.objects.get(student_id = student_id, words_id = item.word_id)
         if studentword.counts == 0:
             continue
         errorwords_mean.clear()
-        word = Words.objects.get(word_id = book_words[item].word_id)
+        word = Words.objects.get(word_id = item.word_id)
         # 随机生成一个正确选项
         correct_id = random.randint(1,4)
         # 随机生成四个错误选项
@@ -902,9 +897,12 @@ def Consolidate_test(request):
             'D':Doption,
             'correct':correct,
         }
+        if i == 10:
+            break
         i = i + 1
-    
+
     return JsonResponse(test_list,json_dumps_params={'ensure_ascii':False})
+
 
 '''
 教师端

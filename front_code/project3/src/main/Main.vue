@@ -803,7 +803,7 @@ export default {
                 url:'http://localhost:8000/app/gonggutest',
                 data:param,
             }).then(function(response){
-
+                window.console.log(response)
             })
         },
         xuehou:function(){
