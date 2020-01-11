@@ -6,15 +6,20 @@
 	    	<div id = "head-box">
 	    	</div>
 	    	<!--头像框-->
-	    	<div class = "head-picture" id = "head-picture1">
-	    	</div>
+	    	<!-- <div class = "head-picture" id = "head-picture1">
+	    	</div> -->
 	    	<div class = "head-picture" id = "head-picture2">
 	    	</div>
 	    	<!--名称框-->
-	    	<p id = "name1">曹勇</p>
+	    	<p id = "name1"></p>
 	    	<p id = "name2">{{student_name}}</p>
 	    	<!--积分框-->
 	    	<div class = "integral" id = "integral1">
+                <p id="daoju">道具</p>
+                <img src="../assets/daoju1.png" @click="usedaoju1">
+                <p id="daoju1">错误次数-1</p>
+                <img src="../assets/daoju2.png" @click="usedaoju2">
+                <p id="daoju2">答题时间+2s</p>
 	    	</div>
 	    	<div class = "integral" id = "integral2">
                 <p id="false_time">答错次数：{{false_count}}</p>
@@ -52,6 +57,7 @@ export default {
             student_id:0,
             student_name:'',
             match_id:0,
+            word_length:0,
             select:'',
             match_word:{},
             word_index:1,
@@ -66,8 +72,12 @@ export default {
             style_c_no:false,
             style_d_no:false,
             dead:false,
-            time:15,
+            time1:60,//一站到底
+            time2:12,
             time_id:0,
+            do_select:false,
+            daoju1:1,
+            daoju2:1,
         }
     },
     beforeCreate(){
@@ -85,6 +95,7 @@ export default {
         let that = this
         let param = new URLSearchParams
         param.append('match_id',this.match_id)
+        window.console.log(this.match_id)
         this.$axios({
             method:'post',
             url:'http://localhost:8000/app/wordpk',
@@ -92,11 +103,15 @@ export default {
         }).then(function(response){
             window.console.log(response)
             that.match_word = response.data
+            that.word_length = Object.keys(that.match_word).length
+            window.console.log(that.word_length)
             that.time_id = setInterval(that.clock,1000)//启动计时
         })
 	},
     methods:{
         word_select:function(id){
+            this.dead = true
+            this.do_select = true
             let index = this.word_index
             this.select = id
             window.console.log(this.select)
@@ -110,7 +125,11 @@ export default {
             this.style_c_no = false
             this.style_d_no = false
             if(this.select == this.match_word[index].correct){
-                this.grade += 10
+                if(this.word_index==7){
+                    this.grade += 40//最后一道题40分
+                }else{
+                    this.grade += 20
+                }
                 switch(id){
                     case 'A':{
                         this.style_a_yes = true
@@ -207,7 +226,6 @@ export default {
                 }
                 if(this.false_count == 3){
                     let that = this
-                    window.alert('比赛结束！')
                     let param = new URLSearchParams
                     param.append('student_id',this.student_id)
                     param.append('match_id',this.match_id)
@@ -217,20 +235,31 @@ export default {
                         url:'http://localhost:8000/app/inputmatch',
                         data:param,
                     }).then(function(response){
-                        window.console.log(response)
+                        clearInterval(that.time_id)
+                        window.alert('比赛结束，你的分数为：'+that.grade)
                         window.location = 'main.html'
                     })
                 }
             }
+            clearInterval(this.time_id)
             setTimeout(this.stop,3000)
         },
         clock:function(){
             if(this.time>0){
                 this.time -= 1
             }else{
-                clearInterval(this.time_id)
-                this.time_id = 0
-                this.time = 15
+                if(this.do_select==false){
+                    this.false_count += 1
+                    this.word_index += 1
+                    this.time_id = 0
+                    this.time = 12
+                    this.time_id = setInterval(this.clock,1000)
+                }else{
+                    clearInterval(this.time_id)
+                    this.time_id = 0
+                    this.time = 12
+                    this.time_id = setInterval(this.clock,1000)
+                }
             }
         },
         stop:function(){
@@ -243,14 +272,48 @@ export default {
             this.style_c_no = false
             this.style_d_no = false
             this.word_index += 1
-            clearInterval(this.time_id)
+            if(this.word_index>this.word_length){
+                let param = new URLSearchParams
+                let that = this
+                param.append('student_id',this.student_id)
+                param.append('match_id',this.match_id)
+                param.append('match_grade',this.grade)
+                this.$axios({
+                    method:'post',
+                    url:'http://localhost:8000/app/inputmatch',
+                    data:param,
+                }).then(function(response){
+                    clearInterval(that.time_id)
+                    window.alert('比赛结束，你的分数为：'+that.grade)
+                    window.location = 'main.html'
+                })
+            }
+            this.do_select = false
             this.time_id = 0
-            this.time = 15
+            this.time = 12
             this.time_id = setInterval(this.clock,1000)
+            this.dead = false
         },
         outmatch:function(){
             clearInterval(this.time_id)
             window.location = 'main.html'
+        },
+        usedaoju1:function(){
+            if(this.daoju1==0){
+                window.alert('该道具已用完')
+            }
+            if(this.false_count!=0&&this.daoju1!=0){
+                this.daoju1 -= 1
+                this.false_count -= 1
+            }
+        },
+        usedaoju2:function(){
+            if(this.daoju2==0){
+                window.alert('该道具已用完')
+            }else{
+                this.time += 2
+                this.daoju2 -= 1
+            }
         }
     },
     components:{
@@ -314,6 +377,7 @@ export default {
     position: absolute;
     top: 230px;
     left: 70px;
+    text-align: center;
 }
 #integral2 {
     position: absolute;
@@ -433,5 +497,14 @@ export default {
 }
 #get_grade{
     color:green;
+}
+#daoju{
+    color: rgb(28, 149, 219);
+}
+#daoju1{
+    color:rgb(29, 221, 221);
+}
+#daoju2{
+    color: rgb(212, 36, 36);
 }
 </style>

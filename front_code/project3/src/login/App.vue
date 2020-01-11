@@ -79,7 +79,7 @@ export default {
 
 <style>
 body {
-    background:url(../assets/background4.png)  no-repeat center center;
+    background:url(../assets/background.png)  no-repeat center center;
     background-attachment:fixed;
     background-size:cover;
     margin: 0;

@@ -24,7 +24,6 @@
             <input type = "button" class="button1" value="单词比赛" @click="goteacher_compete">
             <input type = "button" class="button1" value="学生名册" @click="goteacher_students">
             <input type = "button" class="button1" value="学习统计" @click="goteacher_chart">
-            <input type = "button" class="button1" value="合作申请">
         </div>
         <div id="msg_window" v-show="msg">
             <div id="window_header">

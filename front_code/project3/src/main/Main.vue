@@ -8,7 +8,7 @@
                 <!--左上角-->
                 <div id = "top-left">
                     <div id="headportrait" class="headportraitStyle">
-                        <img src="../assets/u35.png" width="35" height="35" id="headportrait_img" class="headportrait_imgStyle">
+                        <img src="../assets/tubiao.png" width="35" height="35" id="headportrait_img" class="headportrait_imgStyle">
                     </div>
                     <div id="h3head" class="h3headStyle">
                         <h3>{{student_name}}</h3>
@@ -63,10 +63,11 @@
                             <p>{{now_book_name}}</p>
                         </div>
                         <div id = "btn">
-                            <input type = "button" class = "button-style3" value="学前检测" @click="goxueqian" v-if="study_status==1">
-                            <input type="button" class="button-style3" value="巩固测试" @click="gonggu" v-if="study_status==2">
-                            <input type="button" class="button-style3" value="学后测试" @click="xuehou" v-if="study_status==3">
+                            <el-progress type="circle" :percentage="percentage" style="width:126px;height:126px;"></el-progress>
                         </div>
+                        <input type = "button" class = "button-style3" value="学前检测" @click="goxueqian" v-if="study_status==1">
+                        <input type="button" class="button-style3" value="巩固测试" @click="gonggu" v-if="study_status==2">
+                        <input type="button" class="button-style3" value="学后测试" @click="xuehou" v-if="study_status==3">
                     </div>
                     <!--第三行内容-->
                     <div id = "box3">
@@ -103,6 +104,10 @@
                     </div>
                     <input type = "button" id = "next_group" value = "下一组" @click="next_group" v-if="start_index<=word_length&&start_index+12<word_length">
                     <input type="button" id="pre_group" value="上一组" @click="pre_group" v-if="start_index>=12">
+                    <!-- <el-button-group>
+                        <el-button type="primary" icon="el-icon-arrow-left" @click="pre_group" v-if="start_index>=12">上一组</el-button>
+                        <el-button type="primary" @click="next_group" v-if="start_index<=word_length&&start_index+12<word_length">下一组<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+                    </el-button-group> -->
                 </div>
                 <!--学前学习进入页面-->
                 <div v-show="show_xueqian">
@@ -114,48 +119,60 @@
 			        <input type = "button" id = "start" value = "立即开始" @click="starttest">
                 </div>
                 <!--学习统计页面-->
-                <div v-if="show_statistics">
-                    <h2 id="word_number">总共学习单词数量：{{word_numbers}}</h2>
-                    <hr>
-                    <p id="title1">测试成绩</p>
-                    <div id="bake">
-                        <table>
-                            <tr>
-                                <th width="8%" class="table">序号</th>
-                                <th  width="8%" class="table">测试类型</th>
-                                <th  width="8%" class="table">分数</th>
-                                <th  width="8%" class="table">通过</th>
-                            </tr>
-                            <tr v-for="(key,value,index) in tests_type">
-                                <td>{{index+1}}</td>
-                                <td v-if="tests_type[index]==1">学前测试</td>
-                                <td v-if="tests_type[index]==2">巩固测试</td>
-                                <td v-if="tests_type[index]==3">学后测试</td>
-                                <td>{{tests_grade[index]}}</td>
-                                <td v-if="tests_grade[index]<60" color="red">否</td>
-                                <td v-if="tests_grade[index]>=60" color="green">是</td>
-                            </tr>
-                        </table>
-                    </div>
+                <div v-if="show_statistics" id="shabi">
+                    <el-scrollbar>
+                        <h2 id="word_number">总共学习单词数量：{{word_numbers}}</h2>
+                        <ve-line :data="chartData"></ve-line>
+                        <h2 id="word_number">最近一周内单词学习情况图表：{{word_numbers}}</h2>
+                        <ve-histogram :data="chartData"></ve-histogram>
+                        <h2 id="word_number">本月学习时间统计：{{word_numbers}}</h2>
+                        <ve-pie :data="pieData" :settings="pie_settings"></ve-pie>
+                        <hr>
+                        <p id="title1">测试成绩</p>
+                        <div id="bake">
+                            <table>
+                                <tr>
+                                    <th width="8%" class="table">序号</th>
+                                    <th  width="8%" class="table">测试类型</th>
+                                    <th  width="8%" class="table">分数</th>
+                                    <th  width="8%" class="table">通过</th>
+                                </tr>
+                                <tr v-for="(key,value,index) in tests_type">
+                                    <td>{{index+1}}</td>
+                                    <td v-if="tests_type[index]==1">学前测试</td>
+                                    <td v-if="tests_type[index]==2">巩固测试</td>
+                                    <td v-if="tests_type[index]==3">学后测试</td>
+                                    <td>{{tests_grade[index]}}</td>
+                                    <td v-if="tests_grade[index]<60" color="red">否</td>
+                                    <td v-if="tests_grade[index]>=60" color="green">是</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </el-scrollbar>
                 </div>
                 <div v-show="show_test">
                     <!--标题 -->
                     <div id = "title">
-                        <p id = "word">学前检测（计划检测28题）</p>
+                        <p id = "word" v-if="study_status==1">学前检测（计划检测28题）</p>
+                        <p id = "word" v-if="study_status==3">学后检测（计划检测28题）</p>
                         <img src = "../assets/time.png" id = "time-picture">
-                        <p id = "count-down">{{show_time}}</p>
+                        <span id = "count-down">{{show_time}}</span>
 
                         <hr>
                     </div>
                     <!--选择题-->
-                    <div v-for="(value,key,index) in test_before">
+                    <div v-for="(value,key,index) in test_timu">
                         <div id = "one-choice">
                             <div v-if="key>test_index&&key<=test_index+4">
                                 <h2>{{key}}、{{value.spell}}</h2>
-                                <input type = "radio" class = "option" :name = "key" value = "A" v-model="test_select[key]">A:{{value.A}}
+                                <el-radio v-model="test_select[key]" label="A">A:{{value.A}}</el-radio>
+                                <el-radio v-model="test_select[key]" label="B">B:{{value.B}}</el-radio>
+                                <el-radio v-model="test_select[key]" label="C">C:{{value.C}}</el-radio>
+                                <el-radio v-model="test_select[key]" label="D">D:{{value.D}}</el-radio>
+                                <!-- <input type = "radio" class = "option" :name = "key" value = "A" v-model="test_select[key]">A:{{value.A}}
                                 <input type = "radio" class = "option" :name = "key" value = "B" v-model="test_select[key]">B:{{value.B}}
                                 <input type = "radio" class = "option" :name = "key" value = "C" v-model="test_select[key]">C:{{value.C}}
-                                <input type = "radio" class = "option" :name = "key" value = "D" v-model="test_select[key]">D:{{value.D}}
+                                <input type = "radio" class = "option" :name = "key" value = "D" v-model="test_select[key]">D:{{value.D}} -->
                             </div>
                         </div>
                     </div>
@@ -163,6 +180,35 @@
                     <input type = "button" id = "last-page" value = "上一页" v-if="test_index>=4" @click="pre_page">
                     <input type = "button" id = "next-page" value = "下一页" v-if="test_index<24" @click="next_page">
                     <input type = "button" id = "commit" value = "提交" @click="commit_test" v-if="test_index>=24">
+                </div>
+                <div v-show="show_gonggu">
+                    <!--标题 -->
+                    <div id = "title">
+                        <p id = "word">巩固检测（计划检测10题）</p>
+                        <img src = "../assets/time.png" id = "time-picture">
+                        <span id = "count-down">{{show_time}}</span>
+                        <hr>
+                    </div>
+                    <!--选择题-->
+                    <div v-for="(value,key,index) in test_timu">
+                        <div id = "one-choice">
+                            <div v-if="key>test_index&&key<=test_index+4">
+                                <h2>{{key}}、{{value.spell}}</h2>
+                                <el-radio v-model="test_select[key]" label="A">A:{{value.A}}</el-radio>
+                                <el-radio v-model="test_select[key]" label="B">B:{{value.B}}</el-radio>
+                                <el-radio v-model="test_select[key]" label="C">C:{{value.C}}</el-radio>
+                                <el-radio v-model="test_select[key]" label="D">D:{{value.D}}</el-radio>
+                                <!-- <input type = "radio" class = "option" :name = "key" value = "A" v-model="test_select[key]">A:{{value.A}}
+                                <input type = "radio" class = "option" :name = "key" value = "B" v-model="test_select[key]">B:{{value.B}}
+                                <input type = "radio" class = "option" :name = "key" value = "C" v-model="test_select[key]">C:{{value.C}}
+                                <input type = "radio" class = "option" :name = "key" value = "D" v-model="test_select[key]">D:{{value.D}} -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 每页显示4题 -->
+                    <input type = "button" id = "last-page" value = "上一页" v-if="test_index>=4" @click="pre_page">
+                    <input type = "button" id = "next-page" value = "下一页" v-if="test_index<8" @click="next_page">
+                    <input type = "button" id = "commit" value = "提交" @click="commit_test_gonggu" v-if="test_index>=8">
                 </div>
                 <!-- 显示所有单词比赛信息页面 -->
                 <div v-show="show_match">
@@ -251,6 +297,7 @@ export default {
             show_test:false,//显示学前测试页面
             show_match:false,//显示全部比赛信息页面
             show_match_detail:false,//显示比赛详细信息页面
+            show_gonggu:false,
             tests_type:{},//测试类型的字典
             tests_grade:{},//测试类型对应的测试分数的字典
             books:{},
@@ -258,7 +305,7 @@ export default {
             word_length:0,//学生单词本单词的总共数量
             start_index:0,
             test_select:{},//测试页面学生做的选项
-            test_before:{},//测试题数据
+            test_timu:{},//测试题数据
             test_index:0,//判断当前测试页面显示的题号
             commit:{},//学生参加的单词比赛
             uncommit:{},//学生未参加的单词比赛
@@ -275,23 +322,24 @@ export default {
             time_id:0,
             match_detail_message:{},//比赛详细页面的信息
             isjoin:0,//判断可以参加比赛
+            percentage:0,
 		}
     },
-    beforeCreate(){
-		//未登录，跳转到登录界面
-		if(this.$store.state.student_id==""){
-			window.location = "login.html"
-		}
-	},
-	created(){
-		this.student_id = parseInt(this.$store.state.student_id)
-        this.student_name = this.$store.state.student_name
-        this.coins = parseInt(this.$store.state.coins)
-        this.enable_daka = parseInt(this.$store.state.enable_daka)
-        this.daka_num = parseInt(this.$store.state.daka_num)
-		window.console.log(this.student_id)
-        window.console.log(this.student_name)
-	},
+    // beforeCreate(){
+	// 	//未登录，跳转到登录界面
+	// 	if(this.$store.state.student_id==""){
+	// 		window.location = "login.html"
+	// 	}
+	// },
+	// created(){
+	// 	this.student_id = parseInt(this.$store.state.student_id)
+    //     this.student_name = this.$store.state.student_name
+    //     this.coins = parseInt(this.$store.state.coins)
+    //     this.enable_daka = parseInt(this.$store.state.enable_daka)
+    //     this.daka_num = parseInt(this.$store.state.daka_num)
+	// 	window.console.log(this.student_id)
+    //     window.console.log(this.student_name)
+	// },
 	methods: {
         daka:function(){
             let that = this
@@ -326,6 +374,7 @@ export default {
             this.show_test = false
             this.show_match = false
             this.show_match_detail = false
+            this.show_gonggu = false
             this.start_index = 0
             // 更改button样式
             this.button1 = true
@@ -363,6 +412,7 @@ export default {
             this.show_test = false
             this.show_match = false
             this.show_match_detail = false
+            this.show_gonggu = false
             this.start_index = 0
             this.word_order = 'letter'
             let that = this
@@ -394,6 +444,7 @@ export default {
             this.show_test = false
             this.show_match = false
             this.show_match_detail = false
+            this.show_gonggu = false
             this.show_word_book = true
             this.start_index -= 12
         },
@@ -411,6 +462,7 @@ export default {
             this.show_test = false
             this.show_match = false
             this.show_match_detail = false
+            this.show_gonggu = false
             this.show_word_book = true
             this.start_index += 12
         },
@@ -428,6 +480,7 @@ export default {
             this.show_test = false
             this.show_match = false
             this.show_match_detail = false
+            this.show_gonggu = false
             // 更改button样式
             this.button1 = false
             this.button2 = true
@@ -466,6 +519,7 @@ export default {
             this.show_test = false
             this.show_match = false
             this.show_match_detail = false
+            this.show_gonggu = false
             let that = this
             this.now_book_id = book_id
             this.now_book_name = book_name
@@ -502,6 +556,16 @@ export default {
                 window.console.log(response)
                 that.before_grade = response.data.grade
             })
+            let param3 = new URLSearchParams
+            param3.append('book_id',this.now_book_id)
+            param3.append('student_id',this.student_id)
+            this.$axios({
+                method:'post',
+                url:'http://localhost:8000/app/percentage',
+                data:param3,
+            }).then(function(response){
+                that.percentage = response.data['fanchart']
+            })
         },
         goxueqian:function(){
             if(this.time_id!=0){
@@ -518,8 +582,34 @@ export default {
             this.show_test = false
             this.show_match = false
             this.show_match_detail = false
+            this.show_gonggu = false
         },
         statistics:function(){
+            this.chartData = {
+                columns: ['日期', '单词数'],
+                rows: [
+                  { '日期': '1月1日', '单词数': 123 },
+                  { '日期': '1月2日', '单词数': 1223 },
+                  { '日期': '1月3日', '单词数': 2123 },
+                  { '日期': '1月4日', '单词数': 4123 },
+                  { '日期': '1月5日', '单词数': 3123 },
+                  { '日期': '1月6日', '单词数': 7123 }
+                ]
+            }
+            this.pieData = {
+                columns: ['日期','时间'],
+                rows: [
+                  { '日期': '1月1日', '时间':12},
+                  { '日期': '1月2日', '时间':122},
+                  { '日期': '1月3日', '时间':212},
+                  { '日期': '1月4日', '时间':412},
+                  { '日期': '1月5日', '时间':312},
+                  { '日期': '1月6日', '时间':712}
+                ]
+            }
+            this.pie_settings = {
+                limitShowNum: 5
+            }
             if(this.time_id!=0){
                 clearInterval(this.time_id)//防止点击其他页面时计时还在继续
                 this.time_id = 0
@@ -534,6 +624,7 @@ export default {
             this.show_test = false
             this.show_match = false
             this.show_match_detail = false
+            this.show_gonggu = false
             // 更改button样式
             this.button1 = true
             this.button2 = false
@@ -563,6 +654,7 @@ export default {
             this.show_word_book = false
             this.show_match = false
             this.show_match_detail = false
+            this.show_gonggu = false
             let param = new URLSearchParams
             param.append('student_id',this.student_id)
             this.$axios({
@@ -570,7 +662,7 @@ export default {
                 url:'http://localhost:8000/app/testall',
                 data:param,
             }).then(function(response){
-                that.test_before = response.data
+                that.test_timu = response.data
                 that.test_index = 0
                 that.show_test = true
                 that.time_id = setInterval(that.clock,1000)
@@ -587,7 +679,7 @@ export default {
                 window.alert('测试时间到')
                 let count = 0
                 for(let item in this.test_select){
-                    if(this.test_select[item] == this.test_before[item].correct){
+                    if(this.test_select[item] == this.test_timu[item].correct){
                         count++
                     }
                 }
@@ -603,6 +695,7 @@ export default {
                 this.show_test = false
                 this.show_match = false
                 this.show_match_detail = false
+                this.show_gonggu = false
                 let param = new URLSearchParams
                 param.append('student_id',this.student_id)
                 param.append('test_grade',this.before_grade)
@@ -632,7 +725,7 @@ export default {
                     return
                 }
                 while(i<=length){
-                    if(this.test_select[i]==this.test_before[i].correct){
+                    if(this.test_select[i]==this.test_timu[i].correct){
                         count++
                     }
                     i++
@@ -642,7 +735,6 @@ export default {
                 this.show_time = 180
                 that.test_index = 0
                 this.before_grade = parseInt((count/28)*100)
-                this.study_status = 2
                 this.show = true
                 this.show_study = true
                 this.show_statistics = false
@@ -652,10 +744,16 @@ export default {
                 this.show_test = false
                 this.show_match = false
                 this.show_match_detail = false
+                this.show_gonggu = false
                 let param = new URLSearchParams
                 param.append('student_id',this.student_id)
                 param.append('test_grade',this.before_grade)
-                param.append('test_type',1)
+                if(this.study_status==1){
+                    param.append('test_type',this.study_status)
+                    this.study_status = 2
+                }else if(this.study_status==3){
+                    param.append('test_type',this.study_status)
+                }
                 this.$axios({
                     method:'post',
                     url:'http://localhost:8000/app/inputtest',
@@ -664,6 +762,59 @@ export default {
                     window.console.log(response)
                     if(response.data.status=='succeed'){
                         window.alert('恭喜你，测试完成')
+                        that.test_select = {}
+                        that.test_timu = {}
+                    }
+                })
+            }
+        },
+        commit_test_gonggu:function(){
+            let message = '确定提交吗？'
+            if(window.confirm(message)==true){
+                let that = this
+                let count = 0
+                let i = 1
+                let length = Object.keys(this.test_select).length
+                //判断是否有空选项
+                if(length!=10){
+                    window.alert('你还有选项未选择')
+                    return
+                }
+                while(i<=length){
+                    if(this.test_select[i]==this.test_timu[i].correct){
+                        count++
+                    }
+                    i++
+                }
+                clearInterval(this.time_id)//已经提交答案，停止倒计时
+                this.time_id = 0
+                this.show_time = 180
+                that.test_index = 0
+                let grade = parseInt((count/10)*100)
+                this.show = true
+                this.show_study = true
+                this.show_statistics = false
+                this.show_xueqian = false
+                this.show_books = false
+                this.show_word_book = false
+                this.show_test = false
+                this.show_match = false
+                this.show_match_detail = false
+                this.show_gonggu = false
+                let param = new URLSearchParams
+                param.append('student_id',this.student_id)
+                param.append('test_grade',this.before_grade)
+                param.append('test_type',this.study_status)
+                this.$axios({
+                    method:'post',
+                    url:'http://localhost:8000/app/inputtest',
+                    data:param,
+                }).then(function(response){
+                    window.console.log(response)
+                    if(response.data.status=='succeed'){
+                        window.alert('恭喜你，测试完成,测试分数：'+grade)
+                        that.test_select = {}
+                        that.test_timu = {}
                     }
                 })
             }
@@ -689,6 +840,7 @@ export default {
             this.show_test = false
             this.show_match_detail = false
             this.show_match = true
+            this.show_gonggu = false
             // 更改button样式
             this.button1 = true
             this.button2 = true
@@ -719,6 +871,7 @@ export default {
             this.show_word_book = false
             this.show_match = false
             this.show_test = false
+            this.show_gonggu = false
             let that = this
             let param = new URLSearchParams
             param.append('match_id',match_id)
@@ -794,6 +947,15 @@ export default {
             }
         },
         gonggu:function(){
+            this.show = true
+            this.show_study = false
+            this.show_statistics = false
+            this.show_xueqian = false
+            this.show_books = false
+            this.show_word_book = false
+            this.show_test = false
+            this.show_match = false
+            this.show_match_detail = false
             let that = this
             let param = new URLSearchParams
             param.append('student_id',this.student_id)
@@ -804,10 +966,21 @@ export default {
                 data:param,
             }).then(function(response){
                 window.console.log(response)
+                that.test_timu = response.data
+                that.show_gonggu = true
             })
         },
         xuehou:function(){
             let message = '确定参加学后测试吗？'
+            this.show = true
+            this.show_study = false
+            this.show_statistics = false
+            this.show_xueqian = false
+            this.show_books = false
+            this.show_word_book = false
+            this.show_match = false
+            this.show_match_detail = false
+            this.show_gonggu = false
             if(window.confirm(message)==true){
                 let that = this
                 let param = new URLSearchParams
@@ -818,6 +991,10 @@ export default {
                     data:param,
                 }).then(function(response){
                     window.console.log(response)
+                    that.test_timu = response.data
+                    that.show_test = true
+                    that.show_time = 180
+                    that.time_id = setInterval(that.clock,1000)
                 })
             }
         },
@@ -841,6 +1018,8 @@ table{
     width: 1200px;
     height: 700px;
     margin: 100px auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 /* 左侧部分 */
@@ -1129,7 +1308,8 @@ h3 {
     border-radius: 4px;
     background: inherit;
     background-color: #1890FF;
-    margin-left: 300px;
+    position: relative;
+    left: 100px;
 }
 /* 第三行内容 */
 #box3 {
@@ -1260,6 +1440,9 @@ h3 {
     border-radius: 4px;
     background: inherit;
     background-color: #1890FF;
+    position: absolute;
+    top: 630px;
+    left: 480px;
 }
 #next_group {
     width: 150px;
@@ -1271,6 +1454,9 @@ h3 {
     border-radius: 4px;
     background: inherit;
     background-color: #1890FF;
+    position: absolute;
+    top: 630px;
+    left: 670px;
 }
 #div1{
     width: 235px;
@@ -1343,14 +1529,14 @@ h3 {
 }
 
 #time-picture {
-    margin-left: 200px;
+    margin-left: 250px;
+    margin-top: 10px;
 }
 
 #count-down {
     font-size: 16px;
     position: relative;
-    top: 10px;
-    left: 500px;
+    bottom: 20px;
 }
 
 
@@ -1553,5 +1739,19 @@ h3 {
     float: left;
 }
 /* 比赛详细信息页面CSS结束 */
-
+#shabi {
+    width: 850px;
+    height: 720px;
+}
+.el-scrollbar {
+    height: 100%;
+    overflow-x: hidden;
+}
+#shabi .el-scrollbar .el-scrollbar__wrap {
+    overflow-x: hidden;
+    height: 100%;
+}
+.is-horizontal {
+    display: none;
+}
 </style>
