@@ -7,7 +7,7 @@
                 <div class = "title" id = "title-box1">
                     <img id="img1" class="img-style" src="../assets/gold.png">
                     <div class = "rank" v-for="(value,key,index) in coin_rank">
-                        <span id="num">{{index+1}}、</span>
+                        <span id="num">{{index+1}}</span>
                         <span id="uname">{{key}}</span>
                         <span id="grade">{{value}}</span>
                     </div>
@@ -17,7 +17,7 @@
                 <div class = "title" id = "title-box2">
                     <img id="img2" class="img-style" src="../assets/word.png">
                     <div class = "rank" v-for="(value,key,index) in word_rank">
-                        <span id="num">{{index+1}}、</span>
+                        <span id="num">{{index+1}}</span>
                         <span id="uname">{{key}}</span>
                         <span id="grade">{{value}}</span>
                     </div>
@@ -27,9 +27,10 @@
                 <div class = "title" id = "title-box3">
                     <img id="img3" class="img-style" src="../assets/score.png">
                     <div class = "rank" v-for="(value,key,index) in point_rank">
-                        <span id="num">{{index+1}}、</span>
+                        <span id="num">{{index+1}}</span>
                         <span id="uname">{{key}}</span>
                         <span id="grade">{{value}}</span>
+                        <img id="img4" src='../assets/time.png'>
                     </div>
                 </div>
             </div>
@@ -47,17 +48,17 @@ export default {
 		return{
 			student_id: 0,
             student_name: '',
-            coin_rank:{},
-            word_rank:{},
-            point_rank:{},
+            coin_rank:{这是第一名:'20',这是第二名:'20',这是第三名:'20'},
+            word_rank:{这是第一名:'20',这是第二名:'20',这是第三名:'20'},
+            point_rank:{这是第一名:'20',这是第二名:'20',这是第三名:'20'},
 		}
-    },
+    },/*
     beforeCreate(){
 		//未登录，跳转到登录界面
 		if(this.$store.state.student_id==""){
 			window.location = "login.html"
 		}
-	},
+	},*/
 	created(){
 		this.student_id = parseInt(this.$store.state.student_id)
 		this.student_name = this.$store.state.student_name
@@ -124,25 +125,47 @@ export default {
 }
 
 .rank {
-    width: 270px;
-    height: 25px;
+    width: 255px;
+    height: 45px;
     margin-left: 15px;
     border-radius: 5px;
-    background-color: #e0edfdf1;
-    margin-top: 10px;
+    background-color: #EEF9FF;
+    margin-top: 5px;
+    line-height: 45px;
+    text-align: 10px;
+    padding-left: 15px;
 }
 .img-style {
-    width:200px;
-    padding-left: 60px;
+    width:260px;
+    padding-left: 20px;
     margin: auto;
+    margin-top: -45px;
 }
 #img2 {
     padding-top: 11px;
 }
+#img4 {
+    float: right;
+    margin-top: 8px;
+    margin-right: 10px; 
+    width: 29px;
+    height: 29px;
+}
+#num {
+    color: #409EFF;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 45px;
+    float: left;
+}
 #uname{
     margin-left: 20px;
+    line-height: 45px;
+    float: left;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 #grade{
-    margin-left: 140px;
+    float: right;
+    margin-right: 15px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 </style>
