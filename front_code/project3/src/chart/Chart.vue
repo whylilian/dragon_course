@@ -6,26 +6,37 @@
             <div class = "chart" id = "studytime-today">
                 <div class = "title" id = "title-box1">
                     <img id="img1" class="img-style" src="../assets/gold.png">
+                    <img id="first" class="img-style2" src='../assets/first.png'>                    
+                    <img id="second" class="img-style2" src='../assets/second.png'>  
+                    <img id="third" class="img-style2" src='../assets/third.png'>
                     <div class = "rank" v-for="(value,key,index) in coin_rank">
                         <span id="num">{{index+1}}</span>
                         <span id="uname">{{key}}</span>
                         <span id="grade">{{value}}</span>
+                        <img id="img5" src='../assets/medal.png'>
                     </div>
                 </div>
             </div>
             <div class = "chart" id = "studytime-lastmonth">
                 <div class = "title" id = "title-box2">
                     <img id="img2" class="img-style" src="../assets/word.png">
+                    <img id="first" class="img-style2" src='../assets/first.png'>                    
+                    <img id="second" class="img-style2" src='../assets/second.png'>  
+                    <img id="third" class="img-style2" src='../assets/third.png'>
                     <div class = "rank" v-for="(value,key,index) in word_rank">
                         <span id="num">{{index+1}}</span>
                         <span id="uname">{{key}}</span>
                         <span id="grade">{{value}}</span>
+                        <img id="img5" src='../assets/medal.png'>
                     </div>
                 </div>
             </div>
             <div class = "chart" id = "goldcoin-week">
                 <div class = "title" id = "title-box3">
                     <img id="img3" class="img-style" src="../assets/score.png">
+                    <img id="first" class="img-style2" src='../assets/first.png'>                    
+                    <img id="second" class="img-style2" src='../assets/second.png'>  
+                    <img id="third" class="img-style2" src='../assets/third.png'>
                     <div class = "rank" v-for="(value,key,index) in point_rank">
                         <span id="num">{{index+1}}</span>
                         <span id="uname">{{key}}</span>
@@ -48,17 +59,17 @@ export default {
 		return{
 			student_id: 0,
             student_name: '',
-            coin_rank:{},
-            word_rank:{},
-            point_rank:{},
+            coin_rank:{这是第一名:"1",这是第二名:'2'},
+            word_rank:{这是第一名:"1",这是第二名:'2'},
+            point_rank:{这是第一名:"1",这是第二名:'2'},
 		}
-    },
+    },/*
     beforeCreate(){
 		//未登录，跳转到登录界面
 		if(this.$store.state.student_id==""){
 			window.location = "login.html"
 		}
-	},
+	},*/
 	created(){
 		this.student_id = parseInt(this.$store.state.student_id)
 		this.student_name = this.$store.state.student_name
@@ -92,7 +103,7 @@ export default {
 } */
 
 #word2 {
-    margin-top: 80px;
+    margin-top: 20px;
     text-align: center;
     font-size: 24px;
     font-weight: 700;
@@ -100,12 +111,13 @@ export default {
 #box3 {
     display: flex;
     width: 1000px;
-    height: 450px;
+    height: 700px;
     margin: 10px auto 0;
+    margin-top: 50px;
 }
 .chart {
     width: 300px;
-    height: 430px;
+    height: 650px;
     margin-top: 10px;
     margin-left: 10px;
     border-radius: 4px;
@@ -123,7 +135,6 @@ export default {
     padding-left: 8px;
     text-align: center;
 }
-
 .rank {
     width: 255px;
     height: 45px;
@@ -136,10 +147,10 @@ export default {
     padding-left: 15px;
 }
 .img-style {
-    width:260px;
+    width:255px;
     padding-left: 20px;
     margin: auto;
-    margin-top: -45px;
+    margin-top: -50px;
 }
 #img2 {
     padding-top: 11px;
@@ -150,6 +161,27 @@ export default {
     margin-right: 10px; 
     width: 29px;
     height: 29px;
+}
+#img5 {
+    float: right;
+    margin-top: 0px;
+    margin-right: 5px; 
+    width: 47px;
+    height: 37px;
+}
+.img-style2{
+    width: 30%
+}
+#first {
+    margin-left:20px;
+}
+#second {
+    float: left;
+    margin-top:20px;
+}
+#third {
+    float: right;
+    margin-top:20px;
 }
 #num {
     color: #409EFF;
