@@ -188,16 +188,23 @@ export default {
     font-family: Arial, Helvetica, sans-serif;
     line-height: 45px;
     float: left;
+    font-size: 16px;
 }
 #uname{
     margin-left: 20px;
     line-height: 45px;
     float: left;
-    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family:'Microsoft YaHei UI';
+    font-weight: 500;
+    font-size: 16px;
+    color: #606266;
 }
 #grade{
     float: right;
     margin-right: 15px;
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    color: #606266;
+    font-weight: 500;
 }
 </style>

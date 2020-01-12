@@ -50,11 +50,11 @@
                     <div id = "box1">
                         <p id = "word1">{{course_name}}</p>
                         <p id = "before-study">学前检测</p>
-                        <span class = "num" id = "num1" v-if="study_status==1">？</span>
-                        <span class="num" v-if="study_status==2||study_status==3">{{before_grade}}</span>
-                        <span class = "num" id = "num2">VS</span>
-                        <span class = "num" id = "num3" v-if="study_status!=3">？</span>
-                        <span class="num" v-if="study_status==3">{{after_grade}}</span>
+                        <span id = "num1" v-if="study_status==1">？</span>
+                        <span id="num1" v-if="study_status==2||study_status==3">{{before_grade}}</span>
+                        <span id = "num2">VS</span>
+                        <span id = "num3" v-if="study_status!=3">?</span>
+                        <span id="num3" v-if="study_status==3">{{after_grade}}</span>
                         <p id = "after-study">学后检测</p>
                     </div>
                     <!--第二行内容-->
@@ -119,13 +119,12 @@
 			        <input type = "button" id = "start" value = "立即开始" @click="starttest">
                 </div>
                 <!--学习统计页面-->
-                <div v-if="show_statistics" id="shabi">
+                <div v-if="show_statistics" id="statistics">
                     <el-scrollbar>
                         <h2 id="word_number">总共学习单词数量：{{word_numbers}}</h2>
-                        <ve-line :data="chartData"></ve-line>
-                        <h2 id="word_number">最近一周内单词学习情况图表：{{word_numbers}}</h2>
+                        <h2 id="word_number">最近一周内单词学习情况图表</h2>
                         <ve-histogram :data="chartData"></ve-histogram>
-                        <h2 id="word_number">本月学习时间统计：{{word_numbers}}</h2>
+                        <h2 id="word_number">最近一周学习时间统计</h2>
                         <ve-pie :data="pieData" :settings="pie_settings"></ve-pie>
                         <hr>
                         <p id="title1">测试成绩</p>
@@ -164,15 +163,11 @@
                     <div v-for="(value,key,index) in test_timu">
                         <div id = "one-choice">
                             <div v-if="key>test_index&&key<=test_index+4">
-                                <h2>{{key}}、{{value.spell}}</h2>
+                                <h2>{{key}}.{{value.spell}}</h2>
                                 <el-radio v-model="test_select[key]" label="A">A:{{value.A}}</el-radio>
                                 <el-radio v-model="test_select[key]" label="B">B:{{value.B}}</el-radio>
                                 <el-radio v-model="test_select[key]" label="C">C:{{value.C}}</el-radio>
                                 <el-radio v-model="test_select[key]" label="D">D:{{value.D}}</el-radio>
-                                <!-- <input type = "radio" class = "option" :name = "key" value = "A" v-model="test_select[key]">A:{{value.A}}
-                                <input type = "radio" class = "option" :name = "key" value = "B" v-model="test_select[key]">B:{{value.B}}
-                                <input type = "radio" class = "option" :name = "key" value = "C" v-model="test_select[key]">C:{{value.C}}
-                                <input type = "radio" class = "option" :name = "key" value = "D" v-model="test_select[key]">D:{{value.D}} -->
                             </div>
                         </div>
                     </div>
@@ -193,15 +188,11 @@
                     <div v-for="(value,key,index) in test_timu">
                         <div id = "one-choice">
                             <div v-if="key>test_index&&key<=test_index+4">
-                                <h2>{{key}}、{{value.spell}}</h2>
+                                <h2>{{key}}.{{value.spell}}</h2>
                                 <el-radio v-model="test_select[key]" label="A">A:{{value.A}}</el-radio>
                                 <el-radio v-model="test_select[key]" label="B">B:{{value.B}}</el-radio>
                                 <el-radio v-model="test_select[key]" label="C">C:{{value.C}}</el-radio>
                                 <el-radio v-model="test_select[key]" label="D">D:{{value.D}}</el-radio>
-                                <!-- <input type = "radio" class = "option" :name = "key" value = "A" v-model="test_select[key]">A:{{value.A}}
-                                <input type = "radio" class = "option" :name = "key" value = "B" v-model="test_select[key]">B:{{value.B}}
-                                <input type = "radio" class = "option" :name = "key" value = "C" v-model="test_select[key]">C:{{value.C}}
-                                <input type = "radio" class = "option" :name = "key" value = "D" v-model="test_select[key]">D:{{value.D}} -->
                             </div>
                         </div>
                     </div>
@@ -261,25 +252,25 @@
                             <input type = "button" class = "button_match" id = "start-challenge" value = "开始挑战" v-if="isjoin==1" @click="start_match">
                         </div>
 			        </div>
-                    <div class = "chart" id = "goldcoin-week">
-                        <div class = "title" id = "title-box3">
-                            <img id="img3" class="img-style" src="../assets/score.png">
-                            <img id="first" class="img-style2" src='../assets/first.png'>                    
-                            <img id="second" class="img-style2" src='../assets/second.png'>  
-                            <img id="third" class="img-style2" src='../assets/third.png'>
-                            <div class = "rank" v-for="(value,key,index) in point_rank">
-                                <span id="num">{{index+1}}</span>
-                                <span id="uname">{{key}}</span>
-                                <span id="grade">{{value}}</span>
-                            <img id="img4" src='../assets/time.png'>
+                    <div id = "match_rank">
+                        <div class = "chart" id = "goldcoin-week">
+                            <div class = "title" id = "title-box3">
+                                <img id="img3" class="img-style" src="../assets/score.png">
+                                <img id="first" class="img-style2" src='../assets/first.png'>                    
+                                <img id="second" class="img-style2" src='../assets/second.png'>  
+                                <img id="third" class="img-style2" src='../assets/third.png'>
+                                <div class = "rank" v-for="(value,key,index) in point_rank">
+                                    <span id="num">{{index+1}}</span>
+                                    <span id="uname">{{key}}</span>
+                                    <span id="grade">{{value}}</span>
+                                <img id="img4" src='../assets/time.png'>
+                            </div>
                         </div>
                     </div>
-            </div>
-                        
-                    </div>
+                </div>
                 </div>
             </div>
-        </div>
+	    </div>
 	</div>
 </template>
 
@@ -296,13 +287,13 @@ export default {
             daka_num:0,
             coin_rank:{},//金币排行榜字典
             word_rank:{},//单词书排行榜字典
-            point_rank:{这是第一名:"1",这是第二名:'2'},//积分排行榜字典
+            point_rank:{'这是第一名':'2','这是第二名':'3'},//积分排行榜字典
             test:{},
             button1:true,
             button2:true,
             button3:true,
             button4:true,
-            show:false,//显示右边主体框
+            show:true,//显示右边主体框
             show_study:false,//显示学习页面
             show_statistics:false,//显示学习统计页面
             show_xueqian:false,//显示学前测试进入页面
@@ -310,7 +301,7 @@ export default {
             show_word_book:false,//显示单词书页面
             show_test:false,//显示学前测试页面
             show_match:false,//显示全部比赛信息页面
-            show_match_detail:false,//显示比赛详细信息页面
+            show_match_detail:true,//显示比赛详细信息页面
             show_gonggu:false,
             tests_type:{},//测试类型的字典
             tests_grade:{},//测试类型对应的测试分数的字典
@@ -602,23 +593,26 @@ export default {
             this.chartData = {
                 columns: ['日期', '单词数'],
                 rows: [
-                  { '日期': '1月1日', '单词数': 123 },
-                  { '日期': '1月2日', '单词数': 1223 },
-                  { '日期': '1月3日', '单词数': 2123 },
-                  { '日期': '1月4日', '单词数': 4123 },
-                  { '日期': '1月5日', '单词数': 3123 },
-                  { '日期': '1月6日', '单词数': 7123 }
+                  { '日期': '1月6日', '单词数': 1 },
+                  { '日期': '1月7日', '单词数': 6 },
+                  { '日期': '1月8日', '单词数': 10 },
+                  { '日期': '1月9日', '单词数': 11 },
+                  { '日期': '1月11日', '单词数': 12 },
+                  { '日期': '1月12日', '单词数': 20 },
+                  { '日期': '1月13日', '单词数': 40 }
                 ]
             }
             this.pieData = {
                 columns: ['日期','时间'],
                 rows: [
-                  { '日期': '1月1日', '时间':12},
-                  { '日期': '1月2日', '时间':122},
-                  { '日期': '1月3日', '时间':212},
-                  { '日期': '1月4日', '时间':412},
-                  { '日期': '1月5日', '时间':312},
-                  { '日期': '1月6日', '时间':712}
+                  { '日期': '1月6日', '时间':1},
+                  { '日期': '1月7日', '时间':3},
+                  { '日期': '1月8日', '时间':12},
+                  { '日期': '1月9日', '时间':10},
+                  { '日期': '1月10日', '时间':20},
+                  { '日期': '1月11日', '时间':30},
+                  { '日期': '1月12日', '时间':100},
+                  { '日期': '1月13日', '时间':30},
                 ]
             }
             this.pie_settings = {
@@ -982,9 +976,10 @@ export default {
                 url:'http://localhost:8000/app/gonggutest',
                 data:param,
             }).then(function(response){
-                window.console.log(response)
                 that.test_timu = response.data
                 that.show_gonggu = true
+                that.show_time = 180
+                that.time_id = setInterval(that.clock,1000)
             })
         },
         xuehou:function(){
@@ -1007,7 +1002,6 @@ export default {
                     url:'http://localhost:8000/app/testall',
                     data:param,
                 }).then(function(response){
-                    window.console.log(response)
                     that.test_timu = response.data
                     that.show_test = true
                     that.show_time = 180
@@ -1197,7 +1191,7 @@ h3 {
     height: 200px;
     margin: 10px;
     text-align: center;
-    background-color: rgb(216, 191, 116);
+    background-color: rgb(113, 228, 209);
     float: left;
     
 }
@@ -1270,30 +1264,41 @@ h3 {
     top: 50px;
     left: 50px;
 }
-#before-study {
-    color:rgba(42, 235, 17, 0.438);
-    font-size: 18px;
+#num1{
+    color: rgb(238, 150, 18);
+    font-size: 25px;
     position: absolute;
-    left:250px;
+    left: 360px;
+    top: 110px;
+}
+#num2{
+    color: red;
+    font-size: 30px;
+    position: absolute;
+    top: 105px;
+    left: 405px;
+}
+#num3{
+    color: rgb(238, 150, 18);
+    font-size: 25px;
+    position: absolute;
+    top: 110px;
+    left: 455px;
+}
+#before-study {
+    color:rgb(107, 112, 111);
+    font-size: 20px;
+    position: absolute;
+    left: 270px;
 }
 #after-study {
-    font-size: 18px;
-    margin-left: 20px;
+    color:rgb(107, 112, 111);
+    font-size: 20px;
+    position: absolute;
+    left: 490px;
 }
 
-.num {
-    font-size: 30px;
-    margin-left: 20px;
-}
-#num1 {
-    color: orange;
-}
-#num2 {
-    color: black;
-}
-#num3 {
-    color: black;
-}
+
 /* 第二行内容 */
 #box2 {
     width: 850px;
@@ -1756,13 +1761,14 @@ h3 {
 }
 /* 右侧块中的右侧块 */
 #match_rank {
+    display: flex;
 	width: 450px;
 	height: 700px;
 	background-color: white;
     float: left;
 }
 /* 比赛详细信息页面CSS结束 */
-#shabi {
+#statistics {
     width: 850px;
     height: 720px;
 }
@@ -1770,7 +1776,7 @@ h3 {
     height: 100%;
     overflow-x: hidden;
 }
-#shabi .el-scrollbar .el-scrollbar__wrap {
+#statistics .el-scrollbar .el-scrollbar__wrap {
     overflow-x: hidden;
     height: 100%;
 }
@@ -1779,22 +1785,35 @@ h3 {
 }
 .chart {
     width: 300px;
-    height: 650px;
-    margin-top: 10px;
-    margin-left: 10px;
-    border-radius: 4px;
+    height: 600px;
+    margin-top: 50px;
+    margin-left: 125px;
+    border-radius: 10px;
     background: inherit;
     background-color: rgba(255, 255, 255, 1);
+    border: 4px solid rgba(51, 147, 211, 0.856);
 }
 .title {
     width: 300px;
     height: 30px;
+    padding: 0px;
+}
+.rank {
+    width: 255px;
+    height: 45px;
+    margin-left: 15px;
+    border-radius: 5px;
+    background-color: #EEF9FF;
+    margin-top: 5px;
+    line-height: 45px;
+    text-align: 10px;
+    padding-left: 15px;
 }
 .img-style {
     width:255px;
-    padding-left: 20px;
     margin: auto;
-    margin-top: -50px;
+    margin-left: 23px;
+    margin-top: -60px;
 }
 #img4 {
     float: right;
@@ -1822,15 +1841,23 @@ h3 {
     font-family: Arial, Helvetica, sans-serif;
     line-height: 45px;
     float: left;
+    font-size: 16px;
 }
 #uname{
     margin-left: 20px;
     line-height: 45px;
     float: left;
-    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family:'Microsoft YaHei UI';
+    font-weight: 500;
+    font-size: 16px;
+    color: #606266;
 }
 #grade{
     float: right;
     margin-right: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    color: #606266;
+    font-weight: 500;
 }
 </style>

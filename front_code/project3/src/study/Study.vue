@@ -4,7 +4,7 @@
         <div id = "top-box1">
             <p id = "new-word">当前单元已熟练单词数：{{10-word_length}}</p>
             <p id = "recall">回想次数：{{recall_count}}</p>
-            <span>单元：{{study_unit}}</span>
+            <span id="unit">单元：{{study_unit}}</span>
             <img src = "../assets/1.png" id = "picture">
             <span id = "time">{{show_time}}</span>
         </div>
@@ -78,6 +78,7 @@
                 <input type = "button" id = "next-part" value = "Next" v-if="show_next" @click="gonext">
             </div>
         </div>
+        <input type="button" value="退出" id="out" @click="outstudy">
     </div>    
 </template>
 
@@ -133,6 +134,10 @@ export default {
         })
     },
     methods:{
+        outstudy:function(){
+            clearInterval(this.time_id)
+            window.location = 'main.html'
+        },
         clock:function(){
             if(this.show_time>0){
                 this.show_time -= 1
@@ -352,26 +357,39 @@ export default {
 }
 
 #new-word {
-    margin: 0;
-    padding-left: 200px;
-    padding-top: 30px;
+    position: absolute;
+    font-size: 20px;
+    left: 100px;
+    color: rgba(85, 224, 127, 0.788);
 }
 
 #recall {
-    margin: 0;
-    padding-left: 30px;
-    padding-top: 30px;
+    position: absolute;
+    left: 220px;
+    font-size: 20px;
+    top: 30px;
+    color: rgba(230, 96, 43, 0.767);
+}
+#unit{
+    font-size: 25px;
+    position: absolute;
+    left: 520px;
+    color: red;
 }
 
 #picture {
     width: 100px;
     height: 70px;
-    margin-left: 350px;
+    position: absolute;
+    left: 850px;
 }
 
 #time {
-    padding-left: 50px;
-    padding-top: 30px;
+    position: absolute;
+    font-size: 20px;
+    left: 960px;
+    top: 20px;
+    color: rgba(223, 51, 51, 0.801);
 }
 
 #main_box {
@@ -396,7 +414,7 @@ export default {
 }
 
 #english_word {
-    font-size: 30px;
+    font-size: 40px;
     font-weight: bold;
     text-align: center;
     padding-top: 50px;
@@ -514,5 +532,19 @@ export default {
     background: inherit;
     margin-top: 50px;
     margin-left: 500px;
+}
+#out{
+    width: 150px;
+    height: 40px;
+    font-size: 14px;
+    color: white;
+    border-style: solid;
+    border-radius: 4px;
+    border: none;
+    background: inherit;
+    background-color: rgb(26, 219, 36);
+    position: absolute;
+    top: 900px;
+    left: 1200px;
 }
 </style>

@@ -69,7 +69,6 @@
             </div>
             <div id="botton_list2" class="botton_list">
                 <el-button class="button2" icon="el-icon-plus" @click="goclasses_add">新增课程</el-button>
-                <el-button class="button2" icon="el-icon-circle-close" @click="goclasses_delete">删除课程</el-button>
             </div>
             <div id="classes_add" v-show="classes_add">
                 <el-input placeholder="请输入新增课程id" v-model="add_course_id" clearable maxlength="5" show-word-limit size="medium"></el-input>
@@ -77,11 +76,6 @@
                 <el-input placeholder="请输入课程单词书id" v-model="add_class_book_id" clearable></el-input>
                 <el-button type="primary" @click="sure_classes_add">确定</el-button>
                 <el-button type="primary" @click="cancel_classes_add">取消</el-button>
-            </div>
-            <div id="classes_delete" v-show="classes_delete">
-                <el-input placeholder="请输入删除课程id" v-model="delete_class_id" clearable maxlength="5" show-word-limit size="medium"></el-input>
-                <el-button type="primary" @click="sure_classes_delete">确定</el-button>
-                <el-button type="primary" @click="cancel_classes_delete">取消</el-button>
             </div>
             <div id="table_div">
                 <table id="table-a">
@@ -95,22 +89,10 @@
                         <td>{{value.course_id}}</td>
                         <td>{{value.course_name}}</td>
                         <td>{{value.course_student_number}}</td>
-                        <td><el-button type="primary" @click="this_classes_delete">删除</el-button></td>
+                        <td><el-button type="primary" @click="course_delete(value.course_id)">删除</el-button></td>
                     </tr>
                 </table>
             </div>
-            <!-- <template>
-                <el-table ref="multipleTable" v-for="(value,key,index) in course" :data="value" stripe align="left" max-height="900" border style="width: 100%" id="classesdata" :header-cell-style="tableHeaderColor">
-                    <el-table-column prop="course_id" label="课程id"></el-table-column>
-                    <el-table-column prop="course_name" label="课程名称"></el-table-column>
-                    <el-table-column prop="course_student_number" label="课程人数"></el-table-column>
-                    <el-table-column label="操作">
-                        <template slot-scope="">
-                            <el-button @click="goteacher_students">添加/删除学员</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </template>   -->
         </div>
         <div id="msg_window" v-show="compete">
             <div id="window_header">
@@ -135,46 +117,35 @@
             <div id="table_div">
                 <table id="table-a">
                     <tr>
-                        <th>比赛编号</th>
                         <th>比赛名称</th>
-                        <th>比赛积分</th>
-                        <th>组织方</th>
+                        <th>发起人</th>
+                        <th>状态</th>
+                        <th>范围</th>
+                        <th>参加人数</th>
                         <th>操作</th>
                     </tr>
                     <tr v-for="(value,key,index) in match">
-                        <td>{{value.match_id}}</td>
                         <td>{{value.match_name}}</td>
-                        <td>{{value.match_point}}</td>
                         <td>{{value.teacher_name}}</td>
-                        <td><el-button type="primary" @click="gochange_compete">编辑</el-button></td>
+                        <td>{{value.status}}</td>
+                        <td>{{value.scope}}</td>
+                        <td>{{value.join_number}}</td>
+                        <td><el-button type="text" @click="gochange_compete">排名</el-button><el-button type="text" @click="gochange_compete">编辑</el-button></td>
                     </tr>
                 </table>
             </div>
-            <!--<template>
-                <el-table ref="multipleTable" :data="competedata" stripe align="left" max-height="900" border style="width: 100%" id="competedata" :header-cell-style="tableHeaderColor">
-                    <el-table-column prop="match_id" label="比赛编号"></el-table-column>
-                    <el-table-column prop="match_name" label="比赛名称"></el-table-column>
-                    <el-table-column prop="match_point" label="比赛积分"></el-table-column>
-                    <el-table-column prop="teacher_name" label=""></el-table-column>
-                    <el-table-column label="操作">
-                        <template slot-scope="">
-                            <el-button @click="gochange_compete">编辑</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </template> -->
-            <input type = "button" class="button1" value="新建比赛" id="new_compete" @click="goadd_compete"> 
+            <el-button type = "primary" id="new_compete" @click="goadd_compete">新建比赛</el-button> 
         </div>
-        <div id="msg_window" v-show="students">
+        <div id="msg_window" v-show="show_student">
             <div id="window_header">
                 学生名册
             </div>
             <div id="botton_list2" class="botton_list">
-                <el-button class="button2" icon="el-icon-notebook-1" @click="gobook_add">注册课程</el-button>
+                <el-button class="button2" icon="el-icon-notebook-1" @click="gobook_add">开通教材</el-button>
                 <el-button class="button2" icon="el-icon-user-solid" @click="gostudent_change">添加/删除学员</el-button>
             </div>
             <div id="book_add" v-show="book_add">
-                <el-input placeholder="请输入注册教材id" v-model="add_book_id" clearable maxlength="10" show-word-limit size="medium"></el-input>
+                <el-input placeholder="请输入教材id" v-model="add_book_id" clearable maxlength="10" show-word-limit size="medium"></el-input>
                 <el-input placeholder="请输入学生id" v-model="book_student_id" clearable maxlength="7"></el-input>
                 <el-button type="primary" @click="sure_book_add">确定</el-button>
                 <el-button type="primary" @click="cancel_book_add">取消</el-button>
@@ -194,18 +165,16 @@
                         <th>上次登录</th>
                         <th>学生id</th>
                         <th>班级名称</th>
-                        <th>所在组</th>
                         <th>注册日期</th>
                         <th>状态</th>
                     </tr>
-                    <tr v-for="(value,key,index) in student">
+                    <tr v-for="(value,key,index) in students">
                         <td>{{value.student_name}}</td>
                         <td>{{value.email}}</td>
                         <td>{{value.coins}}</td>
                         <td>{{value.last_login}}</td>
                         <td>{{value.student_id}}</td>
                         <td>{{value.course_name}}</td>
-                        <td>{{value.所在组}}</td>
                         <td>{{value.register_time}}</td>
                         <td>{{value.status}}</td>
                     </tr>
@@ -248,26 +217,19 @@ export default {
             rewrite:false,
             classes:true,
             classes_add:false,
-            classes_delete:false,
             compete:false,
             add_compete:false,
-            students:false,
+            show_student:false,
             book_add:false,
             students_change:false,
             change_compete:false,
-            course:{1:1,2:2,3:3},
-            match:{1:1,2:2,3:3},
-            student:{1:1,2:2,3:3},
+            course:{},
+            match:{},
+            students:{},
             add_course_id:'',
             add_course_name:'',
             add_class_book_id:'',
             delete_class_id:'',
-            competedata :[
-                {match_id:'0',match_name:'',match_point:'',teacher_name:''}
-            ],
-            studentsdata :[
-                {student_name:'',email:'',coins:'0',last_login:'',student_id:'0',course_name:'',group:'',register_time:'',status:''}
-            ],
             add_compete_id:'',
             add_compete_name:'',
             add_compete_point:'',
@@ -306,7 +268,7 @@ export default {
         this.rewrite=false
         this.classes=true
         this.compete=false
-        this.students=false
+        this.show_student=false
 	},
 	methods: {
         send_rewrite: function(){
@@ -395,14 +357,14 @@ export default {
             this.rewrite=false
             this.classes=false
             this.compete=false
-            this.students=false
+            this.show_student=false
         },
         gorewrite_pwd:function(){
             this.msg=false
             this.rewrite=true
             this.classes=false
             this.compete=false
-            this.students=false
+            this.show_student=false
         },
         goteacher_classes:function(){
             let that = this
@@ -420,7 +382,7 @@ export default {
             this.rewrite=false
             this.classes=true
             this.compete=false
-            this.students=false
+            this.show_student=false
         },
         goclasses_add:function() {
             this.classes_add=true
@@ -429,27 +391,30 @@ export default {
             if(this.add_course_id==''||this.add_course_name==''||this.add_class_book_id==''){
                 window.alert('输入内容不能为空')
             }else{
-                let that = this
-                let param = new URLSearchParams()
-                param.append('teacher_id',this.teacher_id)
-                param.append('course_id',this.add_course_id)
-                param.append('course_name',this.add_course_name)
-                param.append('book_id',this.add_class_book_id)
-                this.$axios({
-                    method:'post',
-                    url:'http://localhost:8000/app/opencourse',
-                    data:param,
-                }).then(function(response){
-                    window.console.log(response)
-                    if(response.data['status']=='succeed'){
-                        that.add_success()
-                        that.classes_add=false
-                        window.location = 'teacher.html'
-                    }
-                    else if(response.data.add_course_status=='failed'){
-                        that.add_failed()
-                    }
-                })
+                let message = '确定添加课程吗？'
+                if(window.confirm(message)==true){
+                    let that = this
+                    let param = new URLSearchParams()
+                    param.append('teacher_id',this.teacher_id)
+                    param.append('course_id',this.add_course_id)
+                    param.append('course_name',this.add_course_name)
+                    param.append('book_id',this.add_class_book_id)
+                    this.$axios({
+                        method:'post',
+                        url:'http://localhost:8000/app/opencourse',
+                        data:param,
+                    }).then(function(response){
+                        window.console.log(response)
+                        if(response.data['status']=='succeed'){
+                            that.add_success()
+                            that.classes_add=false
+                            window.location = 'teacher.html'
+                        }
+                        else if(response.data.add_course_status=='failed'){
+                            that.add_failed()
+                        }
+                    })
+                }
             }
         },
         cancel_classes_add() {
@@ -469,97 +434,85 @@ export default {
                 type: 'error'
             });
         },
-        goclasses_delete:function() {
-            this.classes_delete=true
-        },
-        // 待做
-        // 
-        // 
-        sure_classes_delete() {
-            let that = this
-			let param = new URLSearchParams()
-			param.append('course_id',this.delete_class_id)
-			this.$axios({
-				method:'post',
-				url:'http://localhost:8000/mainpage/',
-				data:param,
-			}).then(function(response){
-                window.console.log(response)
-                window.console.log(typeof(response.data.teacher_id))
-				if(response.data.delete_course_status=='succeed'){
-                    delete_success()
-                    this.classes_delete=false
-                    window.location = 'teacher.html'
-                }
-                else if(response.data.delete_course_status=='failed'){
-                    delete_failed()
-                }
-			})
-        },
-        cancel_classes_delete() {
-            this.classes_delete=false
+        course_delete:function(courseid){
+            window.console.log(courseid)
+            let message = '确认删除课程吗？'
+            if(window.confirm(message)==true){
+                let that = this
+                let param = new URLSearchParams
+                param.append('course_id',courseid)
+                param.append('teacher_id',this.teacher_id)
+                this.$axios({
+                    method:'post',
+                    url:'http://localhost:8000/app/deletecourse',
+                    data:param,
+                }).then(function(response){
+                    if(response.data['status']=='succeed'){
+                        that.delete_success()
+                        window.location = 'teacher.html'
+                    }else{
+                        that.delete_failed()
+                        window.location = 'teacher.html'
+                    }
+                })
+            }
         },
         delete_success() {
             this.$message({
                 showClose: true,
-                message: '添加成功',
+                message: '删除成功',
                 type: 'success'
             });
         },
         delete_failed() {
             this.$message({
                 showClose: true,
-                message: '添加错误',
+                message: '服务器异常，请稍后重试',
                 type: 'error'
             });
         },
         goteacher_students:function(){
             let that = this
             let param = new URLSearchParams
-            param.append('course_id',this.course_id)
+            param.append('teacher_id',this.teacher_id)
             this.$axios({
                 method:'post',
                 url:'http://localhost:8000/app/studentlist',
             }).then(function(response){
-                that.student_name = response.data.student_name
-                that.email = response.data.email
-                that.coins = response.data.coins
-                that.last_login = response.data.last_login
-                that.student_id = response.data.student_id
-                that.course_name = response.data.course_name
-                that.group = response.data.group
-                that.register_time = response.data.register_time
-                that.status = response.data.status
+                window.console.log(response)
+                that.students = response.data
             })
             this.msg=false
             this.rewrite=false
             this.classes=false
             this.compete=false
-            this.students=true
+            this.show_student=true
         },
         gobook_add(){
             this.book_add=true
         },
         sure_book_add() {
-            let that = this
-			let param = new URLSearchParams()
-			param.append('book_id',this.add_book_id)
-			param.append('student_id',this.book_student_id)
-			this.$axios({
-				method:'post',
-				url:'http://localhost:8000/app/openbook',
-				data:param,
-			}).then(function(response){
-                window.console.log(response)
-                window.console.log(typeof(response.data.teacher_id))
-				if(response.data.status=='succeed'){
-                    add_success()
-                    this.book_add=false
-                }
-                else {
-                    add_failed()
-                }
-			})
+            let message = '确认开通课程吗？'
+            if(window.confirm(message)==true){
+                let that = this
+                let param = new URLSearchParams()
+                param.append('book_id',this.add_book_id)
+                param.append('student_id',this.book_student_id)
+                this.$axios({
+                    method:'post',
+                    url:'http://localhost:8000/app/openbook',
+                    data:param,
+                }).then(function(response){
+                    window.console.log(response)
+                    if(response.data.status=='succeed'){
+                        that.add_success()
+                        that.book_add=false
+                    }
+                    else {
+                        that.add_failed()
+                    }
+                })
+            }
         },
         cancel_book_add() {
             this.book_add=false
@@ -615,14 +568,25 @@ export default {
             this.rewrite=false
             this.classes=false
             this.compete=false
-            this.students=false
+            this.show_student=false
         },
         goteacher_compete:function(){
             this.msg=false
             this.rewrite=false
             this.classes=false
             this.compete=true
-            this.students=false
+            this.show_student=false
+            let that = this
+            let param = new URLSearchParams
+            param.append('teacher_id',this.teacher_id)
+            this.$axios({
+                method:'post',
+                url:'http://localhost:8000/app/teachermatch',
+                data:param,
+            }).then(function(response){
+                window.console.log(response)
+                that.match = response.data
+            })
         },
         goadd_compete() {
             this.add_compete=true
@@ -708,6 +672,9 @@ table{
     width: 8%;
 	background-color:#e9faff;
 }
+#table_div{
+    text-align: center;
+}
 body {
     margin:0px;
     padding:0px;
@@ -719,16 +686,21 @@ body {
     margin-right:auto;
     text-align:left;
 }
+td{
+    font-size: 16px;
+    width: 200px;
+}
 #teachermain {
     z-index:0;
     margin:0px;
     padding:0px;
     border:0px;
+    height: 720px;
     border-right: 2px solid #7D8BA0;
 }
 #header {
     margin:0px;
-    width:1647px;
+    width:1520px;
     height: 35px;
     background-color: #C0CDDE;
     margin-left:auto;
@@ -783,7 +755,7 @@ body {
 #botton_list1 {
     padding: 0px;
     margin:0px;
-    width: 1463px;
+    width: 1334px;
     height: 35px;
     float: left;
     position: relative;
@@ -806,7 +778,7 @@ body {
 #botton_list2 {
     padding: 0px;
     margin:0px;
-    width: 1463px;
+    width: 1334px;
     height: 35px;
     position: relative;
     top:60px;
@@ -829,15 +801,15 @@ body {
     position: relative;
     bottom: 300px;
     left: 184px;
-    width: 1463px;
-    height: 960px;
+    width: 1334px;
+    height: 680px;
     background-color: #ffffff;
     border-right: 2px solid #7D8BA0;
 }
 #window_header {
     position: relative;
     bottom: 35px;
-    width: 1463px;
+    width: 1334px;
     height: 24px;
     float: left;
     font-size: 14px;
@@ -857,7 +829,7 @@ body {
     margin-top: 20px;
 }
 #new_compete {
-    margin-left: 500px;
+    margin-left: 600px;
     margin-top: 30px;
 }
 .input {
@@ -880,14 +852,15 @@ body {
     margin-bottom: 20px;
 }
 /* Table */
+
 #table-a
 {
 	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 	font-size: 12px;
 	margin: 45px;
     margin-top: 80px;
+    margin-left: 400px;
 	width: 480px;
-	text-align: left;
 	border-collapse: collapse;
 	border: 1px solid #69c;
 }
@@ -895,14 +868,14 @@ body {
 {
 	padding: 12px 17px 12px 17px;
 	font-weight: normal;
-	font-size: 14px;
+	font-size: 16px;
 	color: #039;
 	border-bottom: 1px dashed #69c;
     background: #A2C3FD;
 }
 #table-a td
 {
-	padding: 7px 17px 7px 17px;
+	/* padding: 7px 17px 7px 17px; */
 	color: #669;
 }
 #table-a tr:hover td
@@ -919,6 +892,7 @@ body {
 	font-size: 12px;
 	margin: 45px;
     margin-top: 80px;
+    margin-left: 160px;
 	width: 1000px;
 	text-align: left;
 	border-collapse: collapse;

@@ -5,9 +5,8 @@
            <img src="../assets/u24.png" id="logoimg" class="logoimgStyle" width="35" height="35">
             <p id="logotext">单词赢</p>
         </div>
-        <input type = "button" class = "button-style" id = "exit" value = "退出" @click="logout">
-        <input type = "button" class = "button-style" id = "help" value = "帮助">
-        <input type = "button" class = "button-style" id = "setting" value = "修改密码" @click="gosetting">
+        <input type = "button" class = "button-style" value = "退出" @click="logout">
+        <input type = "button" class = "button-style" value = "修改密码" @click="gosetting">
         <input type = "button" class = "button-style" value = "排行榜" @click="gorank">
         <input type = "button" class = "button-style" value = "主页" @click="gomain">
     </div>
