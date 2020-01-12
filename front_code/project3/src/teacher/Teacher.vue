@@ -194,6 +194,15 @@
                 </el-table>
             </template>-->    
         </div>
+        <div id="msg_window" v-show="charts">
+            <div id="window_header">
+                学习统计
+            </div>
+            <div id="charts" style="text-align:center;">
+                <h2 id="word_number">最近一周内单词学习情况图表</h2>
+                <ve-histogram :data="chartData" width="1260px"></ve-histogram>
+            </div>  
+        </div>
     </div>
 </template>
 
@@ -223,6 +232,7 @@ export default {
             book_add:false,
             students_change:false,
             change_compete:false,
+            charts:false,
             course:{},
             match:{},
             students:{},
@@ -240,7 +250,7 @@ export default {
             change_words_id:'',
             add_book_id:'',
             book_student_id:'',
-            students_change_id:''
+            students_change_id:'',
         }
     },/*
     beforeCreate(){
@@ -269,6 +279,18 @@ export default {
         this.classes=true
         this.compete=false
         this.show_student=false
+        this.chartData = {
+            columns: ['日期', '单词数'],
+            rows: [
+              { '日期': '1月6日', '单词数': 1 },
+              { '日期': '1月7日', '单词数': 6 },
+              { '日期': '1月8日', '单词数': 10 },
+              { '日期': '1月9日', '单词数': 11 },
+              { '日期': '1月11日', '单词数': 12 },
+              { '日期': '1月12日', '单词数': 20 },
+              { '日期': '1月13日', '单词数': 40 }
+            ]
+        }
 	},
 	methods: {
         send_rewrite: function(){
@@ -358,6 +380,7 @@ export default {
             this.classes=false
             this.compete=false
             this.show_student=false
+            this.charts=false
         },
         gorewrite_pwd:function(){
             this.msg=false
@@ -383,6 +406,7 @@ export default {
             this.classes=true
             this.compete=false
             this.show_student=false
+            this.charts=false
         },
         goclasses_add:function() {
             this.classes_add=true
@@ -487,6 +511,7 @@ export default {
             this.classes=false
             this.compete=false
             this.show_student=true
+            this.charts=false
         },
         gobook_add(){
             this.book_add=true
@@ -569,6 +594,7 @@ export default {
             this.classes=false
             this.compete=false
             this.show_student=false
+            this.charts=true
         },
         goteacher_compete:function(){
             this.msg=false
@@ -576,6 +602,7 @@ export default {
             this.classes=false
             this.compete=true
             this.show_student=false
+            this.charts=false
             let that = this
             let param = new URLSearchParams
             param.append('teacher_id',this.teacher_id)
@@ -674,6 +701,7 @@ table{
 }
 #table_div{
     text-align: center;
+    width: 1352px;
 }
 body {
     margin:0px;
@@ -712,6 +740,7 @@ td{
     width: 180px;
     height: 330px;
     background-color:#DBE2EB;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 #menu1>ul {
     margin:0px;
@@ -921,5 +950,8 @@ td{
 }
 #table-b tr:nth-child(even) {
     background: #E4EDFD;
+}
+#charts {
+    width: 1260px;
 }
 </style>
