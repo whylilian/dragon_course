@@ -30,15 +30,20 @@
                 个人信息
             </div>
             <div id="msg">
-                <p>用户id：{{teacher_id}}</p>
-                <p>用户名：{{teacher_username}}</p>
-                <p>教师姓名：{{teacher_name}}</p>
-                <p>教师性别：{{teacher_sex}}</p>
-                <p>教师年龄：{{teacher_age}}</p>
-                <p>教师电话：{{teacher_phone}}</p>
-                <p>教师住址：{{teacher_address}}</p>
+                <el-card class="box-card" id="msg_card" shadow="hover">
+                    <div slot="header" class="clearfix">
+                        <span>教师信息</span>
+                    </div>
+                    <p>用户id：{{teacher_id}}</p>
+                    <p>用户名：{{teacher_username}}</p>
+                    <p>教师姓名：{{teacher_name}}</p>
+                    <p>教师性别：{{teacher_sex}}</p>
+                    <p>教师年龄：{{teacher_age}}</p>
+                    <p>教师电话：{{teacher_phone}}</p>
+                    <p>教师住址：{{teacher_address}}</p>
+                </el-card>
                 <div>
-                    <input type = "button" class="button1" id="sure" value="确定" @click="goteacher_classes">
+                    <el-button type="primary" id="sure" @click="goteacher_classes">确定</el-button>
                 </div>
             </div>
         </div>
@@ -850,6 +855,9 @@ td{
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     background-image: linear-gradient(#E9E9E9, #C5C5C5);
 }
+#msg_card {
+    width: 700px;
+}
 #msg {
     margin-left:20px;
     margin-bottom:20px; 
@@ -857,6 +865,7 @@ td{
 #sure {
     background-color: rgb(32, 214, 78);
     margin-top: 20px;
+    margin-left: 300px;
 }
 #new_compete {
     margin-left: 600px;
@@ -953,5 +962,20 @@ td{
 }
 #charts {
     width: 1260px;
+}
+.text {
+    font-size: 14px;
+}
+.item {
+    margin-bottom: 18px;
+}
+
+.clearfix:before,
+.clearfix:after {
+    display: table;
+    content: "";
+}
+.clearfix:after {
+    clear: both
 }
 </style>

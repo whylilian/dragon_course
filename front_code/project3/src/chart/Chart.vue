@@ -123,6 +123,8 @@ export default {
     border-radius: 4px;
     background: inherit;
     background-color: rgba(255, 255, 255, 1);
+    border-radius: 10px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 .title {
     width: 300px;
