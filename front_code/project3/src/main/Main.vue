@@ -287,13 +287,13 @@ export default {
             daka_num:0,
             coin_rank:{},//金币排行榜字典
             word_rank:{},//单词书排行榜字典
-            point_rank:{'这是第一名':'2','这是第二名':'3'},//积分排行榜字典
+            point_rank:{},//积分排行榜字典
             test:{},
             button1:true,
             button2:true,
             button3:true,
             button4:true,
-            show:true,//显示右边主体框
+            show:false,//显示右边主体框
             show_study:false,//显示学习页面
             show_statistics:false,//显示学习统计页面
             show_xueqian:false,//显示学前测试进入页面
@@ -301,7 +301,7 @@ export default {
             show_word_book:false,//显示单词书页面
             show_test:false,//显示学前测试页面
             show_match:false,//显示全部比赛信息页面
-            show_match_detail:true,//显示比赛详细信息页面
+            show_match_detail:false,//显示比赛详细信息页面
             show_gonggu:false,
             tests_type:{},//测试类型的字典
             tests_grade:{},//测试类型对应的测试分数的字典
@@ -329,13 +329,13 @@ export default {
             isjoin:0,//判断可以参加比赛
             percentage:0,
 		}
-    },/*
+    },
     beforeCreate(){
 		//未登录，跳转到登录界面
 		if(this.$store.state.student_id==""){
 			window.location = "login.html"
 		}
-	},*/
+	},
 	created(){
 		this.student_id = parseInt(this.$store.state.student_id)
         this.student_name = this.$store.state.student_name
@@ -1037,6 +1037,8 @@ table{
 #left {
     width: 300px;
     height: 400px;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
 }
 
 /* 左上角部分 */
@@ -1047,6 +1049,7 @@ table{
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
+    border-radius: 10px;
 
 }
 /* 左下角部分 */
@@ -1055,6 +1058,7 @@ table{
     height: 280px;
     background-color: #ffffff;
     text-align: center;
+    border-radius: 10px;
 }
 
 .headportraitStyle {
@@ -1151,7 +1155,8 @@ h3 {
     height: 700px;
     background-color: #ffffff;
     position: relative;
-
+    border-radius: 10px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
 }
 
 /* 学前测试开始页面CSS开始 */
@@ -1554,6 +1559,7 @@ h3 {
     width: 100%;
     height: 260px;
     display: flex;
+    border-radius: 10px;
 }
 
 #time-picture {
@@ -1575,6 +1581,7 @@ h3 {
     margin-top: 50px;
     margin-left: 50px;
     background-color: rgb(212, 211, 209);
+    border-radius: 10px;
 }
 .title {
     font-size: 30px;
@@ -1707,6 +1714,7 @@ h3 {
     width: 400px;
     height: 700px;
     float: left;
+    border-radius: 10px;
 }
 /* 右侧块中左上角部分 */
 #match_topleft {
@@ -1714,6 +1722,7 @@ h3 {
     height: 470px;
     padding-top: none;
 	background-color: white;
+    border-radius: 10px;
 }
 /* 比赛的名字 */
 #name {
@@ -1738,6 +1747,7 @@ h3 {
     width: 400px;
 	height: 230px;
 	background-color: white;
+    border-radius: 10px;
 }
 /* 下方两个按钮样式 */
 .button_match {
@@ -1766,6 +1776,7 @@ h3 {
 	height: 700px;
 	background-color: white;
     float: left;
+    border-radius: 10px;
 }
 /* 比赛详细信息页面CSS结束 */
 #statistics {

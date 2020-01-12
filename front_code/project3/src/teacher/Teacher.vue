@@ -696,11 +696,11 @@ td{
     padding:0px;
     border:0px;
     height: 720px;
-    border-right: 2px solid #7D8BA0;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 #header {
     margin:0px;
-    width:1520px;
+    width:1536px;
     height: 35px;
     background-color: #C0CDDE;
     margin-left:auto;
@@ -755,7 +755,7 @@ td{
 #botton_list1 {
     padding: 0px;
     margin:0px;
-    width: 1334px;
+    width: 1352px;
     height: 35px;
     float: left;
     position: relative;
@@ -763,7 +763,7 @@ td{
     left: 184px;
     margin-left:auto;
     margin-right:auto;
-    border-right: 2px solid #7D8BA0;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     background-image: linear-gradient(#BFCCDC, #8D9DBD);
 }
 .button1 {
@@ -778,11 +778,11 @@ td{
 #botton_list2 {
     padding: 0px;
     margin:0px;
-    width: 1334px;
+    width: 1352px;
     height: 35px;
     position: relative;
     top:60px;
-    border-right: 2px solid #7D8BA0;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     background-image: linear-gradient(#BFCCDC, #8D9DBD);
 }
 .button2 {
@@ -801,15 +801,16 @@ td{
     position: relative;
     bottom: 300px;
     left: 184px;
-    width: 1334px;
+    width: 1352px;
     height: 680px;
     background-color: #ffffff;
-    border-right: 2px solid #7D8BA0;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 #window_header {
     position: relative;
     bottom: 35px;
-    width: 1334px;
+    width: 1352px;
     height: 24px;
     float: left;
     font-size: 14px;
@@ -817,7 +818,7 @@ td{
     line-height: 24px;
     text-indent: 5px;
     color: #565965;
-    border-right: 2px solid #C5C5C5;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     background-image: linear-gradient(#E9E9E9, #C5C5C5);
 }
 #msg {
