@@ -261,7 +261,21 @@
                             <input type = "button" class = "button_match" id = "start-challenge" value = "开始挑战" v-if="isjoin==1" @click="start_match">
                         </div>
 			        </div>
-                    <div id = "match_rank">
+                    <div class = "chart" id = "goldcoin-week">
+                        <div class = "title" id = "title-box3">
+                            <img id="img3" class="img-style" src="../assets/score.png">
+                            <img id="first" class="img-style2" src='../assets/first.png'>                    
+                            <img id="second" class="img-style2" src='../assets/second.png'>  
+                            <img id="third" class="img-style2" src='../assets/third.png'>
+                            <div class = "rank" v-for="(value,key,index) in point_rank">
+                                <span id="num">{{index+1}}</span>
+                                <span id="uname">{{key}}</span>
+                                <span id="grade">{{value}}</span>
+                            <img id="img4" src='../assets/time.png'>
+                        </div>
+                    </div>
+            </div>
+                        
                     </div>
                 </div>
             </div>
@@ -282,7 +296,7 @@ export default {
             daka_num:0,
             coin_rank:{},//金币排行榜字典
             word_rank:{},//单词书排行榜字典
-            point_rank:{},//积分排行榜字典
+            point_rank:{这是第一名:"1",这是第二名:'2'},//积分排行榜字典
             test:{},
             button1:true,
             button2:true,
@@ -324,13 +338,13 @@ export default {
             isjoin:0,//判断可以参加比赛
             percentage:0,
 		}
-    },
+    },/*
     beforeCreate(){
 		//未登录，跳转到登录界面
 		if(this.$store.state.student_id==""){
 			window.location = "login.html"
 		}
-	},
+	},*/
 	created(){
 		this.student_id = parseInt(this.$store.state.student_id)
         this.student_name = this.$store.state.student_name
@@ -1762,5 +1776,61 @@ h3 {
 }
 .is-horizontal {
     display: none;
+}
+.chart {
+    width: 300px;
+    height: 650px;
+    margin-top: 10px;
+    margin-left: 10px;
+    border-radius: 4px;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 1);
+}
+.title {
+    width: 300px;
+    height: 30px;
+}
+.img-style {
+    width:255px;
+    padding-left: 20px;
+    margin: auto;
+    margin-top: -50px;
+}
+#img4 {
+    float: right;
+    margin-top: 8px;
+    margin-right: 10px; 
+    width: 29px;
+    height: 29px;
+}
+.img-style2{
+    width: 30%
+}
+#first {
+    margin-left:20px;
+}
+#second {
+    float: left;
+    margin-top:20px;
+}
+#third {
+    float: right;
+    margin-top:20px;
+}
+#num {
+    color: #409EFF;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 45px;
+    float: left;
+}
+#uname{
+    margin-left: 20px;
+    line-height: 45px;
+    float: left;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+#grade{
+    float: right;
+    margin-right: 15px;
 }
 </style>
