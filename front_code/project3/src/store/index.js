@@ -14,6 +14,7 @@ const store = new Vuex.Store({
         study_unit:window.localStorage.getItem("study_unit") || "0",
         book_id:window.localStorage.getItem("book_id") || "0",
         match_id:window.localStorage.getItem("match_id") || "0",
+        match_name:window.localStorage.getItem("match_name") || "",
         teacher_id:window.localStorage.getItem("teacher_id") || "",
         teacher_name:window.localStorage.getItem("teacher_name") || "",
     },
@@ -34,6 +35,7 @@ const store = new Vuex.Store({
             window.localStorage.removeItem("study_unit")
             window.localStorage.removeItem("book_id")
             window.localStorage.removeItem("match_id")
+            window.localStorage.removeItem("match_name")
         },
         daka_save:function(state,data){
             window.localStorage.coins = data.coins
@@ -45,7 +47,8 @@ const store = new Vuex.Store({
             window.localStorage.book_id = data.book_id
         },
         match_save:function(state,data){
-            window.localStorage.match_id = data
+            window.localStorage.match_id = data.match_id
+            window.localStorage.match_name = data.match_name
         },
         teacher_login_save:function(state,data){
             window.localStorage.teacher_id = data.teacher_id

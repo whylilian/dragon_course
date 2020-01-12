@@ -63,7 +63,7 @@
                             <p>{{now_book_name}}</p>
                         </div>
                         <div id = "btn">
-                            <el-progress type="circle" :percentage="percentage" style="width:126px;height:126px;"></el-progress>
+                            <el-progress type="circle" :percentage="percentage" style="width:126px;height:126px;position:absolute;left:365px;"></el-progress>
                         </div>
                         <input type = "button" class = "button-style3" value="学前检测" @click="goxueqian" v-if="study_status==1">
                         <input type="button" class="button-style3" value="巩固测试" @click="gonggu" v-if="study_status==2">
@@ -216,13 +216,13 @@
                     <div id = "match-box1">
                         <div class = "match" v-for="index in commit">
                             <div id = "first-box">
-                                <p class = "words" id = "words1">{{index.match}}</p>
+                                <p class = "words" id = "words1">{{index.match_name}}</p>
                                 <p class = "words" id = "words3">已参加</p>
                             </div>
                             <p class = "words" id = "words4">{{index.start_time}}-{{index.end_time}}</p>
                             <div id = "third-box">
                                 <p class = "words" id = "words7">我的排名：{{index.match_rank}}</p>
-                                <a id = "detail" @click="match_detail(index.match_id)">详情>></a>
+                                <a id = "detail" @click="match_detail(index.match_id,index.match_name)">详情>></a>
                             </div>
                         </div>
                     </div>
@@ -230,13 +230,13 @@
                     <div id = "match-box2">
                         <div class = "match" v-for="index in uncommit">
                             <div id = "forth-box">
-                                <p class = "words" id = "words8">{{index.match}}</p>
+                                <p class = "words" id = "words8">{{index.match_name}}</p>
                                 <p class = "words" id = "words10">我要参加</p>
                             </div>
                             <p class = "words" id = "words11">{{index.start_time}}-{{index.end_time}}</p>
                             <div id = "sixth-box">
                                 <p class = "words" id = "words14">我的排名 999</p>
-                                <a id = "detail" @click="match_detail(index.match_id)">详情>></a>
+                                <a id = "detail" @click="match_detail(index.match_id,index.match_name)">详情>></a>
                             </div>
                         </div>
                     </div>
@@ -325,21 +325,21 @@ export default {
             percentage:0,
 		}
     },
-    // beforeCreate(){
-	// 	//未登录，跳转到登录界面
-	// 	if(this.$store.state.student_id==""){
-	// 		window.location = "login.html"
-	// 	}
-	// },
-	// created(){
-	// 	this.student_id = parseInt(this.$store.state.student_id)
-    //     this.student_name = this.$store.state.student_name
-    //     this.coins = parseInt(this.$store.state.coins)
-    //     this.enable_daka = parseInt(this.$store.state.enable_daka)
-    //     this.daka_num = parseInt(this.$store.state.daka_num)
-	// 	window.console.log(this.student_id)
-    //     window.console.log(this.student_name)
-	// },
+    beforeCreate(){
+		//未登录，跳转到登录界面
+		if(this.$store.state.student_id==""){
+			window.location = "login.html"
+		}
+	},
+	created(){
+		this.student_id = parseInt(this.$store.state.student_id)
+        this.student_name = this.$store.state.student_name
+        this.coins = parseInt(this.$store.state.coins)
+        this.enable_daka = parseInt(this.$store.state.enable_daka)
+        this.daka_num = parseInt(this.$store.state.daka_num)
+		window.console.log(this.student_id)
+        window.console.log(this.student_name)
+	},
 	methods: {
         daka:function(){
             let that = this
@@ -861,8 +861,10 @@ export default {
                 window.console.log(that.uncommit)
             })
         },
-        match_detail:function(match_id){
-            this.$store.dispatch('match',match_id)
+        match_detail:function(match_id,match_name){
+            window.console.log(match_id)
+            window.console.log(match_name)
+            this.$store.dispatch('match',{match_id,match_name})
             this.show = true
             this.show_statistics = false
             this.show_study = false
@@ -927,6 +929,7 @@ export default {
             let message = '确认立刻开始挑战吗？'
             if(window.confirm(message)==true){
                 let match_id = parseInt(this.$store.state.match_id)
+                window.console.log(match_id)
                 let that = this
                 let on = false
                 let param1 = new URLSearchParams
@@ -1243,15 +1246,21 @@ h3 {
     display: flex;
     margin-top: 50px;
     margin-left: 0;
+    text-align: center;
 }
 #word1 {
-    font-size: 18px;
-    margin-left: 50px;
+    color:rgb(40, 206, 218);
+    font-size: 20px;
     display: block;
+    position: absolute;
+    top: 50px;
+    left: 50px;
 }
 #before-study {
+    color:rgba(42, 235, 17, 0.438);
     font-size: 18px;
-    margin-left: 200px;
+    position: absolute;
+    left:250px;
 }
 #after-study {
     font-size: 18px;

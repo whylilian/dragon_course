@@ -8,7 +8,7 @@
                 <input type = "button" class="option" value="修改密码" @click="gorewrite_pwd">
                 
                 <input type = "button" id="study_management" class="menu_1" value="学习管理">
-                <input type = "button" class="option" value="班级列表" @click="goteacher_classes">
+                <input type = "button" class="option" value="课程列表" @click="goteacher_classes">
                 <input type = "button" class="option" value="学生名册" @click="goteacher_students">
                 <input type = "button" class="option" value="学习统计" @click="goteacher_chart">
                 <input type = "button" class="option" value="单词比赛" @click="goteacher_compete">
@@ -20,7 +20,7 @@
         <div id="botton_list1" class="botton_list">
             <input type = "button" class="button1" value="个人面板" @click="goteacher_msg">
             <input type = "button" class="button1" value="学员面板" @click="goteacher_students">
-            <input type = "button" class="button1" value="班级列表" @click="goteacher_classes">
+            <input type = "button" class="button1" value="课程列表" @click="goteacher_classes">
             <input type = "button" class="button1" value="单词比赛" @click="goteacher_compete">
             <input type = "button" class="button1" value="学生名册" @click="goteacher_students">
             <input type = "button" class="button1" value="学习统计" @click="goteacher_chart">
@@ -40,45 +40,69 @@
                 <div>
                     <input type = "button" class="button1" id="sure" value="确定" @click="goteacher_classes">
                 </div>
-            </div>   
+            </div>
         </div>
-         <div id="msg_window" v-show="rewrite">
+        <div id="msg_window" v-show="rewrite">
             <div id="window_header">
                 修改密码
             </div>
-            <div id="rewrite">
-                <p>请输入旧密码：</p>
-                <input type = "password" class = "input" id = "old_password" placeholder = "密码" v-model="old_password">
-                <p>请输入新密码：</p>
-                <input type = "password" class = "input" id = "new_password" placeholder = "密码" v-model="new_password">
-                <div>
-                    <input type = "button" class="button1" id="sure" value="确定" @click="send_rewrite">
+            <div id="rewrite" style="text-align:center;">
+                <div id="box1">
+                    <span>请输入旧密码：</span>
+                    <input type = "password" class = "input" id = "old_password" placeholder = "密码" v-model="old_password">
                 </div>
+                <div id="box1">
+                    <span>请输入新密码：</span>
+                    <input type = "password" class = "input" placeholder = "密码" v-model="new_password1">
+                </div>
+                <div id="box1">
+                    <span>请确认新密码：</span>
+                    <input type = "password" class = "input" placeholder = "密码" v-model="new_password2">
+                </div>
+                <!-- <input type = "button" id="sure" value="确定" @click="send_rewrite"> -->
+                <el-button round id="sure" @click="send_rewrite">确定</el-button>
             </div>  
         </div>
         <div id="msg_window" v-show="classes">
             <div id="window_header">
-                班级列表
+                课程列表
             </div>
             <div id="botton_list2" class="botton_list">
-                <el-button class="button2" icon="el-icon-plus" @click="goclasses_add">新增</el-button>
-                <el-button class="button2" icon="el-icon-circle-close" @click="goclasses_delete">删除</el-button>
+                <el-button class="button2" icon="el-icon-plus" @click="goclasses_add">新增课程</el-button>
+                <el-button class="button2" icon="el-icon-circle-close" @click="goclasses_delete">删除课程</el-button>
             </div>
             <div id="classes_add" v-show="classes_add">
-                <el-input placeholder="请输入新增班级id" v-model="add_class_id" clearable maxlength="5" show-word-limit size="medium"></el-input>
-                <el-input placeholder="请输入新增班级名称" v-model="add_class_name" clearable></el-input>
+                <el-input placeholder="请输入新增课程id" v-model="add_course_id" clearable maxlength="5" show-word-limit size="medium"></el-input>
+                <el-input placeholder="请输入新增课程名称" v-model="add_course_name" clearable></el-input>
+                <el-input placeholder="请输入课程单词书id" v-model="add_class_book_id" clearable></el-input>
                 <el-button type="primary" @click="sure_classes_add">确定</el-button>
                 <el-button type="primary" @click="cancel_classes_add">取消</el-button>
             </div>
             <div id="classes_delete" v-show="classes_delete">
-                <el-input placeholder="请输入删除班级id" v-model="delete_class_id" clearable maxlength="5" show-word-limit size="medium"></el-input>
+                <el-input placeholder="请输入删除课程id" v-model="delete_class_id" clearable maxlength="5" show-word-limit size="medium"></el-input>
                 <el-button type="primary" @click="sure_classes_delete">确定</el-button>
                 <el-button type="primary" @click="cancel_classes_delete">取消</el-button>
             </div>
-            <template>
-                <el-table ref="multipleTable" :data="classesdata" stripe align="left" max-height="900" border style="width: 100%" id="classesdata" :header-cell-style="tableHeaderColor">
-                    <el-table-column prop="course_id" label="班级id"></el-table-column>
-                    <el-table-column prop="course_name" label="班级名称"></el-table-column>
+            <div id="table_div">
+                <table id="table-a">
+                    <tr>
+                        <th>课程id</th>
+                        <th>课程名称</th>
+                        <th>课程人数</th>
+                        <th>操作</th>
+                    </tr>
+                    <tr v-for="(value,key,index) in course">
+                        <td>{{value.course_id}}</td>
+                        <td>{{value.course_name}}</td>
+                        <td>{{value.course_student_number}}</td>
+                        <td><el-button type="primary" @click="this_classes_delete">删除</el-button></td>
+                    </tr>
+                </table>
+            </div>
+            <!-- <template>
+                <el-table ref="multipleTable" v-for="(value,key,index) in course" :data="value" stripe align="left" max-height="900" border style="width: 100%" id="classesdata" :header-cell-style="tableHeaderColor">
+                    <el-table-column prop="course_id" label="课程id"></el-table-column>
+                    <el-table-column prop="course_name" label="课程名称"></el-table-column>
                     <el-table-column prop="course_student_number" label="课程人数"></el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="">
@@ -86,7 +110,7 @@
                         </template>
                     </el-table-column>
                 </el-table>
-            </template>  
+            </template>   -->
         </div>
         <div id="msg_window" v-show="compete">
             <div id="window_header">
@@ -108,19 +132,37 @@
                 <el-button type="primary" @click="sure_compete_change">确定</el-button>
                 <el-button type="primary" @click="cancel_compete_change">取消</el-button>
             </div>
-            <template>
+            <div id="table_div">
+                <table id="table-a">
+                    <tr>
+                        <th>比赛编号</th>
+                        <th>比赛名称</th>
+                        <th>比赛积分</th>
+                        <th>组织方</th>
+                        <th>操作</th>
+                    </tr>
+                    <tr v-for="(value,key,index) in match">
+                        <td>{{value.match_id}}</td>
+                        <td>{{value.match_name}}</td>
+                        <td>{{value.match_point}}</td>
+                        <td>{{value.teacher_name}}</td>
+                        <td><el-button type="primary" @click="gochange_compete">编辑</el-button></td>
+                    </tr>
+                </table>
+            </div>
+            <!--<template>
                 <el-table ref="multipleTable" :data="competedata" stripe align="left" max-height="900" border style="width: 100%" id="competedata" :header-cell-style="tableHeaderColor">
                     <el-table-column prop="match_id" label="比赛编号"></el-table-column>
                     <el-table-column prop="match_name" label="比赛名称"></el-table-column>
                     <el-table-column prop="match_point" label="比赛积分"></el-table-column>
-                    <el-table-column prop="teacher_name" label="组织方"></el-table-column>
+                    <el-table-column prop="teacher_name" label=""></el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="">
                             <el-button @click="gochange_compete">编辑</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
-            </template> 
+            </template> -->
             <input type = "button" class="button1" value="新建比赛" id="new_compete" @click="goadd_compete"> 
         </div>
         <div id="msg_window" v-show="students">
@@ -143,7 +185,33 @@
                 <el-button type="primary" @click="student_delete">删除</el-button>
                 <el-button type="primary" @click="cancel_students_change">取消</el-button>
             </div>
-            <template>
+            <div id="table_div">
+                <table id="table-b">
+                    <tr>
+                        <th>姓名</th>
+                        <th>邮箱</th>
+                        <th>金币数量</th>
+                        <th>上次登录</th>
+                        <th>学生id</th>
+                        <th>班级名称</th>
+                        <th>所在组</th>
+                        <th>注册日期</th>
+                        <th>状态</th>
+                    </tr>
+                    <tr v-for="(value,key,index) in student">
+                        <td>{{value.student_name}}</td>
+                        <td>{{value.email}}</td>
+                        <td>{{value.coins}}</td>
+                        <td>{{value.last_login}}</td>
+                        <td>{{value.student_id}}</td>
+                        <td>{{value.course_name}}</td>
+                        <td>{{value.所在组}}</td>
+                        <td>{{value.register_time}}</td>
+                        <td>{{value.status}}</td>
+                    </tr>
+                </table>
+            </div>
+            <!--<template>
                 <el-table ref="multipleTable" :data="studentsdata" stripe align="left" max-height="900" border style="width: 100%" id="studentsdata" :header-cell-style="tableHeaderColor">
                     <el-table-column prop="student_name" label="姓名"></el-table-column>
                     <el-table-column prop="email" label="邮箱"></el-table-column>
@@ -151,11 +219,11 @@
                     <el-table-column prop="last_login" label="上次登录"></el-table-column>
                     <el-table-column prop="student_id" label="学生id"></el-table-column>
                     <el-table-column prop="course_name" label="班级名称"></el-table-column>
-                    <el-table-column prop="所在组" label="所在组"></el-table-column>
-                    <el-table-column prop="register_time" label="注册日期"></el-table-column>
+                    <el-table-column prop="register_time所在组" label="所在组"></el-table-column>
+                    <el-table-column prop="" label="注册日期"></el-table-column>
                     <el-table-column prop="status" label="状态"></el-table-column>
                 </el-table>
-            </template>    
+            </template>-->    
         </div>
     </div>
 </template>
@@ -174,7 +242,8 @@ export default {
             teacher_phone: '',
             teacher_address: '',
             old_password: '',
-            new_password: '',
+            new_password1: '',
+            new_password2: '',
             msg:false,
             rewrite:false,
             classes:true,
@@ -186,11 +255,12 @@ export default {
             book_add:false,
             students_change:false,
             change_compete:false,
-            classesdata :[
-                {course_id:'0',course_name:'',course_student_number:'0'}
-            ],
-            add_class_id:'',
-            add_class_name:'',
+            course:{1:1,2:2,3:3},
+            match:{1:1,2:2,3:3},
+            student:{1:1,2:2,3:3},
+            add_course_id:'',
+            add_course_name:'',
+            add_class_book_id:'',
             delete_class_id:'',
             competedata :[
                 {match_id:'0',match_name:'',match_point:'',teacher_name:''}
@@ -210,39 +280,81 @@ export default {
             book_student_id:'',
             students_change_id:''
         }
-    },
+    },/*
     beforeCreate(){
 		//未登录，跳转到登录界面
 		if(this.$store.state.teacher_id==""){
-			window.location = "teacherlogin.html"
+			window.location = "login.html"
 		}
-	},
+	},*/
 	created(){
         this.teacher_id = parseInt(this.$store.state.teacher_id)
         this.teacher_username = this.$store.state.teacher_username
+        let that = this
+        let param = new URLSearchParams
+        param.append('teacher_id',this.teacher_id)
+        this.$axios({
+            method:'post',
+            url:'http://localhost:8000/app/courselist',
+            data:param,
+        }).then(function(response){
+            window.console.log(response)
+            that.course = response.data
+            window.console.log(that.course)
+        })
+        this.msg=false
+        this.rewrite=false
+        this.classes=true
+        this.compete=false
+        this.students=false
 	},
 	methods: {
         send_rewrite: function(){
-			let that = this
-            let param = new URLSearchParams()
-            param.append('teacher_id',this.teacher_id)
-			param.append('oldpassword',this.oldpassword)
-			param.append('newpassword',this.newpassword)
-			this.$axios({
-				method:'post',
-				url:'http://localhost:8000/app/teacherchange',
-				data:param,
-			}).then(function(response){
-                window.console.log(response)
-                window.console.log(typeof(response.data.teacher_id))
-				if(response.data.change_status=='succeed'){
-                    rewrite_success()
-                    window.location = 'teacher.html'
+            if(this.old_password=='' || this.new_password1=='' || this.new_password2==''){
+                window.alert('密码不能为空，请重新输入')
+                this.old_password = ''
+                this.new_password1 = ''
+                this.new_password2 = ''
+            }else if(this.old_password==this.new_password1){
+                window.alert('新密码不能和旧密码相同')
+                this.old_password = ''
+                this.new_password1 = ''
+                this.new_password2 = ''
+            }else if(this.new_password1!=this.new_password2){
+                window.alert('两次输入的新密码不相同，请重新输入')
+                this.old_password = ''
+                this.new_password1 = ''
+                this.new_password2 = ''
+            }else if(this.new_password1==this.new_password2){
+                let message = '确认更改密码吗？'
+                if(window.confirm(message)==true){
+                    let that = this
+                    let param = new URLSearchParams()
+                    param.append('teacher_id',this.teacher_id)
+                    param.append('old_password',this.old_password)
+                    param.append('new_password',this.new_password1)
+                    window.console.log(this.old_password)
+                    window.console.log(this.new_password1)
+                    this.$axios({
+                        method:'post',
+                        url:'http://localhost:8000/app/teacherchangepassword',
+                        data:param,
+                    }).then(function(response){
+                        if(response.data['change_status']=='succeed'){
+                            that.rewrite_success()
+                            that.old_password = ''
+                            that.new_password1 = ''
+                            that.new_password2 = ''
+                        }
+                        else if(response.data['change_status']=='failed'){
+                            that.rewrite_failed()
+                            that.old_password = ''
+                            that.new_password1 = ''
+                            that.new_password2 = ''
+                        }
+                    })
                 }
-                else if(response.data.change_status=='failed'){
-                    rewrite_failed()
-                }
-			})
+            }
         },
         rewrite_success() {
             this.$message({
@@ -254,13 +366,14 @@ export default {
         rewrite_failed() {
             this.$message({
                 showClose: true,
-                message: '修改错误',
+                message: '旧密码输入错误',
                 type: 'error'
             });
         },
 		logout:function() {
             this.$store.dispatch("TeacherLogout")
-			window.location = "teacherlogin.html"
+            this.$store.dispatch("Logout")
+			window.location = "login.html"
         },
         goteacher_msg:function() {
             let that = this
@@ -300,9 +413,8 @@ export default {
                 url:'http://localhost:8000/app/courselist',
                 data:param,
             }).then(function(response){
-                that.course_id = response.data.course_id
-                that.course_name = response.data.course_name
-                that.course_student_number = response.data.course_student_number
+                window.console.log(response)
+                that.course = response.data
             })
             this.msg=false
             this.rewrite=false
@@ -313,30 +425,32 @@ export default {
         goclasses_add:function() {
             this.classes_add=true
         },
-        // 待做
-        // 
-        // 
         sure_classes_add() {
-            let that = this
-			let param = new URLSearchParams()
-			param.append('course_id',this.add_class_id)
-			param.append('course_name',this.add_class_name)
-			this.$axios({
-				method:'post',
-				url:'http://localhost:8000/mainpage/',
-				data:param,
-			}).then(function(response){
-                window.console.log(response)
-                window.console.log(typeof(response.data.teacher_id))
-				if(response.data.add_course_status=='succeed'){
-                    add_success()
-                    this.classes_add=false
-                    window.location = 'teacher.html'
-                }
-                else if(response.data.add_course_status=='failed'){
-                    add_failed()
-                }
-			})
+            if(this.add_course_id==''||this.add_course_name==''||this.add_class_book_id==''){
+                window.alert('输入内容不能为空')
+            }else{
+                let that = this
+                let param = new URLSearchParams()
+                param.append('teacher_id',this.teacher_id)
+                param.append('course_id',this.add_course_id)
+                param.append('course_name',this.add_course_name)
+                param.append('book_id',this.add_class_book_id)
+                this.$axios({
+                    method:'post',
+                    url:'http://localhost:8000/app/opencourse',
+                    data:param,
+                }).then(function(response){
+                    window.console.log(response)
+                    if(response.data['status']=='succeed'){
+                        that.add_success()
+                        that.classes_add=false
+                        window.location = 'teacher.html'
+                    }
+                    else if(response.data.add_course_status=='failed'){
+                        that.add_failed()
+                    }
+                })
+            }
         },
         cancel_classes_add() {
             this.classes_add=false
@@ -574,10 +688,6 @@ export default {
                 return 'background-color: #BECBDC;color :BLACK'
             }
         },
-        logout:function(){
-            this.$store.dispatch("Logout")
-			window.location = "teacherlogin.html"
-        }
     },
   // components: {
   //   HelloWorld
@@ -586,6 +696,18 @@ export default {
 </script>
 
 <style scoped>
+table{
+    border: 1px;
+    text-align: center;
+}
+.table{
+    font-family: 微软雅黑;
+	font-size: 16px;
+	font-weight: bold;
+	color: #020a11;
+    width: 8%;
+	background-color:#e9faff;
+}
 body {
     margin:0px;
     padding:0px;
@@ -680,6 +802,7 @@ body {
     float: left;
     background-image: linear-gradient(#BFCCDC, #8D9DBD);
 }
+
 #botton_list2 {
     padding: 0px;
     margin:0px;
@@ -730,8 +853,8 @@ body {
     margin-bottom:20px; 
 }
 #sure {
-    margin-left:120px;
-    margin-top:20px; 
+    background-color: rgb(32, 214, 78);
+    margin-top: 20px;
 }
 #new_compete {
     margin-left: 500px;
@@ -752,5 +875,76 @@ body {
     padding-right: 0;
     margin-left: 10px;
     border: 2px solid #C5C5C5;
+}
+#box1{
+    margin-bottom: 20px;
+}
+/* Table */
+#table-a
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	margin: 45px;
+    margin-top: 80px;
+	width: 480px;
+	text-align: left;
+	border-collapse: collapse;
+	border: 1px solid #69c;
+}
+#table-a th
+{
+	padding: 12px 17px 12px 17px;
+	font-weight: normal;
+	font-size: 14px;
+	color: #039;
+	border-bottom: 1px dashed #69c;
+    background: #A2C3FD;
+}
+#table-a td
+{
+	padding: 7px 17px 7px 17px;
+	color: #669;
+}
+#table-a tr:hover td
+{
+	color: #339;
+	background: #d0dafd;
+}
+#table-a tr:nth-child(even) {
+    background: #E4EDFD;
+}
+#table-b
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	margin: 45px;
+    margin-top: 80px;
+	width: 1000px;
+	text-align: left;
+	border-collapse: collapse;
+	border: 1px solid #69c;
+}
+#table-b th
+{
+	padding: 12px 17px 12px 17px;
+	font-weight: normal;
+	font-size: 14px;
+	color: #039;
+	border-bottom: 1px dashed #69c;
+    background: #A2C3FD;
+}
+#table-b td
+{
+	padding: 7px 17px 7px 17px;
+    height: 30px;
+	color: #669;
+}
+#table-b tr:hover td
+{
+	color: #339;
+	background: #d0dafd;
+}
+#table-b tr:nth-child(even) {
+    background: #E4EDFD;
 }
 </style>

@@ -6,7 +6,8 @@
 				<p id = "word">单词赢</p>
 				<p id = "text">三天背完小升初   七天背完中高考</p>
 				<div id = "box1">
-					<p>账号密码登陆</p>
+					<el-radio v-model="radio" label="student">学生端</el-radio>
+                    <el-radio v-model="radio" label="teacher">教师端</el-radio>
 				</div>
 				<div class = "box2" id = "account-box">
 					<div class = "box3">
@@ -35,6 +36,7 @@ export default {
 		return{
 			username: '',
             password: '',
+            radio:'student',
 		}
     },
     created(){
@@ -44,31 +46,56 @@ export default {
 	methods: {
 		send: function(){
 			let that = this
-			let param = new URLSearchParams()
-			param.append('student_username',this.username)
-            param.append('student_password',this.password)
-			this.$axios({
-				method:'post',
-				url:'http://localhost:8000/app/',
-				data:param,
-			}).then(function(response){
-                window.console.log(response)
-				if(response.data.login_status=='succeed'){
-                    let student_id = response.data.student_id
-                    let student_name = response.data.student_name
-                    let coins = response.data.coins.toString()
-                    let daka_num = response.data.daka_num.toString()
-                    let enable_daka = response.data.enable_daka.toString()
-                    that.$store.dispatch("Login",{student_id,student_name,coins,daka_num,enable_daka})
-                    window.location = 'main.html'
-				}else if(response.data.login_status=='failed'){
-                    window.alert("密码错误，请重新输入")
-                    window.location = "login.html"
-                }else if(response.data.login_status=='not_exist'){
-                    window.alert("用户名不存在，请重新输入")
-                    window.location = "login.html"
-                }
-			})
+            let param = new URLSearchParams()
+            if(this.radio=='student'){
+                param.append('student_username',this.username)
+                param.append('student_password',this.password)
+                this.$axios({
+                    method:'post',
+                    url:'http://localhost:8000/app/',
+                    data:param,
+                }).then(function(response){
+                    window.console.log(response)
+                    if(response.data.login_status=='succeed'){
+                        let student_id = response.data.student_id
+                        let student_name = response.data.student_name
+                        let coins = response.data.coins.toString()
+                        let daka_num = response.data.daka_num.toString()
+                        let enable_daka = response.data.enable_daka.toString()
+                        that.$store.dispatch("Login",{student_id,student_name,coins,daka_num,enable_daka})
+                        window.location = 'main.html'
+                    }else if(response.data.login_status=='failed'){
+                        window.alert("密码错误，请重新输入")
+                        window.location = "login.html"
+                    }else if(response.data.login_status=='not_exist'){
+                        window.alert("用户名不存在，请重新输入")
+                        window.location = "login.html"
+                    }
+                })
+            }else{
+                param.append('teacher_username',this.username)
+			    param.append('teacher_password',this.password)
+			    this.$axios({
+			    	method:'post',
+			    	url:'http://localhost:8000/app/teacherlogin',
+			    	data:param,
+			    }).then(function(response){
+                    window.console.log(response)
+                    window.console.log(typeof(response.data.teacher_id))
+			    	if(response.data.login_status=='succeed'){
+                        let teacher_id = response.data.teacher_id
+                        let teacher_name = response.data.teacher_name
+                        that.$store.dispatch("TeacherLogin",{teacher_id,teacher_name})
+                        window.location = 'teacher.html'
+			    	}else if(response.data.login_status=='failed'){
+                        window.alert("密码错误，请重新输入")
+                        window.location = "teacherlogin.html"
+                    }else if(response.data.login_status=='not_exist'){
+                        window.alert("用户名不存在，请重新输入")
+                        window.location = "teacherlogin.html"
+                    }
+			    })
+            }
 		}
     },
   // components: {
@@ -128,7 +155,7 @@ body {
     color: hsla(0, 0%, 0%, 0.427450980392157);
 }
 
-#box1 {
+/* #box1 {
     width: 140px;
     height: 50px;
     text-align: center;
@@ -138,6 +165,9 @@ body {
     font-size: 18px;
     color: #1890FF;
     border-bottom: solid #1890FF;
+} */
+#box1{
+    text-align: center;
 }
 
 .box2 {

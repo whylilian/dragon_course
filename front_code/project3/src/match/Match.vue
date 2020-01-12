@@ -1,15 +1,11 @@
 <template>
     <div id="match">
         <navigation></navigation>
-        <div id = "main1">
+        <div id = "main1" v-show="show_match1">
 	    	<!--头部框-->
 	    	<div id = "head-box">
 	    	</div>
-	    	<!--头像框-->
-	    	<!-- <div class = "head-picture" id = "head-picture1">
-	    	</div> -->
-	    	<div class = "head-picture" id = "head-picture2">
-	    	</div>
+	    	<img src="../assets/tubiao.png" style="background-size:100%;width:100px;position:absolute;left:800px;top:40px;">
 	    	<!--名称框-->
 	    	<p id = "name1"></p>
 	    	<p id = "name2">{{student_name}}</p>
@@ -28,7 +24,7 @@
 	    	<!--计时框-->
 	    	<div id = "time2">
 	    		<img src = "../assets/5.png" id = "time-picture">
-	    		<span id = "time-countdown">{{time}}s</span>
+	    		<span id = "time-countdown">{{time1}}s</span>
 	    	</div>
 	    	<!--题目-->
 	    	<div id = "topic">
@@ -38,11 +34,62 @@
 	    	</div>
 	    	<!--选项-->
 	    	<div id = "choic" v-for="(value,key,index) in match_word" v-if="key==word_index">
-	    		<input type = "button" :class = "{choic_button:!style_a_no,choic_correct:style_a_yes,choic_false:style_a_no}" :disabled="dead" :value = "value.A" @click="word_select('A')">
-	    		<input type = "button" :class = "{choic_button:!style_b_no,choic_correct:style_b_yes,choic_false:style_b_no}" :disabled="dead" :value = "value.B" @click="word_select('B')">
-	    		<input type = "button" :class = "{choic_button:!style_c_no,choic_correct:style_c_yes,choic_false:style_c_no}" :disabled="dead" :value = "value.C" @click="word_select('C')">
-	    		<input type = "button" :class = "{choic_button:!style_d_no,choic_correct:style_d_yes,choic_false:style_d_no}" :disabled="dead" :value = "value.D" @click="word_select('D')">
+	    		<input type = "button" :class = "{choic_button:!style_a_no,choic_correct:style_a_yes,choic_false:style_a_no}" :disabled="dead" :value = "value.A" @click="match1_select('A')">
+	    		<input type = "button" :class = "{choic_button:!style_b_no,choic_correct:style_b_yes,choic_false:style_b_no}" :disabled="dead" :value = "value.B" @click="match1_select('B')">
+	    		<input type = "button" :class = "{choic_button:!style_c_no,choic_correct:style_c_yes,choic_false:style_c_no}" :disabled="dead" :value = "value.C" @click="match1_select('C')">
+	    		<input type = "button" :class = "{choic_button:!style_d_no,choic_correct:style_d_yes,choic_false:style_d_no}" :disabled="dead" :value = "value.D" @click="match1_select('D')">
 	    	</div>
+            <img src="../assets/zhengque.png" id='img1'v-if="style_a_yes">
+            <img src="../assets/cuowu.png" id='img1'v-if="style_a_no">
+            <img src="../assets/zhengque.png" id='img2'v-if="style_b_yes">
+            <img src="../assets/cuowu.png" id='img2'v-if="style_b_no">
+            <img src="../assets/zhengque.png" id='img3'v-if="style_c_yes">
+            <img src="../assets/cuowu.png" id='img3'v-if="style_c_no">
+            <img src="../assets/zhengque.png" id='img4'v-if="style_d_yes">
+            <img src="../assets/cuowu.png" id='img4'v-if="style_d_no">
+        </div>
+        <div id = "main1" v-show="show_match2">
+	    	<!--头部框-->
+	    	<div id = "head-box">
+	    	</div>
+            <img src="../assets/gongjuren.png" style="background-size:100%;width:100px;position:absolute;left:100px;top:40px;">
+            <img src="../assets/tubiao.png" style="background-size:100%;width:100px;position:absolute;left:800px;top:40px;">
+	    	<!--名称框-->
+	    	<p id = "name1">工具人</p>
+	    	<p id = "name2">{{student_name}}</p>
+	    	<!--积分框-->
+	    	<div class = "integral" id = "integral1">
+                <p id="get_grade">分数：{{grade}}</p>
+	    	</div>
+	    	<div class = "integral" id = "integral2">
+                <p id="get_grade">分数：{{grade}}</p>
+	    	</div>
+	    	<!--计时框-->
+	    	<div id = "time2">
+	    		<img src = "../assets/5.png" id = "time-picture">
+	    		<span id = "time-countdown">{{time2}}s</span>
+	    	</div>
+	    	<!--题目-->
+	    	<div id = "topic">
+	    		<span id = "topic-word" v-for="(value,key,index) in match_word" v-if="key==word_index">{{value.example}}</span>
+                <br>
+                <span id = "topic-word" v-for="(value,key,index) in match_word" v-if="key==word_index">{{value.example_means}}</span>
+	    	</div>
+	    	<!--选项-->
+	    	<div id = "choic" v-for="(value,key,index) in match_word" v-if="key==word_index">
+	    		<input type = "button" :class = "{choic_button:!style_a_no,choic_correct:style_a_yes,choic_false:style_a_no}" :disabled="dead" :value = "value.A" @click="match2_select('A')">
+	    		<input type = "button" :class = "{choic_button:!style_b_no,choic_correct:style_b_yes,choic_false:style_b_no}" :disabled="dead" :value = "value.B" @click="match2_select('B')">
+	    		<input type = "button" :class = "{choic_button:!style_c_no,choic_correct:style_c_yes,choic_false:style_c_no}" :disabled="dead" :value = "value.C" @click="match2_select('C')">
+	    		<input type = "button" :class = "{choic_button:!style_d_no,choic_correct:style_d_yes,choic_false:style_d_no}" :disabled="dead" :value = "value.D" @click="match2_select('D')">
+	    	</div>
+            <img src="../assets/zhengque.png" id='img1'v-if="style_a_yes">
+            <img src="../assets/cuowu.png" id='img1'v-if="style_a_no">
+            <img src="../assets/zhengque.png" id='img2'v-if="style_b_yes">
+            <img src="../assets/cuowu.png" id='img2'v-if="style_b_no">
+            <img src="../assets/zhengque.png" id='img3'v-if="style_c_yes">
+            <img src="../assets/cuowu.png" id='img3'v-if="style_c_no">
+            <img src="../assets/zhengque.png" id='img4'v-if="style_d_yes">
+            <img src="../assets/cuowu.png" id='img4'v-if="style_d_no">
         </div>
         <input type="button" value="退出" id="out" @click="outmatch">
     </div>    
@@ -57,11 +104,13 @@ export default {
             student_id:0,
             student_name:'',
             match_id:0,
+            match_name:'',
             word_length:0,
             select:'',
             match_word:{},
             word_index:1,
             false_count:0,//错误的次数，达到3则比赛结束
+            false_count1:0,//工具人错误的次数
             grade:0,//答对一题加10分
             style_a_yes:false,
             style_b_yes:false,
@@ -74,10 +123,13 @@ export default {
             dead:false,
             time1:60,//一站到底
             time2:12,
-            time_id:0,
+            time1_id:0,
+            time2_id:0,
             do_select:false,
-            daoju1:1,
-            daoju2:1,
+            daoju1:3,
+            daoju2:3,
+            show_match1:false,//一站到底
+            show_match2:false,
         }
     },
     beforeCreate(){
@@ -90,12 +142,11 @@ export default {
 		this.student_id = parseInt(this.$store.state.student_id)
         this.student_name = this.$store.state.student_name
         this.match_id = parseInt(this.$store.state.match_id)
-		window.console.log(this.student_id)
-        window.console.log(this.student_name)
+        this.match_name = this.$store.state.match_name
+        window.console.log(this.match_name)
         let that = this
         let param = new URLSearchParams
         param.append('match_id',this.match_id)
-        window.console.log(this.match_id)
         this.$axios({
             method:'post',
             url:'http://localhost:8000/app/wordpk',
@@ -105,17 +156,22 @@ export default {
             that.match_word = response.data
             that.word_length = Object.keys(that.match_word).length
             window.console.log(that.word_length)
-            that.time_id = setInterval(that.clock,1000)//启动计时
+            if(that.match_name=='一站到底'){
+                that.show_match1 = true
+                that.show_match2 = false
+                that.time1_id = setInterval(that.clock1,1000)
+            }else if(that.match_name=='擂台pk'){
+                that.show_match1 = false
+                that.show_match2 = true
+                that.time2_id = setInterval(that.clock2,1000)//启动计时
+            }
         })
 	},
     methods:{
-        word_select:function(id){
+        match1_select:function(id){
             this.dead = true
-            this.do_select = true
             let index = this.word_index
             this.select = id
-            window.console.log(this.select)
-            window.console.log(this.match_word[index].correct)
             this.style_a_yes = false
             this.style_b_yes = false
             this.style_c_yes = false
@@ -125,11 +181,7 @@ export default {
             this.style_c_no = false
             this.style_d_no = false
             if(this.select == this.match_word[index].correct){
-                if(this.word_index==7){
-                    this.grade += 40//最后一道题40分
-                }else{
-                    this.grade += 20
-                }
+                this.grade += 20
                 switch(id){
                     case 'A':{
                         this.style_a_yes = true
@@ -241,28 +293,167 @@ export default {
                     })
                 }
             }
-            clearInterval(this.time_id)
-            setTimeout(this.stop,3000)
+            setTimeout(this.stop1,2000)
         },
-        clock:function(){
-            if(this.time>0){
-                this.time -= 1
+        match2_select:function(id){
+            this.dead = true
+            this.do_select = true
+            let index = this.word_index
+            this.select = id
+            this.style_a_yes = false
+            this.style_b_yes = false
+            this.style_c_yes = false
+            this.style_d_yes = false
+            this.style_a_no = false
+            this.style_b_no = false
+            this.style_c_no = false
+            this.style_d_no = false
+            if(this.select == this.match_word[index].correct){
+                //使用小算法判断分数
+                let temp = 12-this.time2
+                if(this.word_index==7){
+                    this.grade = this.grade+40-temp
+                }else{
+                    this.grade = this.grade+20-temp
+                }
+                switch(id){
+                    case 'A':{
+                        this.style_a_yes = true
+                        break
+                    }
+                    case 'B':{
+                        this.style_b_yes = true
+                        break
+                    }
+                    case 'C':{
+                        this.style_c_yes = true
+                        break
+                    }
+                    case 'D':{
+                        this.style_d_yes = true
+                        break
+                    }
+                }
+            }else{
+                switch(id){
+                    case 'A':{
+                        this.style_a_no = true
+                        switch(this.match_word[index].correct){
+                            case 'B':{
+                                this.style_b_yes = true
+                                break
+                            }
+                            case 'C':{
+                                this.style_c_yes = true
+                                break
+                            }
+                            case 'D':{
+                                this.style_d_yes = true
+                                break
+                            }
+                        }
+                        break
+                    }
+                    case 'B':{
+                        this.style_b_no = true
+                        switch(this.match_word[index].correct){
+                            case 'A':{
+                                this.style_a_yes = true
+                                break
+                            }
+                            case 'C':{
+                                this.style_c_yes = true
+                                break
+                            }
+                            case 'D':{
+                                this.style_d_yes = true
+                                break
+                            }
+                        }
+                        break
+                    }
+                    case 'C':{
+                        this.style_c_no = true
+                        switch(this.match_word[index].correct){
+                            case 'A':{
+                                this.style_a_yes = true
+                                break
+                            }
+                            case 'B':{
+                                this.style_b_yes = true
+                                break
+                            }
+                            case 'D':{
+                                this.style_d_yes = true
+                                break
+                            }
+                        }
+                        break
+                    }
+                    case 'D':{
+                        this.style_d_no = true
+                        switch(this.match_word[index].correct){
+                            case 'A':{
+                                this.style_a_yes = true
+                                break
+                            }
+                            case 'B':{
+                                this.style_b_yes = true
+                                break
+                            }
+                            case 'C':{
+                                this.style_c_yes = true
+                                break
+                            }
+                        }
+                        break
+                    }
+                }
+                if(this.false_count == 3){
+                    let that = this
+                    let param = new URLSearchParams
+                    param.append('student_id',this.student_id)
+                    param.append('match_id',this.match_id)
+                    param.append('match_grade',this.grade)
+                    this.$axios({
+                        method:'post',
+                        url:'http://localhost:8000/app/inputmatch',
+                        data:param,
+                    }).then(function(response){
+                        clearInterval(that.time_id)
+                        window.alert('比赛结束，你的分数为：'+that.grade)
+                        window.location = 'main.html'
+                    })
+                }
+            }
+            clearInterval(this.time2_id)
+            setTimeout(this.stop2,2000)
+        },
+        clock1:function(){
+            if(this.time1>0){
+                this.time1 -= 1
+            }else{
+                clearInterval(this.time1_id)
+                this.time1_id = 0
+                this.time1 = 60
+            }
+        },
+        clock2:function(){
+            if(this.time2>0){
+                this.time2 -= 1
             }else{
                 if(this.do_select==false){
-                    this.false_count += 1
                     this.word_index += 1
-                    this.time_id = 0
-                    this.time = 12
-                    this.time_id = setInterval(this.clock,1000)
+                    this.time2 = 12
+                    this.time2_id = setInterval(this.clock2,1000)
                 }else{
                     clearInterval(this.time_id)
-                    this.time_id = 0
-                    this.time = 12
-                    this.time_id = setInterval(this.clock,1000)
+                    this.time2 = 12
+                    this.time2_id = setInterval(this.clock2,1000)
                 }
             }
         },
-        stop:function(){
+        stop1:function(){
             this.style_a_yes = false
             this.style_b_yes = false
             this.style_c_yes = false
@@ -288,11 +479,37 @@ export default {
                     window.location = 'main.html'
                 })
             }
-            this.do_select = false
-            this.time_id = 0
-            this.time = 12
-            this.time_id = setInterval(this.clock,1000)
             this.dead = false
+        },
+        stop2:function(){
+            this.style_a_yes = false
+            this.style_b_yes = false
+            this.style_c_yes = false
+            this.style_d_yes = false
+            this.style_a_no = false
+            this.style_b_no = false
+            this.style_c_no = false
+            this.style_d_no = false
+            this.word_index += 1
+            if(this.word_index>this.word_length){
+                let param = new URLSearchParams
+                let that = this
+                param.append('student_id',this.student_id)
+                param.append('match_id',this.match_id)
+                param.append('match_grade',this.grade)
+                this.$axios({
+                    method:'post',
+                    url:'http://localhost:8000/app/inputmatch',
+                    data:param,
+                }).then(function(response){
+                    clearInterval(that.time_id)
+                    window.alert('比赛结束，你的分数为：'+that.grade)
+                    window.location = 'main.html'
+                })
+            }
+            this.dead = false
+            this.time2 = 12
+            this.time2_id = setInterval(this.clock2,1000)
         },
         outmatch:function(){
             clearInterval(this.time_id)
@@ -311,7 +528,7 @@ export default {
             if(this.daoju2==0){
                 window.alert('该道具已用完')
             }else{
-                this.time += 2
+                this.time1 += 2
                 this.daoju2 -= 1
             }
         }
@@ -329,7 +546,7 @@ export default {
     height: 600px;
     margin: auto;
     margin-top: 150px;
-    background-color: whitesmoke;
+    background-color: white;
     position: relative;
 }
 /* 头部部分 */
@@ -339,22 +556,7 @@ export default {
     background-color: rgb(34, 112, 157);
 }
 /* 头像部分 */
-.head-picture {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background-color: slateblue;
-}
-#head-picture1 {
-    position: absolute;
-    top: 50px;
-    left: 100px;
-}
-#head-picture2 {
-    position: absolute;
-    top: 50px;
-    right: 100px;
-}
+
 /* 名字 */
 #name1 {
     font-size: 18px;
@@ -506,5 +708,25 @@ export default {
 }
 #daoju2{
     color: rgb(212, 36, 36);
+}
+#img1{
+    position: absolute;
+    top: 360px;
+    left: 700px;
+}
+#img2{
+    position: absolute;
+    top: 410px;
+    left: 700px;
+}
+#img3{
+    position: absolute;
+    top: 460px;
+    left: 700px;
+}
+#img4{
+    position: absolute;
+    top: 510px;
+    left: 700px;
 }
 </style>

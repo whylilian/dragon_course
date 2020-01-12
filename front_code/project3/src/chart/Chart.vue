@@ -48,17 +48,17 @@ export default {
 		return{
 			student_id: 0,
             student_name: '',
-            coin_rank:{这是第一名:'20',这是第二名:'20',这是第三名:'20'},
-            word_rank:{这是第一名:'20',这是第二名:'20',这是第三名:'20'},
-            point_rank:{这是第一名:'20',这是第二名:'20',这是第三名:'20'},
+            coin_rank:{},
+            word_rank:{},
+            point_rank:{},
 		}
-    },/*
+    },
     beforeCreate(){
 		//未登录，跳转到登录界面
 		if(this.$store.state.student_id==""){
 			window.location = "login.html"
 		}
-	},*/
+	},
 	created(){
 		this.student_id = parseInt(this.$store.state.student_id)
 		this.student_name = this.$store.state.student_name

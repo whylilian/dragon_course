@@ -39,12 +39,6 @@ module.exports = {
         filename: 'match.html',
         chunks: ['chunk-vendors', 'chunk-common', 'match']
       },
-      teacherlogin: {
-        entry: 'src/teacherlogin/teacherlogin.js',
-        template: 'public/teacherlogin.html',
-        filename: 'teacherlogin.html',
-        chunks: ['chunk-vendors', 'chunk-common', 'teacherlogin']
-      },
       teacher: {
         entry: 'src/teacher/teacher.js',
         template: 'public/teacher.html',
